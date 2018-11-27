@@ -1,7 +1,7 @@
 # Farmer - ZooKeeper UI
 Farmer是一个ZooKeeper的可视化工具，开箱即用。
 
-如果使用中发现了bug，希望你能告诉我，好改正错误。
+如果使用中发现了bug，希望你能告诉我。
 
 ## 项目、工具概览
 
@@ -38,7 +38,7 @@ jar包的版本号，对应"版本计划"中的功能，高版本涵盖低版本
     然后访问：http://localhost:9527/zk/index.do<br>
 
     **上图不配置参数，程序也可以启动，点击页面的"连接ZooKeeper服务器"按钮，即可连接。**<br>
-    ![ZooKeeper-UI展示图](image/ZooKeeper-UI展示图.png)
+    ![ZooKeeper-UI展示图](image/index页面连接zookeeper服务器.png)
 
 
 * 2.**命令行启动**<br>

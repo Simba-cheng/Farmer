@@ -19,11 +19,11 @@ Farmer是一个ZooKeeper的可视化工具，开箱即用。
 
 **用户体验** : 希望最好可以无脑使用
 
-**项目技术** : Java、SpringBoot、FreeMarker、JavaScript、jQuery
+**项目技术** : JDK1.8、Java、SpringBoot 2.X、FreeMarker、JavaScript、jQuery
 
 
 ## 使用说明
-从[installPackage目录](https://github.com/Simba-cheng/Farmer/tree/master/installPackage)中下载对应版本的jar包。
+从[installPackage目录](https://github.com/Simba-cheng/Farmer/tree/master/Farmer-SpringBoot/installPackage)中下载对应版本的jar包。
 jar包的版本号，对应"版本计划"中的功能，高版本涵盖低版本的功能。
 
 
@@ -43,7 +43,7 @@ jar包的版本号，对应"版本计划"中的功能，高版本涵盖低版本
 
 * 2.**命令行启动**<br>
 
-    从[installPackage目录](https://github.com/Simba-cheng/Farmer/tree/master/installPackage)中下载对应版本的jar包。
+    从[installPackage目录](https://github.com/Simba-cheng/Farmer/tree/master/Farmer-SpringBoot/installPackage)中下载对应版本的jar包。
 
     farmer-0.0.1.jar，可以将其放在桌面
 

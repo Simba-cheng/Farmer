@@ -262,6 +262,7 @@ var zkIndex = {
                         if ("" != htmlData && undefined != htmlData) {
                             var htmlNodeData = resultHTMLData + htmlData + "</ul>";
                             var thisNode = $("#" + e.id);
+                            thisNode.next().remove();
                             thisNode.after(htmlNodeData);
                         }
                     }
@@ -331,6 +332,11 @@ var zkIndex = {
                     var info = result.displayCopy + " " + result.nodePath;
                     sweetAlert(info, "请点击父节点刷新", "success")
 
+                    //当前节点的li设置class属性
+                    var nodeID = parentNode;
+                    $("#" + nodeID).parent().attr("class", "parent_li");
+
+                    //刷新节点
                     zkIndex.createNodeRefreshNode(parentNode);
                 }
             }

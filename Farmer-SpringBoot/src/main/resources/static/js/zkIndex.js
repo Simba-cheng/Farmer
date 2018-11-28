@@ -330,6 +330,8 @@ var zkIndex = {
                 if ("Y" == result.isSuccess) {
                     var info = result.displayCopy + " " + result.nodePath;
                     sweetAlert(info, "请点击父节点刷新", "success")
+
+                    zkIndex.createNodeRefreshNode(parentNode);
                 }
             }
         });
@@ -339,7 +341,10 @@ var zkIndex = {
     },
 
     //右击-打开添加子节点弹窗
-    addChildNodePopup: function (nodePath) {
+    addChildNodePopup: function (e) {
+
+        //被点击的节点
+        var nodePath = e[0].id;
 
         //将被点击的节点，存储到编辑区节点的属性中
         $("#addNodeChildPath").attr("nodePath", nodePath);
@@ -399,7 +404,7 @@ var zkIndex = {
                             sweetAlert("异常信息", error.errorMessage, "error");
                         }
                         //刷新被删除节点的父节点
-                        zkIndex.refreshNode(nodePath);
+                        zkIndex.deleteNodeRefreshNode(nodePath);
                     }
                 });
             });
@@ -411,7 +416,7 @@ var zkIndex = {
     },
 
     //刷新节点-删除节点后刷新节点用于展示
-    refreshNode: function (nodeID) {
+    deleteNodeRefreshNode: function (nodeID) {
 
         //被点击的节点
         var node = $("#" + nodeID);
@@ -479,6 +484,69 @@ var zkIndex = {
                 }
             }
         });
+    },
+
+    //创建节点后，刷新当前节点，重新展示节点信息
+    createNodeRefreshNode: function (nodeID) {
+
+        var inputData = {"nodePath": nodeID};
+
+        $.ajax({
+            type: "post",
+            dataType: "json",
+            async: false,
+            url: "/zk/queryChildNodeList.do",
+            data: {"inputData": JSON.stringify(inputData)},
+            success: function (data) {
+                var resultData = data.resultData;
+                if ("Y" == resultData.isSuccess) {
+
+                    var childNodes = resultData.childNodeInfoList;
+                    var resultHTMLData = "<ul>";
+                    var htmlData = "";
+                    for (var i = 0; i < childNodes.length; i++) {
+
+                        var childNode = childNodes[i];
+                        var nodePath = childNode.nodePath;
+                        var completeNode = childNode.completeNode;
+
+                        //节点是否是文件形式 1-是，0-不是
+                        var nodeIsFileValue = childNode.nodeIsFile;
+                        var iconStr = "";
+                        if ("1" == nodeIsFileValue) {
+                            iconStr = "icon-file";
+                        } else if ("0" == nodeIsFileValue) {
+                            iconStr = "icon-folder-open";
+                        }
+
+                        var isExistenceChildClass = "";
+                        if ("1" == childNode.isExistenceChild) {
+                            isExistenceChildClass = "parent_li";
+                        }
+
+                        htmlData +=
+                            "<li class='" + isExistenceChildClass + "'>" +
+                            "<span class='clickNodeMark' name='" + nodePath + "' id='" + completeNode + "' nodeIsFileValue='" + nodeIsFileValue + "' onclick='zkIndex.nodeInfoQuery(this)' title='Expand this branch'>" +
+                            "<i class='" + iconStr + "'></i>" +
+                            nodePath +
+                            "</span>" +
+                            "</li>";
+                    }
+
+                    if (undefined != htmlData) {
+                        var htmlNodeData = resultHTMLData + htmlData + "</ul>";
+                        var thisNode = $("#" + nodeID);
+                        //span 节点的兄弟节点 ul
+                        thisNode.next().remove();
+                        thisNode.after(htmlNodeData);
+                    }
+                } else if ("N" == resultData.isSuccess) {
+                    var errorMessage = resultData.errorInfo.errorMessage;
+                    sweetAlert("异常信息", errorMessage, "error");
+                }
+            }
+        });
+
     },
 
     //渲染节点数据展示区域

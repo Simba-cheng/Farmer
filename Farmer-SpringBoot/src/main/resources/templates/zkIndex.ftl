@@ -69,22 +69,17 @@
         actions: [{
             name: '添加子节点',
             onClick: function (e) {
-
-                //被点击的节点
-                var nodePath = e[0].id;
                 //添加节点弹窗-展示
-                zkIndex.addChildNodePopup(nodePath);
+                zkIndex.addChildNodePopup(e);
             }
         }, {
             name: '删除节点',
             onClick: function (e) {
-                // console.log("id : " + e[0].id);
                 zkIndex.deleteNode(e);
             }
         }, {
             name: '删除节点(all child node)',
             onClick: function (e) {
-                // console.log("id : " + e[0].id);
                 // zkIndex.deleteAllChildNode(e);
             }
         }]

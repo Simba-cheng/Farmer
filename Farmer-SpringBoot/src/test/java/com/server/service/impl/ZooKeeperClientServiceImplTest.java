@@ -23,4 +23,9 @@ public class ZooKeeperClientServiceImplTest {
 
     }
 
+    //@Test
+    //public void test_deleteAllNodes() {
+    //    zooKeeperClient.deleteAllNodes("/temp/temp1/temp2/temp3", -1);
+    //}
+
 }

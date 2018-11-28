@@ -575,4 +575,54 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
         return errorInfo;
     }
+
+    //@Override
+    //public ResDeleteNodeVO deleteAllNodes(String nodePath, int version) {
+    //
+    //    ResDeleteNodeVO deleteNodeVO = new ResDeleteNodeVO();
+    //    ResErrorInfo errorInfo;
+    //
+    //    if (StringUtils.isEmpty(nodePath)) {
+    //        errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage());
+    //        deleteNodeVO.setErrorInfo(errorInfo);
+    //        deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
+    //        return deleteNodeVO;
+    //    }
+    //
+    //    try {
+    //
+    //        String deleteNodePath = nodePath.replace("_", "/").replace("-", ".").trim();
+    //
+    //        int length = StringUtils.countMatches(deleteNodePath, "/");
+    //
+    //        for (int i = 0; i < length; i++) {
+    //
+    //            String node;
+    //
+    //            if (i == 0) {
+    //                //第一次
+    //                node = deleteNodePath;
+    //            } else {
+    //                //开始截取
+    //                node = deleteNodePath.substring(0, deleteNodePath.lastIndexOf("/"));
+    //                deleteNodePath = node;
+    //            }
+    //
+    //            if (StringUtils.isEmpty(node)) {
+    //                continue;
+    //            }
+    //
+    //            zooKeeperClient.deleteNode(node, version);
+    //        }
+    //
+    //    } catch (Exception e) {
+    //        LOGGER.error("nodePath : {} , error message : {}", new Object[]{nodePath, e.getMessage()}, e);
+    //
+    //        errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_07.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_07.getErrorMessage());
+    //        deleteNodeVO.setErrorInfo(errorInfo);
+    //        deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
+    //    }
+    //
+    //    return deleteNodeVO;
+    //}
 }

@@ -329,4 +329,32 @@ public class ZooKeeperController {
 
         pubUtils.flushResultToPage(response, resultJson);
     }
+
+    ///**
+    // * 删除节点-包含该节点下所有的子节点
+    // *
+    // * @param nodePath 节点路径
+    // * @param request
+    // * @param response
+    // */
+    //@PostMapping(value = "/deleteAllChildNodes.do")
+    //public void deleteAllChildNodes(String nodePath, HttpServletRequest request, HttpServletResponse response) {
+    //
+    //    LOGGER.info("===== 删除节点以及所有子节点 =====");
+    //    LOGGER.info("nodePath : " + nodePath);
+    //
+    //    ResultVO resultVO = new ResultVO();
+    //    resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
+    //
+    //    // process
+    //    ResDeleteNodeVO deleteNodeVO = zkClientService.deleteAllNodes(nodePath, -1);
+    //
+    //    resultVO.setResultData(deleteNodeVO);
+    //
+    //    String resultJson = gson.toJson(resultVO);
+    //    LOGGER.info("result info : {}", new Object[]{resultJson});
+    //
+    //    pubUtils.flushResultToPage(response, resultJson);
+    //}
+
 }

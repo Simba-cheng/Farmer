@@ -60,7 +60,6 @@
 
 <script>
 
-    <#--TODO 0.0.2版本 节点右击、新增节点，修改节点，删除节点-->
     new BootstrapMenu('.clickNodeMark', {
         fetchElementData: function (e) {
             // console.log("id : " + e[0].id);
@@ -77,12 +76,14 @@
             onClick: function (e) {
                 zkIndex.deleteNode(e);
             }
-        }, {
-            name: '删除节点(all child node)',
-            onClick: function (e) {
-                // zkIndex.deleteAllChildNode(e);
-            }
-        }]
+        }
+        // , {
+        //     name: '删除节点(all child node)',
+        //     onClick: function (e) {
+        //         zkIndex.deleteAllChildNode(e);
+        //     }
+        // }
+        ]
     });
 
 </script>

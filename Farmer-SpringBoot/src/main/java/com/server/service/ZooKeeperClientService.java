@@ -85,6 +85,15 @@ public interface ZooKeeperClientService {
      */
     ResDeleteNodeVO deleteNode(String nodePath, int version);
 
+    ///**
+    // * 删除节点路径，包含该节点下所有子节点
+    // *
+    // * @param nodePath 节点路径
+    // * @param version  版本号
+    // * @return
+    // */
+    //ResDeleteNodeVO deleteAllNodes(String nodePath, int version);
+
     /**
      * set参数到指定节点下
      *

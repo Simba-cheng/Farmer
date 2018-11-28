@@ -330,7 +330,7 @@ var zkIndex = {
                 var result = data.resultData;
                 if ("Y" == result.isSuccess) {
                     var info = result.displayCopy + " " + result.nodePath;
-                    sweetAlert(info, "请点击父节点刷新", "success")
+                    sweetAlert("创建成功", info, "success")
 
                     //当前节点的li设置class属性
                     var nodeID = parentNode;
@@ -405,12 +405,16 @@ var zkIndex = {
                         if ("Y" == result.isSuccess) {
                             var displayCopy = result.displayCopy + " " + result.nodePath;
                             sweetAlert("删除成功", displayCopy, "success")
+
+                            //删除页面中的节点
+                            $("#" + nodePath).parent().remove();
+
                         } else if ("N" == result.isSuccess) {
                             var error = result.errorInfo;
                             sweetAlert("异常信息", error.errorMessage, "error");
                         }
                         //刷新被删除节点的父节点
-                        zkIndex.deleteNodeRefreshNode(nodePath);
+                        // zkIndex.deleteNodeRefreshNode(nodePath);
                     }
                 });
             });
@@ -461,75 +465,75 @@ var zkIndex = {
     // },
 
     //刷新节点-删除节点后刷新节点用于展示
-    deleteNodeRefreshNode: function (nodeID) {
-
-        //被点击的节点
-        var node = $("#" + nodeID);
-        //找到节点层级关系中的父节点
-        var parentNode = node.parent().parent().prev();
-        var parentNodeID = parentNode[0].id;
-
-        var inputData = {"nodePath": parentNodeID};
-        $.ajax({
-            type: "post",
-            dataType: "json",
-            async: false,
-            url: "/zk/queryChildNodeList.do",
-            data: {"inputData": JSON.stringify(inputData)},
-            success: function (data) {
-                var resultData = data.resultData;
-                if ("Y" == resultData.isSuccess) {
-
-                    var childNodes = resultData.childNodeInfoList;
-                    var resultHTMLData = "<ul>";
-                    var htmlData = "";
-                    for (var i = 0; i < childNodes.length; i++) {
-
-                        var childNode = childNodes[i];
-                        var nodePath = childNode.nodePath;
-                        var completeNode = childNode.completeNode;
-
-                        //节点是否是文件形式 1-是，0-不是
-                        var nodeIsFileValue = childNode.nodeIsFile;
-                        var iconStr = "";
-                        if ("1" == nodeIsFileValue) {
-                            iconStr = "icon-file";
-                        } else if ("0" == nodeIsFileValue) {
-                            iconStr = "icon-folder-open";
-                        }
-
-                        var isExistenceChildClass = "";
-                        if ("1" == childNode.isExistenceChild) {
-                            isExistenceChildClass = "parent_li";
-                        }
-
-                        htmlData +=
-                            "<li class='" + isExistenceChildClass + "'>" +
-                            "<span class='clickNodeMark' name='" + nodePath + "' id='" + completeNode + "' nodeIsFileValue='" + nodeIsFileValue + "' onclick='zkIndex.nodeInfoQuery(this)' title='Expand this branch'>" +
-                            "<i class='" + iconStr + "'></i>" +
-                            nodePath +
-                            "</span>" +
-                            "</li>";
-                    }
-
-                    if ("" == htmlData) {
-                        var thisNode = $("#" + parentNodeID);
-                        //span 节点的兄弟节点 ul
-                        thisNode.next().remove();
-                    } else if (undefined != htmlData) {
-                        var htmlNodeData = resultHTMLData + htmlData + "</ul>";
-                        var thisNode = $("#" + parentNodeID);
-                        //span 节点的兄弟节点 ul
-                        thisNode.next().remove();
-                        thisNode.after(htmlNodeData);
-                    }
-                } else if ("N" == resultData.isSuccess) {
-                    var errorMessage = resultData.errorInfo.errorMessage;
-                    sweetAlert("异常信息", errorMessage, "error");
-                }
-            }
-        });
-    },
+    // deleteNodeRefreshNode: function (nodeID) {
+    //
+    //     //被点击的节点
+    //     var node = $("#" + nodeID);
+    //     //找到节点层级关系中的父节点
+    //     var parentNode = node.parent().parent().prev();
+    //     var parentNodeID = parentNode[0].id;
+    //
+    //     var inputData = {"nodePath": parentNodeID};
+    //     $.ajax({
+    //         type: "post",
+    //         dataType: "json",
+    //         async: false,
+    //         url: "/zk/queryChildNodeList.do",
+    //         data: {"inputData": JSON.stringify(inputData)},
+    //         success: function (data) {
+    //             var resultData = data.resultData;
+    //             if ("Y" == resultData.isSuccess) {
+    //
+    //                 var childNodes = resultData.childNodeInfoList;
+    //                 var resultHTMLData = "<ul>";
+    //                 var htmlData = "";
+    //                 for (var i = 0; i < childNodes.length; i++) {
+    //
+    //                     var childNode = childNodes[i];
+    //                     var nodePath = childNode.nodePath;
+    //                     var completeNode = childNode.completeNode;
+    //
+    //                     //节点是否是文件形式 1-是，0-不是
+    //                     var nodeIsFileValue = childNode.nodeIsFile;
+    //                     var iconStr = "";
+    //                     if ("1" == nodeIsFileValue) {
+    //                         iconStr = "icon-file";
+    //                     } else if ("0" == nodeIsFileValue) {
+    //                         iconStr = "icon-folder-open";
+    //                     }
+    //
+    //                     var isExistenceChildClass = "";
+    //                     if ("1" == childNode.isExistenceChild) {
+    //                         isExistenceChildClass = "parent_li";
+    //                     }
+    //
+    //                     htmlData +=
+    //                         "<li class='" + isExistenceChildClass + "'>" +
+    //                         "<span class='clickNodeMark' name='" + nodePath + "' id='" + completeNode + "' nodeIsFileValue='" + nodeIsFileValue + "' onclick='zkIndex.nodeInfoQuery(this)' title='Expand this branch'>" +
+    //                         "<i class='" + iconStr + "'></i>" +
+    //                         nodePath +
+    //                         "</span>" +
+    //                         "</li>";
+    //                 }
+    //
+    //                 if ("" == htmlData) {
+    //                     var thisNode = $("#" + parentNodeID);
+    //                     //span 节点的兄弟节点 ul
+    //                     thisNode.next().remove();
+    //                 } else if (undefined != htmlData) {
+    //                     var htmlNodeData = resultHTMLData + htmlData + "</ul>";
+    //                     var thisNode = $("#" + parentNodeID);
+    //                     //span 节点的兄弟节点 ul
+    //                     thisNode.next().remove();
+    //                     thisNode.after(htmlNodeData);
+    //                 }
+    //             } else if ("N" == resultData.isSuccess) {
+    //                 var errorMessage = resultData.errorInfo.errorMessage;
+    //                 sweetAlert("异常信息", errorMessage, "error");
+    //             }
+    //         }
+    //     });
+    // },
 
     //创建节点后，刷新当前节点，重新展示节点信息
     createNodeRefreshNode: function (nodeID) {

@@ -39,6 +39,11 @@ public class ZooKeeperClient {
     private CountDownLatch connectedSignal = new CountDownLatch(1);
 
     /**
+     * 标志位：zookeeper服务端是否连接成功
+     */
+    private boolean zkServerIsConn = false;
+
+    /**
      * 创建节点
      *
      * @param nodePath   节点路径
@@ -135,11 +140,12 @@ public class ZooKeeperClient {
                 if (watchedEvent.getState() == Event.KeeperState.SyncConnected) {
                     connectedSignal.countDown();
                     LOGGER.info("===== end 初始化 连接ZooKeeper服务端 完成=====");
+                    zkServerIsConn = true;
                 }
 
                 LOGGER.info("===== 回调 ====");
-                LOGGER.info(watchedEvent.getState().toString());
-                LOGGER.info(watchedEvent.getType().toString());
+                LOGGER.debug(watchedEvent.getState().toString());
+                LOGGER.debug(watchedEvent.getType().toString());
 
             }
         });
@@ -185,5 +191,9 @@ public class ZooKeeperClient {
 
     public ZooKeeper getZooKeeperClient() {
         return zooKeeperClient;
+    }
+
+    public boolean isZkServerIsConn() {
+        return zkServerIsConn;
     }
 }

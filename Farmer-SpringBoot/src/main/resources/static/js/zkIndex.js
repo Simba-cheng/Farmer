@@ -6,7 +6,7 @@ var zkIndex = {
     init: function () {
         this.indexQuery();
         this.connZkServer();
-        this.closeZkServer();
+        this.closeZkServerClick();
         this.connZkServerButton();
         this.refreshPage();
         this.submitNodeData();
@@ -34,6 +34,8 @@ var zkIndex = {
     },
 
     //连接服务器
+    //异步-5秒钟超时时间，5秒钟没有连接上，认为是ZooKeeper服务器Host有问题。
+    //底层客户端连接时间设置为Integer.MAX,是为了尽量避免session失效等连接后产生的问题。
     connZkServer: function () {
         $("#btn_conn_zk_submit").click(function () {
 
@@ -42,11 +44,13 @@ var zkIndex = {
             $.ajax({
                 type: "post",
                 dataType: 'json',
-                async: false,
+                async: true,
+                timeout: 5000,
                 url: "/zk/conn.do",
                 data: {"host": zkConnHost},
                 success: function (data) {
                     var result = data.resultData;
+
                     if ("Y" == result.isSuccess) {
                         sweetAlert("连接成功", "已连接", "success")
                         zkIndex.indexQuery();
@@ -54,8 +58,17 @@ var zkIndex = {
                         var errorMessage = result.errorInfo.errorMessage;
                         sweetAlert("异常信息", errorMessage, "error");
                     }
+
                     //清空文本框中的内容
                     $("#txt_departmentname").val("");
+
+                },
+                complete: function (XMLHttpRequest, status) {
+
+                    //超时处理
+                    if (status == 'timeout') {
+                        sweetAlert("异常信息", "超过默认连接时间(5S),请检查host是否填写正确", "error");
+                    }
                 }
             });
             zkIndex.connZkServerButtonClose();
@@ -97,24 +110,28 @@ var zkIndex = {
     },
 
     //断开ZooKeeper服务器连接
-    closeZkServer: function () {
+    closeZkServerClick: function () {
         $("#button_close_zkServer").click(function () {
+            zkIndex.closeZkServer();
+        });
+    },
 
-            $.ajax({
-                type: "post",
-                dataType: 'json',
-                async: false,
-                url: "/zk/closeZooKeeperServerConn.do",
-                success: function (data) {
-                    var result = data.resultData;
-                    if ("Y" == result.isSuccess) {
-                        sweetAlert("断开连接", result.displayCopy, "success")
-                    } else {
-                        var errorInfo = result.errorInfo;
-                        sweetAlert("异常信息", errorInfo.errorMessage, "error");
-                    }
+    //关闭连接
+    closeZkServer: function () {
+        $.ajax({
+            type: "post",
+            dataType: 'json',
+            async: false,
+            url: "/zk/closeZooKeeperServerConn.do",
+            success: function (data) {
+                var result = data.resultData;
+                if ("Y" == result.isSuccess) {
+                    sweetAlert("断开连接", result.displayCopy, "success")
+                } else {
+                    var errorInfo = result.errorInfo;
+                    sweetAlert("异常信息", errorInfo.errorMessage, "error");
                 }
-            });
+            }
         });
     },
 

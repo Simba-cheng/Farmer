@@ -58,7 +58,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
                 zkClientConectVO.setErrorInfo(errorInfo);
             }
 
-            if (null != zooKeeperClient.getZooKeeperClient()) {
+            if (zooKeeperClient.isZkServerIsConn()) {
                 zkClientConectVO = new ResZKClientConectVO();
                 zkClientConectVO.setIsSuccess(CommConstant.STRING_N);
                 errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_12.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_12.getErrorMessage());

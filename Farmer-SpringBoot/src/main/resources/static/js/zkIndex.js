@@ -54,7 +54,6 @@ var zkIndex = {
                         var errorMessage = result.errorInfo.errorMessage;
                         sweetAlert("异常信息", errorMessage, "error");
                     }
-
                     //清空文本框中的内容
                     $("#txt_departmentname").val("");
                 }
@@ -67,7 +66,6 @@ var zkIndex = {
     connZkServerButton: function () {
         $("#button_conn_zkServer").click(function (e) {
 
-            // $("#myModalLabel").text("连接ZooKeeper服务器");
             $("#myModal").modal();
 
             //修改CSS属性
@@ -164,12 +162,10 @@ var zkIndex = {
                 //隐藏节点数据展示区域
                 $("#node-info-display").hide();
             }
-
         } else {
             //查询节点数据
             this.queryNodeInfoData(nodePath);
         }
-
     },
 
     //查询节点中的内容
@@ -210,11 +206,7 @@ var zkIndex = {
 
     //查询子节点
     queryChildNode: function (e) {
-
-        var name = $("#" + e.id).attr("name");
-        var nodeClass = e.className;
         var inputData = {"nodePath": e.id};
-
         $.ajax({
             type: "post",
             dataType: "json",
@@ -225,47 +217,15 @@ var zkIndex = {
                 var resultData = data.resultData;
                 if ("Y" == resultData.isSuccess) {
 
-                    var childNodes = resultData.childNodeInfoList;
-                    var resultHTMLData = "<ul>";
-                    var htmlData = "";
-                    if ("" != childNodes && undefined != childNodes) {
-                        for (var i = 0; i < childNodes.length; i++) {
+                    //节点拼接
+                    var resultHTMLData = zkIndex.splicingNodeContent(resultData);
 
-                            var childNode = childNodes[i];
-                            var nodePath = childNode.nodePath;
-                            var completeNode = childNode.completeNode;
-
-                            //节点是否是文件形式 1-是，0-不是
-                            var nodeIsFileValue = childNode.nodeIsFile;
-                            var iconStr = "";
-                            if ("1" == nodeIsFileValue) {
-                                // iconStr = "icon-leaf";
-                                iconStr = "icon-file";
-                            } else if ("0" == nodeIsFileValue) {
-                                iconStr = "icon-folder-open";
-                            }
-
-                            var isExistenceChildClass = "";
-                            if ("1" == childNode.isExistenceChild) {
-                                isExistenceChildClass = "parent_li";
-                            }
-
-                            htmlData +=
-                                "<li class='" + isExistenceChildClass + "'>" +
-                                "<span class='clickNodeMark' name='" + nodePath + "' id='" + completeNode + "' nodeIsFileValue='" + nodeIsFileValue + "' onclick='zkIndex.nodeInfoQuery(this)' title='Expand this branch'>" +
-                                "<i class='" + iconStr + "'></i>" +
-                                nodePath +
-                                "</span>" +
-                                "</li>";
-                        }
-
-                        if ("" != htmlData && undefined != htmlData) {
-                            var htmlNodeData = resultHTMLData + htmlData + "</ul>";
-                            var thisNode = $("#" + e.id);
-                            thisNode.next().remove();
-                            thisNode.after(htmlNodeData);
-                        }
+                    if ("" != resultHTMLData && undefined != resultHTMLData) {
+                        var thisNode = $("#" + e.id);
+                        thisNode.next().remove();
+                        thisNode.after(resultHTMLData);
                     }
+
                 } else if ("N" == resultData.isSuccess) {
                     var errorMessage = resultData.errorInfo.errorMessage;
                     sweetAlert("异常信息", errorMessage, "error");
@@ -278,7 +238,6 @@ var zkIndex = {
     submitNodeData: function () {
 
         $("#nodeData_SubmitButton").click(function (e) {
-
             var nodePath = clickNodePath;
 
             //获取文本编辑框中的数据
@@ -413,8 +372,6 @@ var zkIndex = {
                             var error = result.errorInfo;
                             sweetAlert("异常信息", error.errorMessage, "error");
                         }
-                        //刷新被删除节点的父节点
-                        // zkIndex.deleteNodeRefreshNode(nodePath);
                     }
                 });
             });
@@ -550,40 +507,10 @@ var zkIndex = {
                 var resultData = data.resultData;
                 if ("Y" == resultData.isSuccess) {
 
-                    var childNodes = resultData.childNodeInfoList;
-                    var resultHTMLData = "<ul>";
-                    var htmlData = "";
-                    for (var i = 0; i < childNodes.length; i++) {
+                    //拼接节点信息
+                    var htmlNodeData = zkIndex.splicingNodeContent(resultData);
 
-                        var childNode = childNodes[i];
-                        var nodePath = childNode.nodePath;
-                        var completeNode = childNode.completeNode;
-
-                        //节点是否是文件形式 1-是，0-不是
-                        var nodeIsFileValue = childNode.nodeIsFile;
-                        var iconStr = "";
-                        if ("1" == nodeIsFileValue) {
-                            iconStr = "icon-file";
-                        } else if ("0" == nodeIsFileValue) {
-                            iconStr = "icon-folder-open";
-                        }
-
-                        var isExistenceChildClass = "";
-                        if ("1" == childNode.isExistenceChild) {
-                            isExistenceChildClass = "parent_li";
-                        }
-
-                        htmlData +=
-                            "<li class='" + isExistenceChildClass + "'>" +
-                            "<span class='clickNodeMark' name='" + nodePath + "' id='" + completeNode + "' nodeIsFileValue='" + nodeIsFileValue + "' onclick='zkIndex.nodeInfoQuery(this)' title='Expand this branch'>" +
-                            "<i class='" + iconStr + "'></i>" +
-                            nodePath +
-                            "</span>" +
-                            "</li>";
-                    }
-
-                    if (undefined != htmlData) {
-                        var htmlNodeData = resultHTMLData + htmlData + "</ul>";
+                    if (undefined != htmlNodeData) {
                         var thisNode = $("#" + nodeID);
                         //span 节点的兄弟节点 ul
                         thisNode.next().remove();
@@ -596,6 +523,46 @@ var zkIndex = {
             }
         });
 
+    },
+
+    //拼接节点内容
+    splicingNodeContent: function (resultData) {
+
+        var childNodes = resultData.childNodeInfoList;
+        var resultHTMLData = "<ul>";
+        var htmlData = "";
+        for (var i = 0; i < childNodes.length; i++) {
+
+            var childNode = childNodes[i];
+            var nodePath = childNode.nodePath;
+            var completeNode = childNode.completeNode;
+
+            //节点是否是文件形式 1-是，0-不是
+            var nodeIsFileValue = childNode.nodeIsFile;
+            var iconStr = "";
+            if ("1" == nodeIsFileValue) {
+                iconStr = "icon-file";
+            } else if ("0" == nodeIsFileValue) {
+                iconStr = "icon-folder-open";
+            }
+
+            var isExistenceChildClass = "";
+            if ("1" == childNode.isExistenceChild) {
+                isExistenceChildClass = "parent_li";
+            }
+
+            htmlData +=
+                "<li class='" + isExistenceChildClass + "'>" +
+                "<span class='clickNodeMark' name='" + nodePath + "' id='" + completeNode + "' nodeIsFileValue='" + nodeIsFileValue + "' onclick='zkIndex.nodeInfoQuery(this)' title='Expand this branch'>" +
+                "<i class='" + iconStr + "'></i>" +
+                nodePath +
+                "</span>" +
+                "</li>";
+        }
+
+        var htmlNodeData = resultHTMLData + htmlData + "</ul>";
+
+        return htmlNodeData;
     },
 
     //渲染节点数据展示区域

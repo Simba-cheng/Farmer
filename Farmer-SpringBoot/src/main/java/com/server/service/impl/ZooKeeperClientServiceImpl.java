@@ -71,28 +71,9 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
                 //存储zkHost变量
                 ZooKeeperController.ZK_HOST = host;
 
-                //TODO 暂时留着
-                //Thread thread = new Thread(new Runnable() {
-                //    @Override
-                //    public void run() {
-                //        try {
-                //            zooKeeperClient.connect(host);
-                //        } catch (Exception e) {
-                //            e.printStackTrace();
-                //        }
-                //    }
-                //});
-                //thread.start();
-                //Thread.sleep(5000);
-                //if (zooKeeperClient.isZkServerIsConn()) {
-                //    zkClientConectVO = new ResZKClientConectVO(CommConstant.STRING_Y, null, "zookeeper连接成功");
-                //} else {
-                //    zooKeeperClient.closeClientConn();
-                //    zkClientConectVO = new ResZKClientConectVO();
-                //    zkClientConectVO.setIsSuccess(CommConstant.STRING_N);
-                //    errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_02.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_02.getErrorMessage());
-                //    zkClientConectVO.setErrorInfo(errorInfo);
-                //}
+                LOGGER.info("===== 连接前，断开之前的连接 ======");
+                zooKeeperClient.closeClientConn();
+                LOGGER.info("===== 连接前，断开之前的连接 ======");
 
                 zooKeeperClient.connect(host);
                 zkClientConectVO = new ResZKClientConectVO(CommConstant.STRING_Y, null, "zookeeper连接成功");

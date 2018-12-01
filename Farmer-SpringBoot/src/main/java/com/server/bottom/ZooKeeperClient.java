@@ -133,6 +133,8 @@ public class ZooKeeperClient {
         LOGGER.info("===== start 初始化 连接ZooKeeper服务端 =====");
         LOGGER.info("zookeeper host:{}", new Object[]{host});
 
+        zooKeeperClient = null;
+
         zooKeeperClient = new ZooKeeper(host, Integer.MAX_VALUE, new Watcher() {
             @Override
             public void process(WatchedEvent watchedEvent) {
@@ -156,8 +158,16 @@ public class ZooKeeperClient {
      * 关闭连接
      */
     public void closeClientConn() throws Exception {
-        zooKeeperClient.close();
-        zooKeeperClient = null;
+        if (null != zooKeeperClient) {
+            long startTime = System.currentTimeMillis();
+
+            zooKeeperClient.close();
+            zooKeeperClient = null;
+            zkServerIsConn = false;
+            long endTime = System.currentTimeMillis();
+
+            LOGGER.info("关闭连接花费时间：***** " + (endTime - startTime) + " *****");
+        }
     }
 
     /**

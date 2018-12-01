@@ -20,6 +20,29 @@ Farmer 是一个ZooKeeper的可视化工具。
     将平日学习的技术，产出实质成果，是件让人兴奋的事情。
 
 
+## 项目、工具概览
+
+### **首页展示图**<br>
+![ZooKeeper-UI展示图](Farmer-SpringBoot/image/ZooKeeper-UI展示图.png)<br>
+
+### **节点、节点数据展示图**<br>
+![index页面节点-数据](Farmer-SpringBoot/image/index页面节点数据.png)<br>
+
+### **页面按钮-连接ZooKeeper服务器**
+![](Farmer-SpringBoot/image/页面连接zk服务器.png)
+
+![](Farmer-SpringBoot/image/页面连接zk服务器成功.png)
+
+### **节点右击事件**
+![](Farmer-SpringBoot/image/节点-右击事件.png)
+
+### **添加子节点**
+![](Farmer-SpringBoot/image/添加节点.png)
+
+### **删除节点**
+![](Farmer-SpringBoot/image/删除节点.png)
+
+
 ## 版本
 Farmer目前分为两个版本：**SpringBoot版本** 和 **SpringMVC版本**
 
@@ -35,14 +58,3 @@ SpringBoot版本使用的是SpringBoot2.X，仅支持JDK1.8以上，为了照顾
 * SpringMVC版本：
 
     待开发，静候。
-
-
-## 项目、工具概览
-
-* 项目URL : http://localhost:9527/zk/index.do
-
-* **首页展示图**<br>
-![ZooKeeper-UI展示图](Farmer-SpringBoot/image/ZooKeeper-UI展示图.png)<br>
-
-* **节点、节点数据展示图**<br>
-![index页面节点-数据](Farmer-SpringBoot/image/index页面节点数据.png)<br>

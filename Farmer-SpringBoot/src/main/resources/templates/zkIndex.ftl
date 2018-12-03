@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Farmer</title>
+    <title>Farmer - ZooKeeper UI</title>
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     <link rel="stylesheet" type="text/css" href="/static/css/sweetalert.css">

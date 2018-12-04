@@ -3,7 +3,7 @@ package com.server.service.impl;
 import com.server.bottom.ZooKeeperClient;
 import com.server.constant.CommConstant;
 import com.server.constant.ErrorMessageEnum;
-import com.server.constant.NumberStrEnum;
+import com.server.constant.NumberEnum;
 import com.server.controller.zk.ZooKeeperController;
 import com.server.dto.NodeInfoDTO;
 import com.server.service.ZooKeeperClientService;
@@ -24,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -40,6 +42,16 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
      */
     @Autowired
     private ZooKeeperClient zooKeeperClient;
+
+    /**
+     * 删除所有子节点-临时存储节点路径
+     */
+    private List<String> temp_deleteAllChildNodes = new ArrayList<String>();
+
+    /**
+     * 删除所有子节点-最终所有需要删除的节点路径
+     */
+    private LinkedList<String> result_deleteAllChildNodes = new LinkedList<String>();
 
     @Override
     public ResZKClientConectVO zkClientConect(String host) {
@@ -133,15 +145,17 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         }
 
         if (StringUtils.isEmpty(nodeData)) {
-            nodeData = "";
+            nodeData = StringUtils.EMPTY;
         }
 
         StringBuilder createNodePath = new StringBuilder();
         createNodePath.append(parentNode).append("/").append(childNode);
-        String nodePath = createNodePath.toString().replace("_", "/").replace("-", ".").trim();
+        String nodePath = StringUtils.EMPTY;
 
         //process
         try {
+            nodePath = nodePathInputConversion(createNodePath.toString());
+
             String node = zooKeeperClient.createOneNode(nodePath, nodeData.getBytes(), acl, createMode);
             createOneNodeVO = new ResCreateOneNodeVO(CommConstant.STRING_Y, null, "创建节点成功", node);
         } catch (Exception e) {
@@ -301,16 +315,16 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
         ResExitNodePathVO exitNodePathVO = new ResExitNodePathVO();
         String message;
-        String isExist = "";
+        String isExist;
         try {
             Stat stat = zooKeeperClient.exitNodePath(nodePath);
 
             if (null == stat) {
                 message = "节点不存在";
-                isExist = "0";
+                isExist = NumberEnum.ZERO_STR.getNumberStr();
             } else {
                 message = "节点已存在";
-                isExist = "1";
+                isExist = NumberEnum.ONE_STR.getNumberStr();
             }
             //exitNodePathVO = new ResExitNodePathVO(CommConstant.STRING_Y, StringUtils.EMPTY, StringUtils.EMPTY, message, nodePath, isExist);
         } catch (Exception e) {
@@ -324,7 +338,8 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
     @Override
     public ResDeleteNodeVO deleteNode(String nodePath, int version) {
         ResDeleteNodeVO deleteNodeVO = new ResDeleteNodeVO();
-        ResErrorInfo errorInfo = null;
+        ResErrorInfo errorInfo;
+        String resultNodePath = StringUtils.EMPTY;
 
         //check
         if (StringUtils.isEmpty(nodePath)) {
@@ -335,12 +350,12 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         }
 
         try {
-            nodePath = nodePath.replace("_", "/").replace("-", ".");
+            resultNodePath = nodePathInputConversion(nodePath);
 
-            zooKeeperClient.deleteNode(nodePath, version);
-            deleteNodeVO = new ResDeleteNodeVO(CommConstant.STRING_Y, null, "删除节点成功", nodePath);
+            zooKeeperClient.deleteNode(resultNodePath, version);
+            deleteNodeVO = new ResDeleteNodeVO(CommConstant.STRING_Y, null, "删除节点成功", resultNodePath);
         } catch (Exception e) {
-            LOGGER.error("nodePath : {} , error message : {}", new Object[]{nodePath, e.getMessage()}, e);
+            LOGGER.error("nodePath : {} , error message : {}", new Object[]{resultNodePath, e.getMessage()}, e);
             errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_07.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_07.getErrorMessage());
             deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
             deleteNodeVO.setErrorInfo(errorInfo);
@@ -373,7 +388,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
             }
 
             //process
-            Stat stat = zooKeeperClient.setDataForNodePath(nodeInfoDTO.getNodePath(), nodeInfoDTO.getNodeData().getBytes(), version);
+            zooKeeperClient.setDataForNodePath(nodeInfoDTO.getNodePath(), nodeInfoDTO.getNodeData().getBytes(), version);
             dataForNodeVO = new ResSetDataForNodeVO(CommConstant.STRING_Y, null, "插入数据成功", nodeInfoDTO.getNodePath(), nodeInfoDTO.getNodeData());
 
         } catch (Exception e) {
@@ -403,7 +418,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
                 byte[] resultData = zooKeeperClient.getDataForNodePath(nodePath, watcher, stat);
                 if (null == resultData) {
-                    resultData = "".getBytes();
+                    resultData = StringUtils.EMPTY.getBytes();
                 }
                 String data = IOUtils.toString(resultData, CommConstant.CODING_UTF8);
                 getDataForNodeVO = new ResGetDataForNodeVO(CommConstant.STRING_Y, null, "获取节点中数据成功", nodePath, data);
@@ -480,8 +495,8 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
                         ResNodeInfoVO nodeInfoVO = new ResNodeInfoVO();
                         nodeInfoVO.setNodePath(childNode.trim());
                         nodeInfoVO.setCompleteNode(sb.toString().replace("/", "_").replace(".", "-").trim());
-                        nodeInfoVO.setIsExistenceChild(existenceChildNode ? NumberStrEnum.ONE_STR.getNumberStr() : NumberStrEnum.ZERO_STR.getNumberStr());
-                        nodeInfoVO.setNodeIsFile(childNode.contains(".") ? NumberStrEnum.ONE_STR.getNumberStr() : NumberStrEnum.ZERO_STR.getNumberStr());
+                        nodeInfoVO.setIsExistenceChild(existenceChildNode ? NumberEnum.ONE_STR.getNumberStr() : NumberEnum.ZERO_STR.getNumberStr());
+                        nodeInfoVO.setNodeIsFile(childNode.contains(".") ? NumberEnum.ONE_STR.getNumberStr() : NumberEnum.ZERO_STR.getNumberStr());
 
                         resNodeInfoVOS.add(nodeInfoVO);
                     }
@@ -530,7 +545,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
      */
     private ResErrorInfo checkInputParam(String inputData, NodeInfoDTO nodeInfoDTO) {
 
-        ResErrorInfo errorInfo = null;
+        ResErrorInfo errorInfo;
         String nodePath;
         try {
 
@@ -550,10 +565,10 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
                 errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage());
             }
 
-            nodePath = nodePath.replace("_", "/").replace("-", ".");
+            String resultNodePath = nodePathInputConversion(nodePath);
 
-            nodeInfoDTO.setNodePath(nodePath);
-            nodeInfoDTO.setNodeData(StringUtils.isEmpty(reqNodeInfo.getNodeData()) ? "" : reqNodeInfo.getNodeData());
+            nodeInfoDTO.setNodePath(resultNodePath);
+            nodeInfoDTO.setNodeData(StringUtils.isEmpty(reqNodeInfo.getNodeData()) ? StringUtils.EMPTY : reqNodeInfo.getNodeData());
 
         } catch (Exception e) {
             LOGGER.error("inputData : {} , error message : {}", new Object[]{inputData, e.getMessage()}, e);
@@ -571,62 +586,155 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         //0-连接正常，1-未连接，2-连接超时或其他连接异常
         String result = zooKeeperClient.isConn();
 
-        if (NumberStrEnum.ONE_STR.getNumberStr().equals(result)) {
+        if (NumberEnum.ONE_STR.getNumberStr().equals(result)) {
             errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_15.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_15.getErrorMessage());
-        } else if (NumberStrEnum.TWO_STR.getNumberStr().equals(result)) {
+        } else if (NumberEnum.TWO_STR.getNumberStr().equals(result)) {
             errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_16.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_16.getErrorMessage());
         }
 
         return errorInfo;
     }
 
-    //@Override
-    //public ResDeleteNodeVO deleteAllNodes(String nodePath, int version) {
-    //
-    //    ResDeleteNodeVO deleteNodeVO = new ResDeleteNodeVO();
-    //    ResErrorInfo errorInfo;
-    //
-    //    if (StringUtils.isEmpty(nodePath)) {
-    //        errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage());
-    //        deleteNodeVO.setErrorInfo(errorInfo);
-    //        deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
-    //        return deleteNodeVO;
-    //    }
-    //
-    //    try {
-    //
-    //        String deleteNodePath = nodePath.replace("_", "/").replace("-", ".").trim();
-    //
-    //        int length = StringUtils.countMatches(deleteNodePath, "/");
-    //
-    //        for (int i = 0; i < length; i++) {
-    //
-    //            String node;
-    //
-    //            if (i == 0) {
-    //                //第一次
-    //                node = deleteNodePath;
-    //            } else {
-    //                //开始截取
-    //                node = deleteNodePath.substring(0, deleteNodePath.lastIndexOf("/"));
-    //                deleteNodePath = node;
-    //            }
-    //
-    //            if (StringUtils.isEmpty(node)) {
-    //                continue;
-    //            }
-    //
-    //            zooKeeperClient.deleteNode(node, version);
-    //        }
-    //
-    //    } catch (Exception e) {
-    //        LOGGER.error("nodePath : {} , error message : {}", new Object[]{nodePath, e.getMessage()}, e);
-    //
-    //        errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_07.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_07.getErrorMessage());
-    //        deleteNodeVO.setErrorInfo(errorInfo);
-    //        deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
-    //    }
-    //
-    //    return deleteNodeVO;
-    //}
+    @Override
+    public ResDeleteNodeVO deleteAllNodes(String nodePath, int version) {
+
+        ResDeleteNodeVO deleteNodeVO = new ResDeleteNodeVO();
+        ResErrorInfo errorInfo;
+        String deleteNode = "";
+
+        if (StringUtils.isEmpty(nodePath)) {
+            errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage());
+            deleteNodeVO.setErrorInfo(errorInfo);
+            deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
+            return deleteNodeVO;
+        }
+
+        // process
+        // 找出当前节点下，所有的子节点，然后循环删除
+        try {
+
+            //解析
+            String currentNodePath = nodePathInputConversion(nodePath);
+
+            //递归查询所有子节点
+            recursiveQueryAllChildNode(currentNodePath);
+            LOGGER.info("result_deleteAllChildNodes : {}", new Object[]{result_deleteAllChildNodes});
+
+            //delete
+            int deleteNodeSize = result_deleteAllChildNodes.size();
+            for (int i = 0; i < deleteNodeSize; i++) {
+
+                // 从最后一个节点开始删除
+                deleteNode = result_deleteAllChildNodes.pollLast();
+
+                zooKeeperClient.deleteNode(deleteNode, -1);
+            }
+
+            deleteNodeVO = new ResDeleteNodeVO(CommConstant.STRING_Y, null, "节点:" + currentNodePath + "下所有节点 删除成功", currentNodePath);
+
+        } catch (Exception e) {
+            LOGGER.error("nodePath : {} , error message : {}", new Object[]{nodePath, e.getMessage()}, e);
+
+            errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_17.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_17.getErrorMessage());
+            deleteNodeVO.setErrorInfo(errorInfo);
+            deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
+            deleteNodeVO.setNodePath(deleteNode);
+        }
+
+        return deleteNodeVO;
+    }
+
+    /**
+     * 递归查询节点下所有子节点
+     *
+     * @param currentNodePath 当前节点
+     */
+    private void recursiveQueryAllChildNode(String currentNodePath) throws Exception {
+
+        temp_deleteAllChildNodes.clear();
+        result_deleteAllChildNodes.clear();
+
+        temp_deleteAllChildNodes.add(currentNodePath);
+        result_deleteAllChildNodes.add(currentNodePath);
+
+        recursiveQueryChildNode();
+
+    }
+
+    /**
+     * 递归查询子节点
+     */
+    private void recursiveQueryChildNode() throws Exception {
+
+        if (CollectionUtils.isNotEmpty(temp_deleteAllChildNodes)) {
+
+            List<String> tempNode = new ArrayList<String>();
+
+            Iterator<String> nodeIterator = temp_deleteAllChildNodes.iterator();
+
+            while (nodeIterator.hasNext()) {
+
+                String node = nodeIterator.next();
+
+                //在迭代中删除已经获取的节点
+                nodeIterator.remove();
+
+                //查询子节点
+                List<String> allChildNodePath = zooKeeperClient.getChildNodePath(node, null);
+
+                if (CollectionUtils.isNotEmpty(allChildNodePath)) {
+
+                    List<String> allChildNodes = assembleNodePath(node, allChildNodePath);
+
+                    tempNode.addAll(allChildNodes);
+
+                } else {
+                    continue;
+                }
+            }
+
+            temp_deleteAllChildNodes.addAll(tempNode);
+            //所有查出来的节点存入集合，最后循环删除
+            result_deleteAllChildNodes.addAll(tempNode);
+
+            //递归
+            recursiveQueryChildNode();
+        } else {
+            return;
+        }
+    }
+
+    /**
+     * 节点路径入参转换
+     * <p>
+     * 将'_'、'-' 转换为'/'、'.'
+     *
+     * @param nodePath
+     * @return
+     */
+    private String nodePathInputConversion(String nodePath) throws Exception {
+        return nodePath.replace("_", "/").replace("-", ".").trim();
+    }
+
+    /**
+     * 循环拼装子节点路径
+     *
+     * @param rootNode  父节点路径
+     * @param childNode 子节点集合
+     * @return
+     */
+    private List<String> assembleNodePath(String rootNode, List<String> childNode) throws Exception {
+
+        List<String> allChildNodePaths = new ArrayList<String>();
+
+        for (String childNodePath : childNode) {
+
+            String childPath = rootNode + "/" + childNodePath;
+
+            allChildNodePaths.add(childPath);
+        }
+
+        return allChildNodePaths;
+    }
+
 }

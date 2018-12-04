@@ -314,6 +314,9 @@ var zkIndex = {
 
                     //刷新节点
                     zkIndex.createNodeRefreshNode(parentNode);
+                }else{
+                    var errorMessage = result.errorInfo.errorMessage;
+                    sweetAlert("异常信息", errorMessage, "error")
                 }
             }
         });
@@ -394,49 +397,49 @@ var zkIndex = {
             });
     },
 
-    // //删除选中节点(包括选中节点下的所有子节点)
-    // deleteAllChildNode: function (e) {
-    //
-    //     var nodePath = e[0].id;
-    //
-    //     //弹窗提醒
-    //     swal({
-    //             title: "确定全部删除吗？",
-    //             text: "确定全部删除？该节点下子节点也会全部删除！",
-    //             type: "warning",
-    //             showCancelButton: true,
-    //             confirmButtonColor: "#DD6B55",
-    //             cancelButtonText: "取消删除！",
-    //             confirmButtonText: "确定全部删除！",
-    //             closeOnConfirm: false
-    //         },
-    //         function () {
-    //             $.ajax({
-    //                 type: "post",
-    //                 dataType: "json",
-    //                 async: false,
-    //                 url: "/zk/deleteAllChildNodes.do",
-    //                 data: {"nodePath": nodePath},
-    //                 success: function (data) {
-    //
-    //                     var result = data.resultData;
-    //
-    //                     if ("Y" == result.isSuccess) {
-    //                         var displayCopy = result.displayCopy + " " + result.nodePath;
-    //                         sweetAlert("删除成功", displayCopy, "success")
-    //
-    //                         //刷新删除的节点信息
-    //                         // span 当前节点 父节点 li 删除
-    //                         $("#" + nodePath).parent().remove();
-    //
-    //                     } else if ("N" == result.isSuccess) {
-    //                         var error = result.errorInfo;
-    //                         sweetAlert("异常信息", error.errorMessage, "error");
-    //                     }
-    //                 }
-    //             });
-    //         });
-    // },
+    //删除选中节点(包括选中节点下的所有子节点)
+    deleteAllChildNode: function (e) {
+
+        var nodePath = e[0].id;
+
+        //弹窗提醒
+        swal({
+                title: "确定全部删除吗？",
+                text: "确定全部删除？该节点下子节点也会全部删除！",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                cancelButtonText: "取消删除！",
+                confirmButtonText: "确定全部删除！",
+                closeOnConfirm: false
+            },
+            function () {
+                $.ajax({
+                    type: "post",
+                    dataType: "json",
+                    async: false,
+                    url: "/zk/deleteAllChildNodes.do",
+                    data: {"nodePath": nodePath},
+                    success: function (data) {
+
+                        var result = data.resultData;
+
+                        if ("Y" == result.isSuccess) {
+                            var displayCopy = result.displayCopy + " " + result.nodePath;
+                            sweetAlert("删除成功,请手动刷新页面", displayCopy, "success")
+
+                            //刷新删除的节点信息
+                            // span 当前节点 父节点 li 删除
+                            // $("#" + nodePath).parent().remove();
+
+                        } else if ("N" == result.isSuccess) {
+                            var error = result.errorInfo;
+                            sweetAlert("异常信息", error.errorMessage, "error");
+                        }
+                    }
+                });
+            });
+    },
 
     //刷新节点-删除节点后刷新节点用于展示
     // deleteNodeRefreshNode: function (nodeID) {

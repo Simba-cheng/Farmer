@@ -77,12 +77,12 @@
                 zkIndex.deleteNode(e);
             }
         }
-        // , {
-        //     name: '删除节点(all child node)',
-        //     onClick: function (e) {
-        //         zkIndex.deleteAllChildNode(e);
-        //     }
-        // }
+        , {
+            name: '删除节点(all child node)',
+            onClick: function (e) {
+                zkIndex.deleteAllChildNode(e);
+            }
+        }
         ]
     });
 

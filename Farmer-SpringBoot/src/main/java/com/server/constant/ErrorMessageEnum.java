@@ -24,7 +24,8 @@ public enum ErrorMessageEnum {
     ZK_Client_ERROR_13("ZK_Client_ERROR_13","查询子节点异常"),
     ZK_Client_ERROR_14("ZK_Client_ERROR_14","参数解析、校验异常"),
     ZK_Client_ERROR_15("ZK_Client_ERROR_15","客户端尚未连接"),
-    ZK_Client_ERROR_16("ZK_Client_ERROR_16","服务端连接超时,请重新连接");
+    ZK_Client_ERROR_16("ZK_Client_ERROR_16","服务端连接超时,请重新连接"),
+    ZK_Client_ERROR_17("ZK_Client_ERROR_17","删除全部节点-异常-中断删除");
 
     private String errorCode;
 

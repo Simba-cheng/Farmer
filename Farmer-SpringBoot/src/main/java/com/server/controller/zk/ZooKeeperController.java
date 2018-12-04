@@ -2,7 +2,7 @@ package com.server.controller.zk;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.server.constant.NumberStrEnum;
+import com.server.constant.NumberEnum;
 import com.server.service.ZooKeeperClientService;
 import com.server.util.PubUtils;
 import com.server.vo.response.ResCloseZKClientConnVO;
@@ -87,7 +87,7 @@ public class ZooKeeperController {
         LOGGER.info("zookeeper host : {}", new Object[]{host});
 
         ResultVO resultVO = new ResultVO();
-        resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
 
         ResZKClientConectVO resZKClientConectVO = zkClientService.zkClientConect(host);
         resultVO.setResultData(resZKClientConectVO);
@@ -111,7 +111,7 @@ public class ZooKeeperController {
         LOGGER.info("===== 关闭ZooKeeper服务端的连接 =====");
 
         ResultVO resultVO = new ResultVO();
-        resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
 
         ResCloseZKClientConnVO resCloseZKClientConnVO = zkClientService.closeZKClientConn();
         resultVO.setResultData(resCloseZKClientConnVO);
@@ -145,7 +145,7 @@ public class ZooKeeperController {
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         ResultVO resultVO = new ResultVO();
 
-        resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
         ResGetChildNodeVO childNodeVO = zkClientService.getChildNode(inputData, null);
 
         if (null == childNodeVO.getErrorInfo()) {
@@ -185,7 +185,7 @@ public class ZooKeeperController {
         LOGGER.info("inputData : {}", new Object[]{inputData});
 
         ResultVO resultVO = new ResultVO();
-        resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
 
         ResGetDataForNodeVO dataForNodeVO = zkClientService.getDataForNodePath(inputData, null, null);
         resultVO.setResultData(dataForNodeVO);
@@ -210,7 +210,7 @@ public class ZooKeeperController {
         LOGGER.info("inputData : {}", new Object[]{inputData});
 
         ResultVO resultVO = new ResultVO();
-        resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
 
         ResGetChildNodeVO resGetChildNodeVO = zkClientService.getChildNode(inputData, null);
         resultVO.setResultData(resGetChildNodeVO);
@@ -234,7 +234,7 @@ public class ZooKeeperController {
         LOGGER.info("===== 关闭ZooKeeper 连接 =====");
 
         ResultVO resultVO = new ResultVO();
-        resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
 
         ResCloseZKClientConnVO closeZKClientConnVO = zkClientService.closeZKClientConn();
         resultVO.setResultData(closeZKClientConnVO);
@@ -259,7 +259,7 @@ public class ZooKeeperController {
         LOGGER.info("inputData : {}", new Object[]{inputData});
 
         ResultVO resultVO = new ResultVO();
-        resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
 
         ResSetDataForNodeVO setDataForNodeVO = zkClientService.setDataForNodePath(inputData, -1);
 
@@ -290,7 +290,7 @@ public class ZooKeeperController {
         LOGGER.info("parentNode : {} , childNode : {}", new Object[]{parentNode, childNode});
 
         ResultVO resultVO = new ResultVO();
-        resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
 
         //process
         ResCreateOneNodeVO createOneNodeVO = zkClientService.createOneNode(parentNode, childNode, nodeData, ZooDefs.Ids.OPEN_ACL_UNSAFE, PERSISTENT);
@@ -317,7 +317,7 @@ public class ZooKeeperController {
         LOGGER.info("nodePath : {}", new Object[]{nodePath});
 
         ResultVO resultVO = new ResultVO();
-        resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
 
         //process
         ResDeleteNodeVO deleteNodeVO = zkClientService.deleteNode(nodePath, -1);
@@ -330,31 +330,31 @@ public class ZooKeeperController {
         pubUtils.flushResultToPage(response, resultJson);
     }
 
-    ///**
-    // * 删除节点-包含该节点下所有的子节点
-    // *
-    // * @param nodePath 节点路径
-    // * @param request
-    // * @param response
-    // */
-    //@PostMapping(value = "/deleteAllChildNodes.do")
-    //public void deleteAllChildNodes(String nodePath, HttpServletRequest request, HttpServletResponse response) {
-    //
-    //    LOGGER.info("===== 删除节点以及所有子节点 =====");
-    //    LOGGER.info("nodePath : " + nodePath);
-    //
-    //    ResultVO resultVO = new ResultVO();
-    //    resultVO.setIsSuccess(NumberStrEnum.ONE_STR.getNumberStr());
-    //
-    //    // process
-    //    ResDeleteNodeVO deleteNodeVO = zkClientService.deleteAllNodes(nodePath, -1);
-    //
-    //    resultVO.setResultData(deleteNodeVO);
-    //
-    //    String resultJson = gson.toJson(resultVO);
-    //    LOGGER.info("result info : {}", new Object[]{resultJson});
-    //
-    //    pubUtils.flushResultToPage(response, resultJson);
-    //}
+    /**
+     * 删除节点-包含该节点下所有的子节点
+     *
+     * @param nodePath 节点路径
+     * @param request
+     * @param response
+     */
+    @PostMapping(value = "/deleteAllChildNodes.do")
+    public void deleteAllChildNodes(String nodePath, HttpServletRequest request, HttpServletResponse response) {
+
+        LOGGER.info("===== 删除节点以及所有子节点 =====");
+        LOGGER.info("nodePath : " + nodePath);
+
+        ResultVO resultVO = new ResultVO();
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
+
+        // process
+        ResDeleteNodeVO deleteNodeVO = zkClientService.deleteAllNodes(nodePath, -1);
+
+        resultVO.setResultData(deleteNodeVO);
+
+        String resultJson = gson.toJson(resultVO);
+        LOGGER.info("result info : {}", new Object[]{resultJson});
+
+        pubUtils.flushResultToPage(response, resultJson);
+    }
 
 }

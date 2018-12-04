@@ -1,7 +1,7 @@
 package com.server.bottom;
 
 import com.server.constant.CommConstant;
-import com.server.constant.NumberStrEnum;
+import com.server.constant.NumberEnum;
 import org.apache.commons.io.IOUtils;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.WatchedEvent;
@@ -177,11 +177,11 @@ public class ZooKeeperClient {
      */
     public String isConn() {
 
-        String result = NumberStrEnum.ZERO_STR.getNumberStr();
+        String result = NumberEnum.ZERO_STR.getNumberStr();
 
         //未连接
         if (zooKeeperClient == null) {
-            return NumberStrEnum.ONE_STR.getNumberStr();
+            return NumberEnum.ONE_STR.getNumberStr();
         }
 
         //如果基本查询异常，则认为超时或其他连接异常，提示重新连接
@@ -189,7 +189,7 @@ public class ZooKeeperClient {
             zooKeeperClient.getChildren("/", null);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
-            result = NumberStrEnum.TWO_STR.getNumberStr();
+            result = NumberEnum.TWO_STR.getNumberStr();
         }
 
         return result;

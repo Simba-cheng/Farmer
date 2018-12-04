@@ -34,7 +34,7 @@ var zkIndex = {
     },
 
     //连接服务器
-    //异步-5秒钟超时时间，5秒钟没有连接上，认为是ZooKeeper服务器Host有问题。
+    //异步-10秒钟超时时间，10秒钟没有连接上，认为是ZooKeeper服务器Host有问题。
     //底层客户端连接时间设置为Integer.MAX,是为了尽量避免session失效等连接后产生的问题。
     connZkServer: function () {
         $("#btn_conn_zk_submit").click(function () {
@@ -45,7 +45,7 @@ var zkIndex = {
                 type: "post",
                 dataType: 'json',
                 async: true,
-                timeout: 5000,
+                timeout: 10000,
                 url: "/zk/conn.do",
                 data: {"host": zkConnHost},
                 success: function (data) {

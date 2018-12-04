@@ -67,7 +67,7 @@ var zkIndex = {
 
                     //超时处理
                     if (status == 'timeout') {
-                        sweetAlert("异常信息", "超过默认连接时间(5S),请检查host是否填写正确", "error");
+                        sweetAlert("异常信息", "超过默认连接时间(10S),请检查host是否填写正确", "error");
                     }
                 }
             });

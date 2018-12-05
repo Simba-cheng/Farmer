@@ -208,7 +208,10 @@ var zkIndex = {
 
                         //展示文本框上方显示节点名称
                         $("#node_data_name").show();
-                        $("#node_data_name").html(name);
+                        // $("#node_data_name").html(name);
+
+                        var resultNodePath = nodePath.replace(/_/g, "/").replace(/-/, ".");
+                        $("#node_data_name").html(resultNodePath);
 
                         //塞入节点数据内容
                         $("#node-info-display-input").val(nodeData);

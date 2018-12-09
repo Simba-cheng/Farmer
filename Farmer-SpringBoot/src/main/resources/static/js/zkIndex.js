@@ -67,6 +67,18 @@ var zkIndex = {
 
                     //超时处理
                     if (status == 'timeout') {
+
+                        //关闭连接
+                        // zkIndex.closeZkServer();
+
+                        $.ajax({
+                            type: "post",
+                            dataType: 'json',
+                            async: false,
+                            url: "/zk/closeZooKeeperServerConn.do",
+                            success: function (data) {}
+                        });
+
                         sweetAlert("异常信息", "超过默认连接时间(10S),请检查host是否填写正确", "error");
                     }
                 }
@@ -317,7 +329,7 @@ var zkIndex = {
 
                     //刷新节点
                     zkIndex.createNodeRefreshNode(parentNode);
-                }else{
+                } else {
                     var errorMessage = result.errorInfo.errorMessage;
                     sweetAlert("异常信息", errorMessage, "error")
                 }

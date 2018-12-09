@@ -23,7 +23,7 @@
 
 <body>
 
-<h2>ZooKeeper Visual Interface</h2>
+<h2>Farmer - ZooKeeper Visual Interface</h2>
 
 <#--
     bootstrap 图标样式

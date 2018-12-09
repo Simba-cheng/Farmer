@@ -76,7 +76,8 @@ var zkIndex = {
                             dataType: 'json',
                             async: false,
                             url: "/zk/closeZooKeeperServerConn.do",
-                            success: function (data) {}
+                            success: function (data) {
+                            }
                         });
 
                         sweetAlert("异常信息", "超过默认连接时间(10S),请检查host是否填写正确", "error");
@@ -349,6 +350,10 @@ var zkIndex = {
         //将被点击的节点，存储到编辑区节点的属性中
         $("#addNodeChildPath").attr("nodePath", nodePath);
 
+        var formatNodePath = nodePath.replace(/_/g, "/").replace(/-/g, ".");
+
+        $("#addChildNodelLabel").text("添加" + formatNodePath + "的子节点");
+
         // 弹出弹框
         $("#addChildNodeParent").modal();
         //修改CSS属性
@@ -456,77 +461,6 @@ var zkIndex = {
             });
     },
 
-    //刷新节点-删除节点后刷新节点用于展示
-    // deleteNodeRefreshNode: function (nodeID) {
-    //
-    //     //被点击的节点
-    //     var node = $("#" + nodeID);
-    //     //找到节点层级关系中的父节点
-    //     var parentNode = node.parent().parent().prev();
-    //     var parentNodeID = parentNode[0].id;
-    //
-    //     var inputData = {"nodePath": parentNodeID};
-    //     $.ajax({
-    //         type: "post",
-    //         dataType: "json",
-    //         async: false,
-    //         url: "/zk/queryChildNodeList.do",
-    //         data: {"inputData": JSON.stringify(inputData)},
-    //         success: function (data) {
-    //             var resultData = data.resultData;
-    //             if ("Y" == resultData.isSuccess) {
-    //
-    //                 var childNodes = resultData.childNodeInfoList;
-    //                 var resultHTMLData = "<ul>";
-    //                 var htmlData = "";
-    //                 for (var i = 0; i < childNodes.length; i++) {
-    //
-    //                     var childNode = childNodes[i];
-    //                     var nodePath = childNode.nodePath;
-    //                     var completeNode = childNode.completeNode;
-    //
-    //                     //节点是否是文件形式 1-是，0-不是
-    //                     var nodeIsFileValue = childNode.nodeIsFile;
-    //                     var iconStr = "";
-    //                     if ("1" == nodeIsFileValue) {
-    //                         iconStr = "icon-file";
-    //                     } else if ("0" == nodeIsFileValue) {
-    //                         iconStr = "icon-folder-open";
-    //                     }
-    //
-    //                     var isExistenceChildClass = "";
-    //                     if ("1" == childNode.isExistenceChild) {
-    //                         isExistenceChildClass = "parent_li";
-    //                     }
-    //
-    //                     htmlData +=
-    //                         "<li class='" + isExistenceChildClass + "'>" +
-    //                         "<span class='clickNodeMark' name='" + nodePath + "' id='" + completeNode + "' nodeIsFileValue='" + nodeIsFileValue + "' onclick='zkIndex.nodeInfoQuery(this)' title='Expand this branch'>" +
-    //                         "<i class='" + iconStr + "'></i>" +
-    //                         nodePath +
-    //                         "</span>" +
-    //                         "</li>";
-    //                 }
-    //
-    //                 if ("" == htmlData) {
-    //                     var thisNode = $("#" + parentNodeID);
-    //                     //span 节点的兄弟节点 ul
-    //                     thisNode.next().remove();
-    //                 } else if (undefined != htmlData) {
-    //                     var htmlNodeData = resultHTMLData + htmlData + "</ul>";
-    //                     var thisNode = $("#" + parentNodeID);
-    //                     //span 节点的兄弟节点 ul
-    //                     thisNode.next().remove();
-    //                     thisNode.after(htmlNodeData);
-    //                 }
-    //             } else if ("N" == resultData.isSuccess) {
-    //                 var errorMessage = resultData.errorInfo.errorMessage;
-    //                 sweetAlert("异常信息", errorMessage, "error");
-    //             }
-    //         }
-    //     });
-    // },
-
     //创建节点后，刷新当前节点，重新展示节点信息
     createNodeRefreshNode: function (nodeID) {
 
@@ -597,6 +531,16 @@ var zkIndex = {
         var htmlNodeData = resultHTMLData + htmlData + "</ul>";
 
         return htmlNodeData;
+    },
+
+    //新建节点-弹窗展示
+    popUpsCreateCompleteNodePath: function () {
+
+    },
+
+    //新建节点-创建完整节点路径
+    createCompleteNodePath: function () {
+
     },
 
     //渲染节点数据展示区域

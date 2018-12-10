@@ -1,7 +1,15 @@
 package com.server.service.impl;
 
-import com.server.service.ZooKeeperClientService;
-import org.junit.Test;
+import com.server.bottom.ZooKeeperClient;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.PrintWriter;
 
 /**
  * @author CYX
@@ -9,23 +17,46 @@ import org.junit.Test;
  */
 public class ZooKeeperClientServiceImplTest {
 
-    private ZooKeeperClientService zooKeeperClient = new ZooKeeperClientServiceImpl();
+    @InjectMocks
+    private ZooKeeperClientServiceImpl zooKeeperClientService;
 
-    public static final String TEST_HOST = "192.168.137.150:2181";
+    @Mock
+    private ZooKeeperClient zooKeeperClient;
 
-    /**
-     * 测试-创建节点-完整路径
-     */
-    @Test
-    public void test_createNodes() {
+    @Mock
+    private HttpServletRequest requestWithLogon;
 
-        zooKeeperClient.createNodes("/one/two", "1234567", null, null);
+    @Mock
+    private HttpServletResponse response;
 
+    @Mock
+    private PrintWriter writer;
+
+    //public static final String TEST_HOST = "192.168.137.150:2181";
+    public static final String TEST_HOST = "127.0.0.1:2181";
+
+    @BeforeClass(alwaysRun = true)
+    public void init() {
+        try {
+
+            MockitoAnnotations.initMocks(this);
+
+            //when(response.getWriter()).thenReturn(writer);
+
+            //zooKeeperClientService.zkClientConect(TEST_HOST);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    //@Test
-    //public void test_deleteAllNodes() {
-    //    zooKeeperClient.deleteAllNodes("/temp/temp1/temp2/temp3", -1);
-    //}
+    @Test
+    public void test_connectionZKServer() {
+        zooKeeperClientService.zkClientConect(TEST_HOST);
+    }
+
+    @Test
+    public void test_connectionZKServer_exception_1() {
+        zooKeeperClientService.zkClientConect("");
+    }
 
 }

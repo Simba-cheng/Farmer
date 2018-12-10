@@ -54,9 +54,19 @@ public class ZooKeeperClientServiceImplTest {
         zooKeeperClientService.zkClientConect(TEST_HOST);
     }
 
-    @Test
+@Test
     public void test_connectionZKServer_exception_1() {
-        zooKeeperClientService.zkClientConect("");
+
+        try {
+            String filePath = ZooKeeperClientServiceImplTest.class.getResource("/zkServerData/TestOne.json").getPath();
+            String result = FileUtils.readFileToString(new File(filePath), "UTF-8");
+            System.out.println(result);
+
+            zooKeeperClientService.zkClientConect("");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

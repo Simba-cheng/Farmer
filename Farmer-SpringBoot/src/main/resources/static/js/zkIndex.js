@@ -151,6 +151,9 @@ var zkIndex = {
     //点击节点触发的事件
     nodeInfoQuery: function (e) {
         var nodePath = e.id;
+
+        // nodePath = escapeJquery(nodePath);
+
         var thisNode = $("#" + nodePath);
         var titleValue = $("#" + nodePath).attr("title");
         var nodeisfilevalue = $("#" + nodePath).attr("nodeisfilevalue");
@@ -559,33 +562,38 @@ $(function () {
 });
 
 
+/**
+ * 特殊字符转义
+ *
+ * zookeeper节点中包含'/'(斜杠)，为了方便使用jQuery定位，在id中直接拼接完整的节点路径
+ *
+ * 但在jquery中，'/'(斜杠)是特殊字符，使用选择器无法定位；
+ * 同时，为了防止用户定义节点名称时使用特殊字符，所以对节点路径、名称进行转义
+ *
+ * */
+function escapeJquery(srcString) {
 
-//     //特殊字符转义
-//     function escapeJquery(srcString) {
-// // 转义之后的结果
-//         var escapseResult = srcString;
-//
-// // javascript正则表达式中的特殊字符
-//         var jsSpecialChars = ["\\", "^", "$", "*", "?", ".", "+", "(", ")", "[",
-//             "]", "|", "{", "}"];
-//
-// // jquery中的特殊字符,不是正则表达式中的特殊字符
-//         var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
-//             ":", ";", "<", ">", ",", "/"];
-//
-//         for (var i = 0; i < jsSpecialChars.length; i++) {
-//             escapseResult = escapseResult.replace(new RegExp("\\"
-//                 + jsSpecialChars[i], "g"), "\\"
-//                 + jsSpecialChars[i]);
-//         }
-//
-//         for (var i = 0; i < jquerySpecialChars.length; i++) {
-//             escapseResult = escapseResult.replace(new RegExp(jquerySpecialChars[i],
-//                 "g"), "\\" + jquerySpecialChars[i]);
-//         }
-//
-//         return escapseResult;
-//     };
+    // 转义之后的结果
+    var escapseResult = srcString;
+
+    // javascript正则表达式中的特殊字符
+    var jsSpecialChars = ["\\", "^", "$", "*", "?", ".", "+", "(", ")", "[",
+        "]", "|", "{", "}"];
+
+    // jquery中的特殊字符,不是正则表达式中的特殊字符
+    var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
+        ":", ";", "<", ">", ",", "/"];
+
+    for (var i = 0; i < jsSpecialChars.length; i++) {
+        escapseResult = escapseResult.replace(new RegExp("\\" + jsSpecialChars[i], "g"), "\\" + jsSpecialChars[i]);
+    }
+
+    for (var i = 0; i < jquerySpecialChars.length; i++) {
+        escapseResult = escapseResult.replace(new RegExp(jquerySpecialChars[i], "g"), "\\" + jquerySpecialChars[i]);
+    }
+
+    return escapseResult;
+};
 //
 //     var id="add/gift/card/btn.txt"
 //

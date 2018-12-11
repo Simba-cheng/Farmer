@@ -557,3 +557,39 @@ var zkIndex = {
 $(function () {
     zkIndex.init();
 });
+
+
+
+//     //特殊字符转义
+//     function escapeJquery(srcString) {
+// // 转义之后的结果
+//         var escapseResult = srcString;
+//
+// // javascript正则表达式中的特殊字符
+//         var jsSpecialChars = ["\\", "^", "$", "*", "?", ".", "+", "(", ")", "[",
+//             "]", "|", "{", "}"];
+//
+// // jquery中的特殊字符,不是正则表达式中的特殊字符
+//         var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
+//             ":", ";", "<", ">", ",", "/"];
+//
+//         for (var i = 0; i < jsSpecialChars.length; i++) {
+//             escapseResult = escapseResult.replace(new RegExp("\\"
+//                 + jsSpecialChars[i], "g"), "\\"
+//                 + jsSpecialChars[i]);
+//         }
+//
+//         for (var i = 0; i < jquerySpecialChars.length; i++) {
+//             escapseResult = escapseResult.replace(new RegExp(jquerySpecialChars[i],
+//                 "g"), "\\" + jquerySpecialChars[i]);
+//         }
+//
+//         return escapseResult;
+//     };
+//
+//     var id="add/gift/card/btn.txt"
+//
+//     var result = escapeJquery(id);
+//     console.log(result);
+//     console.log("#"+result)
+//     $("#"+result)

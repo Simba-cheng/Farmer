@@ -13,6 +13,6 @@
         <button type="button" class="btn btn-info">信息</button>
     </span>-->
     <span class="nav-content-detail">
-		<button type="button" id="button_close_zkServer" class="btn btn-warning">断开ZK服务器连接</button>
+		<button type="button" id="button_close_zkServer" class="btn btn-danger">断开ZK服务器连接</button>
 	</span>
 </div>

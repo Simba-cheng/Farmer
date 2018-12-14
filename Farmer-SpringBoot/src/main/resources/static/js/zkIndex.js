@@ -125,7 +125,21 @@ var zkIndex = {
     //断开ZooKeeper服务器连接
     closeZkServerClick: function () {
         $("#button_close_zkServer").click(function () {
-            zkIndex.closeZkServer();
+
+            //弹窗提醒
+            swal({
+                    title: "警告！",
+                    text: "确定关闭连接吗？",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    cancelButtonText: "取消关闭",
+                    confirmButtonText: "确定关闭！",
+                    closeOnConfirm: false
+                },
+                function () {
+                    zkIndex.closeZkServer();
+                });
         });
     },
 
@@ -549,6 +563,16 @@ var zkIndex = {
     //渲染节点数据展示区域
     renderingNodeDataInfo: function () {
         $("#node-info-display-input").setTextareaCount({
+            width: "30px",
+            bgColor: "#000",
+            color: "#FFF",
+            display: "inline-block"
+        });
+    },
+
+    // 添加子节点弹窗-数据文本框展示区域
+    addNodeChildDataRenderingNodeDataInfo: function () {
+        $("#addNodeChildData").setTextareaCount({
             width: "30px",
             bgColor: "#000",
             color: "#FFF",

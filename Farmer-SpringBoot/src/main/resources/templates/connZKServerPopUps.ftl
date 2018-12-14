@@ -10,7 +10,8 @@
         <div class="modal-body">
             <div class="form-group">
                 <label for="txt_departmentname">ZooKeeper服务器 Host</label>
-                <textarea id="txt_departmentname" name="content" rows="3" cols="5" placeholder="ip:port 或 ip:port,ip:port,ip:port"></textarea>
+                <textarea id="txt_departmentname" name="content" rows="3" cols="5"
+                          placeholder="ip:port 或 ip:port,ip:port,ip:port(多个host用逗号分隔)"></textarea>
             </div>
         </div>
         <div class="modal-footer">

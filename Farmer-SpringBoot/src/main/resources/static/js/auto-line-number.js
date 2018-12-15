@@ -12,16 +12,16 @@
         this.$ol.css({
             "color": "#999",
             "width": config.width,
-//	    	"height" : this.$element.height(),
             "height": "96%",
-            "font-size": "15px",
+            "font-size": "16px",
             "line-height": this.$element.css("line-height"),
             "position": "absolute",
             "overflow": "hidden",
             "margin": 0,
             "padding": 0,
             "text-align": "center",
-            "font-family": "'Helvetica Neue', Helvetica, Arial, sans-serif"
+            // "font-family": "'Helvetica Neue', Helvetica, Arial, sans-serif"
+            "font-family": " 仿宋"
         });
         this.$wrap.css({
             "padding": ((this.$element.outerHeight() - this.$element.height()) / 2) + 'px 0',
@@ -29,7 +29,7 @@
             "position": "absolute",
             "width": config.width,
 //	    	"height" : this.$element.height() + 'px'
-            "height": "51.3%"
+            "height": "52%"
         });
         this.$element.css({
             "white-space": "none",

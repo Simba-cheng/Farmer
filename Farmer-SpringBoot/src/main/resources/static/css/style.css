@@ -130,6 +130,10 @@ h2 {
     display: block;
 }
 
+#node_data_name {
+    width: 96%;
+}
+
 .node_button {
     display: block;
 }
@@ -140,10 +144,12 @@ h2 {
 }
 
 #node-info-display-input {
-    width: 95.9% !important;
+    width: 95% !important;
     height: 85.85%;
     resize: none;
     margin-top: -1px;
+    line-height: 18px;
+    font-size: 17px;
 }
 
 #txt_departmentname {
@@ -211,7 +217,8 @@ pre {
     background-color: #88cd9b85;
     border-radius: 4px;
 }
-.tree-btn{
+
+.tree-btn {
     width: 91%;
     height: auto;
     padding: 20px 10px;
@@ -219,6 +226,7 @@ pre {
     margin-top: -20px;
     margin-bottom: 15px;
 }
-.btn{
+
+.btn {
     margin-right: 10px;
 }

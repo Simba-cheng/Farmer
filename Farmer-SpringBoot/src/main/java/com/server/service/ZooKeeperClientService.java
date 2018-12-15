@@ -54,7 +54,7 @@ public interface ZooKeeperClientService {
      * @param createMode 节点类型 PERSISTENT 持久型、PERSISTENT_SEQUENTIAL 持久顺序、EPHEMERAL 临时节点、EPHEMERAL_SEQUENTIAL 临时顺序节点
      * @return
      */
-    ResCreateOneNodeVO createNodes(String nodePath, String data, List<ACL> acl, CreateMode createMode);
+    ResCreateAllNodeVO createNodes(String nodePath, String data, List<ACL> acl, CreateMode createMode);
 
     /**
      * 以文件的形式创建节点并写入数据

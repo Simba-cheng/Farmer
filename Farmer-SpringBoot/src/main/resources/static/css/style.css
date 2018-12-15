@@ -211,3 +211,16 @@ pre {
     background-color: #88cd9b85;
     border-radius: 4px;
 }
+
+.tree-btn {
+    width: 91%;
+    height: auto;
+    padding: 20px 10px;
+    border-bottom: 1px solid #2272c8;
+    margin-top: -20px;
+    margin-bottom: 15px;
+}
+
+.btn {
+    margin-right: 10px;
+}

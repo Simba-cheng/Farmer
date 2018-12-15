@@ -38,9 +38,7 @@ var zkIndex = {
     //底层客户端连接时间设置为Integer.MAX,是为了尽量避免session失效等连接后产生的问题。
     connZkServer: function () {
         $("#btn_conn_zk_submit").click(function () {
-
             var zkConnHost = $("#txt_departmentname").val();
-
             $.ajax({
                 type: "post",
                 dataType: 'json',
@@ -50,7 +48,6 @@ var zkIndex = {
                 data: {"host": zkConnHost},
                 success: function (data) {
                     var result = data.resultData;
-
                     if ("Y" == result.isSuccess) {
                         sweetAlert("连接成功", "已连接", "success")
                         zkIndex.indexQuery();
@@ -58,19 +55,12 @@ var zkIndex = {
                         var errorMessage = result.errorInfo.errorMessage;
                         sweetAlert("异常信息", errorMessage, "error");
                     }
-
                     //清空文本框中的内容
                     $("#txt_departmentname").val("");
-
                 },
                 complete: function (XMLHttpRequest, status) {
-
                     //超时处理
                     if (status == 'timeout') {
-
-                        //关闭连接
-                        // zkIndex.closeZkServer();
-
                         $.ajax({
                             type: "post",
                             dataType: 'json',
@@ -79,7 +69,6 @@ var zkIndex = {
                             success: function (data) {
                             }
                         });
-
                         sweetAlert("异常信息", "超过默认连接时间(10S),请检查host是否填写正确", "error");
                     }
                 }
@@ -91,9 +80,7 @@ var zkIndex = {
     //连接服务器按钮-打开弹窗事件
     connZkServerButton: function () {
         $("#button_conn_zkServer").click(function (e) {
-
             $("#myModal").modal();
-
             //修改CSS属性
             var opacityValue = $("#myModal").css("opacity");
             if ("0" == opacityValue) {
@@ -117,7 +104,6 @@ var zkIndex = {
         //还原css样式
         $("#myModal").css("opacity", "0");
         $("#myModal").css("top", "-25%");
-
         //清空文本框中的内容
         $("#txt_departmentname").val("");
     },
@@ -125,7 +111,6 @@ var zkIndex = {
     //断开ZooKeeper服务器连接
     closeZkServerClick: function () {
         $("#button_close_zkServer").click(function () {
-
             //弹窗提醒
             swal({
                     title: "警告！",
@@ -164,13 +149,14 @@ var zkIndex = {
 
     //点击节点触发的事件
     nodeInfoQuery: function (e) {
+
+        //原始路径
         var nodePath = e.id;
-
-        // nodePath = escapeJquery(nodePath);
-
-        var thisNode = $("#" + nodePath);
-        var titleValue = $("#" + nodePath).attr("title");
-        var nodeisfilevalue = $("#" + nodePath).attr("nodeisfilevalue");
+        //特殊字符转换
+        var forMatNodePath = zkIndex.escapeJquery(nodePath);
+        var thisNode = $("#" + forMatNodePath);
+        var titleValue = $("#" + forMatNodePath).attr("title");
+        var nodeisfilevalue = $("#" + forMatNodePath).attr("nodeisfilevalue");
 
         //每次点击时，将id存储到 变量'clickNodePath'中，如果修改数据,则使用这个变量
         clickNodePath = nodePath;
@@ -181,10 +167,8 @@ var zkIndex = {
 
             // 1.查询节点中的数据内容
             this.queryNodeInfoData(nodePath);
-
             // 2.查询该节点的子节点 & 拼接
-            this.queryChildNode(e);
-
+            this.queryChildNode(nodePath, forMatNodePath);
             // 3.将此分支title设置为'Collapse this branch'
             thisNode.attr("title", "Collapse this branch");
 
@@ -204,7 +188,6 @@ var zkIndex = {
 
             //收起操作完成后，将title改为'Expand this branch'
             thisNode.attr("title", "Expand this branch");
-
             //文件夹形式的节点隐藏数据展示区域，文件形式的节点不隐藏
             if ("0" == nodeisfilevalue) {
                 //隐藏节点数据展示区域
@@ -218,7 +201,6 @@ var zkIndex = {
 
     //查询节点中的内容
     queryNodeInfoData: function (nodePath) {
-        var name = $("#" + nodePath).attr("name");
         var inputData = {"nodePath": nodePath};
         $.ajax({
             type: "post",
@@ -233,17 +215,13 @@ var zkIndex = {
                     if (undefined != nodeData) {
                         //展示文本框
                         $("#node-info-display").show();
-
                         //展示文本框行号渲染
                         zkIndex.renderingNodeDataInfo();
-
                         //展示文本框上方显示节点名称
                         $("#node_data_name").show();
                         // $("#node_data_name").html(name);
-
-                        var resultNodePath = nodePath.replace(/_/g, "/").replace(/-/, ".");
-                        $("#node_data_name").html(resultNodePath);
-
+                        // var resultNodePath = nodePath.replace(/_/g, "/").replace(/-/, ".");
+                        $("#node_data_name").html(nodePath);
                         //塞入节点数据内容
                         $("#node-info-display-input").val(nodeData);
                     }
@@ -256,8 +234,8 @@ var zkIndex = {
     },
 
     //查询子节点
-    queryChildNode: function (e) {
-        var inputData = {"nodePath": e.id};
+    queryChildNode: function (nodePath, forMatNodePath) {
+        var inputData = {"nodePath": nodePath};
         $.ajax({
             type: "post",
             dataType: "json",
@@ -267,16 +245,14 @@ var zkIndex = {
             success: function (data) {
                 var resultData = data.resultData;
                 if ("Y" == resultData.isSuccess) {
-
                     //节点拼接
                     var resultHTMLData = zkIndex.splicingNodeContent(resultData);
-
                     if ("" != resultHTMLData && undefined != resultHTMLData) {
-                        var thisNode = $("#" + e.id);
+                        // var thisNode = zkIndex.escapeJquery(nodePath);
+                        var thisNode = $("#" + forMatNodePath);
                         thisNode.next().remove();
                         thisNode.after(resultHTMLData);
                     }
-
                 } else if ("N" == resultData.isSuccess) {
                     var errorMessage = resultData.errorInfo.errorMessage;
                     sweetAlert("异常信息", errorMessage, "error");
@@ -324,9 +300,9 @@ var zkIndex = {
 
         //填写的需要创建的节点名称
         var childNodeName = $("#addNodeChildPath").val();
-        if (childNodeName.indexOf(".") != -1) {
-            childNodeName = childNodeName.replace(".", "-");
-        }
+        // if (childNodeName.indexOf(".") != -1) {
+        //     childNodeName = childNodeName.replace(".", "-");
+        // }
 
         var nodeData = $("#addNodeChildData").val();
 
@@ -364,13 +340,15 @@ var zkIndex = {
 
         //被点击的节点
         var nodePath = e[0].id;
+        // var formatNodePath = zkIndex.escapeJquery(nodePath);
 
         //将被点击的节点，存储到编辑区节点的属性中
         $("#addNodeChildPath").attr("nodePath", nodePath);
 
-        var formatNodePath = nodePath.replace(/_/g, "/").replace(/-/g, ".");
+        // var formatNodePath = nodePath.replace(/_/g, "/").replace(/-/g, ".");
+        // var formatNodePath = nodePath;
 
-        $("#addChildNodelLabel").text("添加" + formatNodePath + "的子节点");
+        $("#addChildNodelLabel").text("添加" + nodePath + "的子节点");
 
         // 弹出弹框
         $("#addChildNodeParent").modal();
@@ -398,6 +376,7 @@ var zkIndex = {
 
         //被选点击的节点id,节点全路径
         var nodePath = e[0].id;
+        var formatNodePath = zkIndex.escapeJquery(nodePath);
 
         //弹窗提醒
         swal({
@@ -424,7 +403,7 @@ var zkIndex = {
                             sweetAlert("删除成功", displayCopy, "success")
 
                             //删除页面中的节点
-                            $("#" + nodePath).parent().remove();
+                            $("#" + formatNodePath).parent().remove();
 
                         } else if ("N" == result.isSuccess) {
                             var error = result.errorInfo;
@@ -439,6 +418,7 @@ var zkIndex = {
     deleteAllChildNode: function (e) {
 
         var nodePath = e[0].id;
+        var formatNodePath = zkIndex.escapeJquery(nodePath);
 
         //弹窗提醒
         swal({
@@ -468,7 +448,7 @@ var zkIndex = {
 
                             //刷新删除的节点信息
                             // span 当前节点 父节点 li 删除
-                            // $("#" + nodePath).parent().remove();
+                            $("#" + formatNodePath).parent().remove();
 
                         } else if ("N" == result.isSuccess) {
                             var error = result.errorInfo;
@@ -579,6 +559,29 @@ var zkIndex = {
             color: "#FFF",
             display: "inline-block"
         });
+    },
+    escapeJquery: function (srcString) {
+
+        // 转义之后的结果
+        var escapseResult = srcString;
+
+        // javascript正则表达式中的特殊字符
+        var jsSpecialChars = ["\\", "^", "$", "*", "?", ".", "+", "(", ")", "[",
+            "]", "|", "{", "}"];
+
+        // jquery中的特殊字符,不是正则表达式中的特殊字符
+        var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
+            ":", ";", "<", ">", ",", "/"];
+
+        for (var i = 0; i < jsSpecialChars.length; i++) {
+            escapseResult = escapseResult.replace(new RegExp("\\" + jsSpecialChars[i], "g"), "\\" + jsSpecialChars[i]);
+        }
+
+        for (var i = 0; i < jquerySpecialChars.length; i++) {
+            escapseResult = escapseResult.replace(new RegExp(jquerySpecialChars[i], "g"), "\\" + jquerySpecialChars[i]);
+        }
+
+        return escapseResult;
     }
 };
 
@@ -596,29 +599,29 @@ $(function () {
  * 同时，为了防止用户定义节点名称时使用特殊字符，所以对节点路径、名称进行转义
  *
  * */
-function escapeJquery(srcString) {
-
-    // 转义之后的结果
-    var escapseResult = srcString;
-
-    // javascript正则表达式中的特殊字符
-    var jsSpecialChars = ["\\", "^", "$", "*", "?", ".", "+", "(", ")", "[",
-        "]", "|", "{", "}"];
-
-    // jquery中的特殊字符,不是正则表达式中的特殊字符
-    var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
-        ":", ";", "<", ">", ",", "/"];
-
-    for (var i = 0; i < jsSpecialChars.length; i++) {
-        escapseResult = escapseResult.replace(new RegExp("\\" + jsSpecialChars[i], "g"), "\\" + jsSpecialChars[i]);
-    }
-
-    for (var i = 0; i < jquerySpecialChars.length; i++) {
-        escapseResult = escapseResult.replace(new RegExp(jquerySpecialChars[i], "g"), "\\" + jquerySpecialChars[i]);
-    }
-
-    return escapseResult;
-};
+// function escapeJquery(srcString) {
+//
+//     // 转义之后的结果
+//     var escapseResult = srcString;
+//
+//     // javascript正则表达式中的特殊字符
+//     var jsSpecialChars = ["\\", "^", "$", "*", "?", ".", "+", "(", ")", "[",
+//         "]", "|", "{", "}"];
+//
+//     // jquery中的特殊字符,不是正则表达式中的特殊字符
+//     var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
+//         ":", ";", "<", ">", ",", "/"];
+//
+//     for (var i = 0; i < jsSpecialChars.length; i++) {
+//         escapseResult = escapseResult.replace(new RegExp("\\" + jsSpecialChars[i], "g"), "\\" + jsSpecialChars[i]);
+//     }
+//
+//     for (var i = 0; i < jquerySpecialChars.length; i++) {
+//         escapseResult = escapseResult.replace(new RegExp(jquerySpecialChars[i], "g"), "\\" + jquerySpecialChars[i]);
+//     }
+//
+//     return escapseResult;
+// };
 //
 //     var id="add/gift/card/btn.txt"
 //

@@ -66,7 +66,6 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
                 zkClientConectVO = new ResZKClientConectVO();
                 zkClientConectVO.setIsSuccess(CommConstant.STRING_N);
                 errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_01.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_01.getErrorMessage());
-
                 zkClientConectVO.setErrorInfo(errorInfo);
             }
 
@@ -149,14 +148,12 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         }
 
         StringBuilder createNodePath = new StringBuilder();
-        createNodePath.append(parentNode).append("/").append(childNode);
+        createNodePath.append(parentNode).append(CommConstant.SLASH).append(childNode);
         String nodePath = StringUtils.EMPTY;
 
         //process
         try {
-            nodePath = nodePathInputConversion(createNodePath.toString());
-
-            String node = zooKeeperClient.createOneNode(nodePath, nodeData.getBytes(), acl, createMode);
+            String node = zooKeeperClient.createOneNode(createNodePath.toString(), nodeData.getBytes(), acl, createMode);
             createOneNodeVO = new ResCreateOneNodeVO(CommConstant.STRING_Y, null, "创建节点成功", node);
         } catch (Exception e) {
             LOGGER.error("nodePath : {} , error message : {}", new Object[]{nodePath, e.getMessage()}, e);
@@ -165,13 +162,12 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
             createOneNodeVO.setNodePath(nodePath);
             errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_05.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_05.getErrorMessage());
             createOneNodeVO.setErrorInfo(errorInfo);
-
         }
 
         return createOneNodeVO;
     }
 
-       @Override
+    @Override
     public ResCreateAllNodeVO createNodes(String nodePath, String data, List<ACL> acl, CreateMode createMode) {
 
         ResCreateAllNodeVO resCreateAllNodeVO = new ResCreateAllNodeVO();
@@ -238,16 +234,16 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
      */
     private boolean handleNode(String nodePath, StringBuilder handleNode, String data, List<ACL> acl, CreateMode createMode) throws Exception {
 
-        handleNode.append("/");
+        handleNode.append(CommConstant.SLASH);
         String tempData;
 
         //默认去掉第一个'/'
         nodePath = nodePath.substring(1, nodePath.length());
 
         //截取需要操作节点，不包含'/'则认为是最后一个节点
-        if (nodePath.contains("/")) {
-            handleNode.append(nodePath.substring(0, nodePath.indexOf("/")));
-            tempData = "";
+        if (nodePath.contains(CommConstant.SLASH)) {
+            handleNode.append(nodePath.substring(0, nodePath.indexOf(CommConstant.SLASH)));
+            tempData = StringUtils.EMPTY;
         } else {
             handleNode.append(nodePath);
             tempData = data;
@@ -262,9 +258,9 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
             return false;
         }
 
-        if (nodePath.contains("/")) {
+        if (nodePath.contains(CommConstant.SLASH)) {
             //去掉已经操作的节点，截取下一次递归的后续节点
-            String nextNode = nodePath.substring(nodePath.indexOf("/"), nodePath.length());
+            String nextNode = nodePath.substring(nodePath.indexOf(CommConstant.SLASH), nodePath.length());
             LOGGER.info("递归继续操作的节点 : {}", new Object[]{nextNode});
 
             handleNode(nextNode, handleNode, data, acl, createMode);
@@ -353,9 +349,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         }
 
         try {
-            resultNodePath = nodePathInputConversion(nodePath);
-
-            zooKeeperClient.deleteNode(resultNodePath, version);
+            zooKeeperClient.deleteNode(nodePath, version);
             deleteNodeVO = new ResDeleteNodeVO(CommConstant.STRING_Y, null, "删除节点成功", resultNodePath);
         } catch (Exception e) {
             LOGGER.error("nodePath : {} , error message : {}", new Object[]{resultNodePath, e.getMessage()}, e);
@@ -497,9 +491,9 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
                         //构建对象
                         ResNodeInfoVO nodeInfoVO = new ResNodeInfoVO();
                         nodeInfoVO.setNodePath(childNode.trim());
-                        nodeInfoVO.setCompleteNode(sb.toString().replace("/", "_").replace(".", "-").trim());
+                        nodeInfoVO.setCompleteNode(sb.toString().trim());
                         nodeInfoVO.setIsExistenceChild(existenceChildNode ? NumberEnum.ONE_STR.getNumberStr() : NumberEnum.ZERO_STR.getNumberStr());
-                        nodeInfoVO.setNodeIsFile(childNode.contains(".") ? NumberEnum.ONE_STR.getNumberStr() : NumberEnum.ZERO_STR.getNumberStr());
+                        nodeInfoVO.setNodeIsFile(childNode.contains(CommConstant.POINT) ? NumberEnum.ONE_STR.getNumberStr() : NumberEnum.ZERO_STR.getNumberStr());
 
                         resNodeInfoVOS.add(nodeInfoVO);
                     }
@@ -568,9 +562,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
                 errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage());
             }
 
-            String resultNodePath = nodePathInputConversion(nodePath);
-
-            nodeInfoDTO.setNodePath(resultNodePath);
+            nodeInfoDTO.setNodePath(nodePath);
             nodeInfoDTO.setNodeData(StringUtils.isEmpty(reqNodeInfo.getNodeData()) ? StringUtils.EMPTY : reqNodeInfo.getNodeData());
 
         } catch (Exception e) {
@@ -617,7 +609,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         try {
 
             //解析
-            String currentNodePath = nodePathInputConversion(nodePath);
+            String currentNodePath = nodePath;
 
             //递归查询所有子节点
             recursiveQueryAllChildNode(currentNodePath);
@@ -708,18 +700,6 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
     }
 
     /**
-     * 节点路径入参转换
-     * <p>
-     * 将'_'、'-' 转换为'/'、'.'
-     *
-     * @param nodePath
-     * @return
-     */
-    private String nodePathInputConversion(String nodePath) throws Exception {
-        return nodePath.replace("_", "/").replace("-", ".").trim();
-    }
-
-    /**
      * 循环拼装子节点路径
      *
      * @param rootNode  父节点路径
@@ -732,7 +712,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
         for (String childNodePath : childNode) {
 
-            String childPath = rootNode + "/" + childNodePath;
+            String childPath = rootNode + CommConstant.SLASH + childNodePath;
 
             allChildNodePaths.add(childPath);
         }

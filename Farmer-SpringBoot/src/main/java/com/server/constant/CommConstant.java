@@ -42,4 +42,9 @@ public class CommConstant {
      * 斜杠
      */
     public static final String SLASH = "/";
+
+    /**
+     * 英文-点
+     */
+    public static final String POINT = ".";
 }

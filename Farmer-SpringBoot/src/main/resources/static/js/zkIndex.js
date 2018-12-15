@@ -175,7 +175,8 @@ var zkIndex = {
         //每次点击时，将id存储到 变量'clickNodePath'中，如果修改数据,则使用这个变量
         clickNodePath = nodePath;
 
-        if ("Expand this branch" == titleValue) {
+        //文件形式节点不用打开和展开，所以直接查询
+        if ("1" == nodeisfilevalue || "Expand this branch" == titleValue) {
             // 'Expand this branch'展开此分支
 
             // 1.查询节点中的数据内容

@@ -357,4 +357,37 @@ public class ZooKeeperController {
         pubUtils.flushResultToPage(response, resultJson);
     }
 
+        /**
+     * 创建完整节点路径
+     * <p>
+     * 用户在页面直接输入完整节点路径，根据"/"进行分隔，每一层节点都判断节点是否存在，不存在则创建，存在则不管。
+     * <p>
+     * 用户输入信息存储在最后一个节点中。
+     * <p>
+     * 如果创建其中某个节点出现异常，之前创建的节点不会删除回滚
+     *
+     * @param nodePath 完整节点路径
+     * @param nodeData 节点数据(存储在最后一个节点)
+     * @param request
+     * @param response
+     */
+    public void createCompleteNodePath(String nodePath, String nodeData, HttpServletRequest request, HttpServletResponse response) {
+
+        LOGGER.info("===== 删除节点以及所有子节点 =====");
+        LOGGER.info("nodePath : " + nodePath);
+
+        ResultVO resultVO = new ResultVO();
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
+
+        //process
+        ResCreateAllNodeVO resCreateAllNodeVO = zkClientService.createNodes(nodePath, nodeData, ZooDefs.Ids.OPEN_ACL_UNSAFE, PERSISTENT);
+
+        resultVO.setResultData(null);
+
+        String resultJson = gson.toJson(resultVO);
+        LOGGER.info("result info : {}", new Object[]{resultJson});
+
+        pubUtils.flushResultToPage(response, resultJson);
+    }
+    
 }

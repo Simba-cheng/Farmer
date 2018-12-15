@@ -171,17 +171,20 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         return createOneNodeVO;
     }
 
-    @Override
-    public ResCreateOneNodeVO createNodes(String nodePath, String data, List<ACL> acl, CreateMode createMode) {
+       @Override
+    public ResCreateAllNodeVO createNodes(String nodePath, String data, List<ACL> acl, CreateMode createMode) {
 
-        ResCreateOneNodeVO createOneNodeVO = null;
+        ResCreateAllNodeVO resCreateAllNodeVO = new ResCreateAllNodeVO();
+        ResErrorInfo errorInfo;
 
         //check
-        if (StringUtils.isEmpty(nodePath)) {
-            //createOneNodeVO = new ResCreateOneNodeVO(CommConstant.STRING_N, "ZK_Client_ERROR_04", "nodePath 节点为空", StringUtils.EMPTY, nodePath);
+        if (StringUtils.isEmpty(nodePath) || StringUtils.isEmpty(data)) {
+            resCreateAllNodeVO.setIsSuccess(CommConstant.STRING_N);
+            errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage());
+            resCreateAllNodeVO.setErrorInfo(errorInfo);
         }
 
-        if (null == createOneNodeVO) {
+        if (null == resCreateAllNodeVO.getErrorInfo()) {
 
             if (CollectionUtils.isEmpty(acl)) {
                 acl = ZooDefs.Ids.OPEN_ACL_UNSAFE;
@@ -196,22 +199,30 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
                 StringBuilder handleNode = new StringBuilder();
 
+                //递归循环节点，一层层判断、校验
                 boolean handleNodeResult = handleNode(nodePath, handleNode, data, acl, createMode);
 
                 if (!handleNodeResult) {
                     //成功
-                    createOneNodeVO = new ResCreateOneNodeVO();
+                    resCreateAllNodeVO = new ResCreateAllNodeVO(CommConstant.STRING_Y, null, "节点创建成功", nodePath);
                 } else {
                     //失败
-                    //createOneNodeVO = new ResCreateOneNodeVO(CommConstant.STRING_N, "ZK_Client_ERROR_08", "创建完整路径节点异常", StringUtils.EMPTY, nodePath);
+                    errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_08.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_08.getErrorMessage());
+                    resCreateAllNodeVO = new ResCreateAllNodeVO();
+                    resCreateAllNodeVO.setIsSuccess(CommConstant.STRING_N);
+                    resCreateAllNodeVO.setErrorInfo(errorInfo);
                 }
 
             } catch (Exception e) {
                 LOGGER.error("创建完整路径节点 : {} 失败", new Object[]{nodePath});
-                //createOneNodeVO = new ResCreateOneNodeVO(CommConstant.STRING_N, "ZK_Client_ERROR_08", "创建完整路径节点异常", StringUtils.EMPTY, nodePath);
+                errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_08.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_08.getErrorMessage());
+                resCreateAllNodeVO = new ResCreateAllNodeVO();
+                resCreateAllNodeVO.setIsSuccess(CommConstant.STRING_N);
+                resCreateAllNodeVO.setErrorInfo(errorInfo);
             }
         }
-        return createOneNodeVO;
+
+        return resCreateAllNodeVO;
     }
 
     /**
@@ -219,6 +230,11 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
      *
      * @param nodePath
      * @param handleNode
+     * @param data
+     * @param acl
+     * @param createMode
+     * @return
+     * @throws Exception
      */
     private boolean handleNode(String nodePath, StringBuilder handleNode, String data, List<ACL> acl, CreateMode createMode) throws Exception {
 
@@ -271,44 +287,31 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
      * @return false-操作失败 true-操作成功
      * @throws Exception
      */
-    private boolean handleNodePath(StringBuilder handleNode, String data, List<ACL> acl, CreateMode createMode) throws Exception {
+    private boolean handleNodePath(StringBuilder handleNode, String data, List<ACL> acl, CreateMode createMode) {
 
         boolean handleNodeResult = true;
 
-        //判断节点是否存在
-        ResExitNodePathVO tempResultVO = exitNodePath(handleNode.toString());
+        try {
+            //判断节点是否存在
+            Stat stat = zooKeeperClient.exitNodePath(handleNode.toString());
 
-        //if (null != tempResultVO && CommConstant.STRING_Y.equals(tempResultVO.getIsSuccess())) {
-        //
-        //    if (NumberStrEnum.ZERO_STR.getNumberStr().equals(tempResultVO.getIsExist())) {
-        //
-        //        LOGGER.info("节点 :{} 不存在 , 需要创建", new Object[]{handleNode});
-        //
-        //        //不存在,创建节点
-        //        ResCreateOneNodeVO createOneNodeVO = createOneNode(handleNode.toString(), data, acl, createMode);
-        //
-        //        if (CommConstant.STRING_N.equals(createOneNodeVO.getIsSuccess())) {
-        //            //创建某个节点失败，直接退出，不再继续往下创建
-        //            handleNodeResult = false;
-        //            LOGGER.info("节点 : {},创建失败", new Object[]{handleNode});
-        //        } else if (CommConstant.STRING_Y.equals(createOneNodeVO.getIsSuccess())) {
-        //            //创建节点成功
-        //            handleNodeResult = true;
-        //            LOGGER.info("节点 : {},创建成功", new Object[]{handleNode});
-        //        }
-        //
-        //    } else {
-        //        //节点存在
-        //        LOGGER.info("节点 : {},已存在", new Object[]{handleNode});
-        //    }
-        //
-        //} else {
-        //    //判断节点是否存在接口操作异常，直接返回
-        //    handleNodeResult = false;
-        //    LOGGER.info("判断节点 : {} 是否存在，操作异常", new Object[]{handleNode});
-        //}
+            if (null == stat) {
+                //不存在,创建节点
+                LOGGER.info("节点 :{} 不存在 , 需要创建", new Object[]{handleNode});
+
+                zooKeeperClient.createOneNode(handleNode.toString(), data.getBytes(), acl, createMode);
+            } else {
+                //节点存在
+                LOGGER.info("节点 : {},已存在", new Object[]{handleNode});
+            }
+        } catch (Exception e) {
+            LOGGER.error("创建节点失败,nodePath : {}", new Object[]{handleNode}, e);
+            handleNodeResult = false;
+        }
+
         return handleNodeResult;
     }
+
 
     @Override
     public ResExitNodePathVO exitNodePath(String nodePath) {

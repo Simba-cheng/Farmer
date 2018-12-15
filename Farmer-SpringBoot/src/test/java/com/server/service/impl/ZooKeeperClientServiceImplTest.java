@@ -60,4 +60,22 @@ public class ZooKeeperClientServiceImplTest {
         zooKeeperClientService.zkClientConect("");
     }
 
+    @Test
+    public void test_createNodes() {
+
+        try {
+
+            when(zooKeeperClient.exitNodePath((String) anyObject())).thenReturn(null);
+
+            when(zooKeeperClient.createOneNode((String) anyObject(), anyObject(), anyObject(), anyObject())).thenReturn("yes");
+
+            String nodePath = "/home/service/whois";
+            String data = "whois";
+
+            zooKeeperClientService.createNodes(nodePath, data, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
 }

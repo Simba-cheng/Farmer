@@ -16,7 +16,6 @@
     <script type="text/javascript" src="/static/js/toastr.js"></script>
     <script type="text/javascript" src="/static/js/BootstrapMenu.min.js"></script>
     <script type="text/javascript" src="/static/js/highlight-8.6.default.min.js"></script>
-    <script type="text/javascript" src="/static/js/custom-imitate-editor/jquery.custom.imitate.editor-v1.0.js"></script>
     <script>
         hljs.initHighlightingOnLoad();
     </script>

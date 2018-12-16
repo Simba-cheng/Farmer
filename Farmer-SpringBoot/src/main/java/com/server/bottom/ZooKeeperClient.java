@@ -186,7 +186,7 @@ public class ZooKeeperClient {
 
         //如果基本查询异常，则认为超时或其他连接异常，提示重新连接
         try {
-            zooKeeperClient.getChildren("/", null);
+            zooKeeperClient.getChildren(CommConstant.SLASH, null);
         } catch (Exception e) {
             LOGGER.error(e.getMessage(), e);
             result = NumberEnum.TWO_STR.getNumberStr();

@@ -32,8 +32,6 @@ import java.util.Map;
 import static org.apache.zookeeper.CreateMode.PERSISTENT;
 
 /**
- * zookeeper节点命名中不推荐使用'_'、'-',会造成数据解析冲突
- *
  * @author CYX
  * @date 2018/11/10 17:10
  */
@@ -358,7 +356,7 @@ public class ZooKeeperController {
         pubUtils.flushResultToPage(response, resultJson);
     }
 
-        /**
+    /**
      * 创建完整节点路径
      * <p>
      * 用户在页面直接输入完整节点路径，根据"/"进行分隔，每一层节点都判断节点是否存在，不存在则创建，存在则不管。
@@ -390,5 +388,5 @@ public class ZooKeeperController {
 
         pubUtils.flushResultToPage(response, resultJson);
     }
-    
+
 }

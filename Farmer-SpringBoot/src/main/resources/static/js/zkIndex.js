@@ -401,10 +401,10 @@ var zkIndex = {
                         if ("Y" == result.isSuccess) {
                             var displayCopy = result.displayCopy + " " + result.nodePath;
                             sweetAlert("删除成功", displayCopy, "success")
-
                             //删除页面中的节点
                             $("#" + formatNodePath).parent().remove();
-
+                            // 隐藏数据展示区域
+                            $("#node-info-display").hide();
                         } else if ("N" == result.isSuccess) {
                             var error = result.errorInfo;
                             sweetAlert("异常信息", error.errorMessage, "error");
@@ -446,10 +446,10 @@ var zkIndex = {
                             var displayCopy = result.displayCopy + " " + result.nodePath;
                             sweetAlert("删除成功,请手动刷新页面", displayCopy, "success")
 
-                            //刷新删除的节点信息
                             // span 当前节点 父节点 li 删除
                             $("#" + formatNodePath).parent().remove();
-
+                            // 隐藏数据展示区域
+                            $("#node-info-display").hide();
                         } else if ("N" == result.isSuccess) {
                             var error = result.errorInfo;
                             sweetAlert("异常信息", error.errorMessage, "error");
@@ -533,7 +533,21 @@ var zkIndex = {
 
     //新建节点-弹窗展示
     popUpsCreateCompleteNodePath: function () {
+        $("#addAllNodePath").modal();
 
+        //修改CSS属性
+        var opacityValue = $("#addAllNodePath").css("opacity");
+        if ("0" == opacityValue) {
+            $("#addAllNodePath").css("opacity", "1");
+        }
+        $("#addAllNodePath").css("top", "50%");
+    },
+
+    //新建节点-关闭弹窗
+    closePopUpsCreateCompleteNodePath: function () {
+        //还原css样式
+        $("#addAllNodePath").css("opacity", "0");
+        $("#addAllNodePath").css("top", "-25%");
     },
 
     //新建节点-创建完整节点路径

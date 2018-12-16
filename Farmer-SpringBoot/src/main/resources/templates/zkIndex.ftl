@@ -16,6 +16,7 @@
     <script type="text/javascript" src="/static/js/toastr.js"></script>
     <script type="text/javascript" src="/static/js/BootstrapMenu.min.js"></script>
     <script type="text/javascript" src="/static/js/highlight-8.6.default.min.js"></script>
+    <script type="text/javascript" src="/static/js/custom-imitate-editor/jquery.custom.imitate.editor-v1.0.js"></script>
     <script>
         hljs.initHighlightingOnLoad();
     </script>
@@ -46,6 +47,15 @@
 <#--右击-添加子节点弹窗-->
 <div class="modal fade" id="addChildNodeParent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <#include "addChildNode.ftl" >
+</div>
+
+<#-- 创建节点-弹窗-->
+<#--<div class="modal fade" id="addAllNodePath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
+    <#--<#include "createCompleteNodePath.ftl">-->
+<#--</div>-->
+
+<div class="nodeModal nodeFade" id="addAllNodePath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <#include "createCompleteNodePath.ftl">
 </div>
 
 <#--节点列表-->

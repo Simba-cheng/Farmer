@@ -166,7 +166,8 @@ h2 {
 
 #addNodeChildData {
     width: 100%;
-    height: 100%;
+    /*height: 100%;*/
+    height: 200px;
     resize: none;
 }
 
@@ -231,118 +232,10 @@ pre {
     margin-right: 10px;
 }
 
-.nodeModal-backdrop {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1040;
-    background-color: #000
+#addAllNodePath {
+    width: 700px;
 }
 
-.nodeModal-backdrop.nodeFade {
-    opacity: 0
-}
-
-.nodeModal-backdrop, .nodeModal-backdrop.nodeFade.in {
-    opacity: .8;
-    filter: alpha(opacity=80)
-}
-
-.nodeModal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    z-index: 1050;
-    width: 560px;
-    margin: -250px 0 0 -280px;
-    background-color: #fff;
-    border: 1px solid #999;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    *border: 1px solid #999;
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    outline: 0;
-    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
-    -webkit-background-clip: padding-box;
-    -moz-background-clip: padding-box;
-    background-clip: padding-box
-}
-
-.nodeModal.nodeFade {
-    top: -25%;
-    -webkit-transition: opacity .3s linear, top .3s ease-out;
-    -moz-transition: opacity .3s linear, top .3s ease-out;
-    -o-transition: opacity .3s linear, top .3s ease-out;
-    transition: opacity .3s linear, top .3s ease-out
-}
-
-.nodeModal.nodeFade.in {
-    top: 50%
-}
-
-.nodeModal-header {
-    padding: 9px 15px;
-    border-bottom: 1px solid #eee
-}
-
-.nodeModal-header .close {
-    margin-top: 2px
-}
-
-.nodeModal-header h3 {
-    margin: 0;
-    line-height: 30px
-}
-
-.nodeModal-body {
-    max-height: 400px;
-    padding: 15px;
-    overflow-y: auto
-}
-
-.nodeModal-form {
-    margin-bottom: 0
-}
-
-.nodeModal-footer {
-    padding: 14px 15px 15px;
-    margin-bottom: 0;
-    text-align: right;
-    background-color: #f5f5f5;
-    border-top: 1px solid #ddd;
-    -webkit-border-radius: 0 0 6px 6px;
-    -moz-border-radius: 0 0 6px 6px;
-    border-radius: 0 0 6px 6px;
-    *zoom: 1;
-    -webkit-box-shadow: inset 0 1px 0 #fff;
-    -moz-box-shadow: inset 0 1px 0 #fff;
-    box-shadow: inset 0 1px 0 #fff
-}
-
-.nodeModal-footer:before, .nodeModal-footer:after {
-    display: table;
-    line-height: 0;
-    content: ""
-}
-
-.nodeModal-footer:after {
-    clear: both
-}
-
-.nodeModal-footer .btn + .btn {
-    margin-bottom: 0;
-    margin-left: 5px
-}
-
-.nodeModal-footer .btn-group .btn + .btn {
-    margin-left: -1px
-}
-
-.nodeModal-footer .btn-block + .btn-block {
-    margin-left: 0
+#addChildNodeParent{
+    width: 700px;
 }

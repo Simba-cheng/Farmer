@@ -49,13 +49,13 @@
 </div>
 
 <#-- 创建节点-弹窗-->
-<#--<div class="modal fade" id="addAllNodePath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">-->
-    <#--<#include "createCompleteNodePath.ftl">-->
-<#--</div>-->
-
-<div class="nodeModal nodeFade" id="addAllNodePath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="addAllNodePath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <#include "createCompleteNodePath.ftl">
 </div>
+
+<#--<div class="nodeModal nodeFade" id="addAllNodePath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <#include "createCompleteNodePath.ftl">
+</div>-->
 
 <#--节点列表-->
 <div class="content">

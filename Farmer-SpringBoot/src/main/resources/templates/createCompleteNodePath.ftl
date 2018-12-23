@@ -21,7 +21,7 @@
             <button type="button" class="btn btn-default" data-dismiss="modal" onclick="zkIndex.closePopUpsCreateCompleteNodePath()">
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭
             </button>
-            <button type="button" id="btn_conn_zk_submit" class="btn btn-primary" data-dismiss="modal" onclick="zkIndex.createCompleteNodePath(this)">
+            <button type="button" id="btn_createCompleteNodePath_submit" class="btn btn-primary" data-dismiss="modal" onclick="zkIndex.createCompleteNodePath(this)">
                 <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>确定
             </button>
         </div>

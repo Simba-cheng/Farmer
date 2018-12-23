@@ -101,6 +101,7 @@ var zkIndex = {
 
     //连接服务器按钮-关闭弹窗事件
     connZkServerButtonClose: function () {
+        $("#myModal").modal('hide');
         //还原css样式
         $("#myModal").css("opacity", "0");
         $("#myModal").css("top", "-25%");
@@ -311,6 +312,7 @@ var zkIndex = {
 
                     //当前节点的li设置class属性
                     var nodeID = parentNode;
+                    nodeID = zkIndex.escapeJquery(nodeID);
                     $("#" + nodeID).parent().attr("class", "parent_li");
 
                     //刷新节点
@@ -347,6 +349,9 @@ var zkIndex = {
 
     //关闭-添加子节点弹窗展示
     closeAddChildNodePopup: function () {
+
+        $("#addChildNodeParent").modal('hide');
+
         //还原css样式
         $("#addChildNodeParent").css("opacity", "0");
         $("#addChildNodeParent").css("top", "-25%");
@@ -445,9 +450,7 @@ var zkIndex = {
 
     //创建节点后，刷新当前节点，重新展示节点信息
     createNodeRefreshNode: function (nodeID) {
-
         var inputData = {"nodePath": nodeID};
-
         $.ajax({
             type: "post",
             dataType: "json",
@@ -462,6 +465,7 @@ var zkIndex = {
                     var htmlNodeData = zkIndex.splicingNodeContent(resultData);
 
                     if (undefined != htmlNodeData) {
+                        nodeID = zkIndex.escapeJquery(nodeID);
                         var thisNode = $("#" + nodeID);
                         //span 节点的兄弟节点 ul
                         thisNode.next().remove();
@@ -529,9 +533,12 @@ var zkIndex = {
 
     //新建节点-关闭弹窗
     closePopUpsCreateCompleteNodePath: function () {
+
+        $("#addAllNodePath").modal('hide');
+
         //还原css样式
         $("#addAllNodePath").css("opacity", "0");
-        $("#addAllNodePath").css("top", "-25%");
+        $("#addAllNodePath").css("top", "-50%");
 
         //清空数据
         $("#createCompleteNodePath").val("");
@@ -593,6 +600,26 @@ var zkIndex = {
         }
     },
 
+    //文件上传弹窗展示
+    fileUpLoadPopUps: function () {
+
+        $("#upLoadFilePopUps").modal();
+
+        //修改CSS属性
+        var opacityValue = $("#upLoadFilePopUps").css("opacity");
+        if ("0" == opacityValue) {
+            $("#upLoadFilePopUps").css("opacity", "1");
+        }
+        $("#upLoadFilePopUps").css("top", "50%");
+    },
+
+    //文件上传关闭弹窗
+    closeFileUpLoadPopUps: function () {
+
+        $("#upLoadFilePopUps").modal('hide');
+
+    },
+
     //渲染节点数据展示区域
     renderingNodeDataInfo: function () {
         $("#node-info-display-input").setTextareaCount({
@@ -618,16 +645,16 @@ var zkIndex = {
         var escapseResult = srcString;
 
         // javascript正则表达式中的特殊字符
-        var jsSpecialChars = ["\\", "^", "$", "*", "?", ".", "+", "(", ")", "[",
-            "]", "|", "{", "}"];
+        // var jsSpecialChars = ["\\", "^", "$", "*", "?", ".", "+", "(", ")", "[",
+        //     "]", "|", "{", "}"];
 
         // jquery中的特殊字符,不是正则表达式中的特殊字符
         var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
             ":", ";", "<", ">", ",", "/"];
 
-        for (var i = 0; i < jsSpecialChars.length; i++) {
-            escapseResult = escapseResult.replace(new RegExp("\\" + jsSpecialChars[i], "g"), "\\" + jsSpecialChars[i]);
-        }
+        // for (var i = 0; i < jsSpecialChars.length; i++) {
+        //     escapseResult = escapseResult.replace(new RegExp("\\" + jsSpecialChars[i], "g"), "\\" + jsSpecialChars[i]);
+        // }
 
         for (var i = 0; i < jquerySpecialChars.length; i++) {
             escapseResult = escapseResult.replace(new RegExp(jquerySpecialChars[i], "g"), "\\" + jquerySpecialChars[i]);

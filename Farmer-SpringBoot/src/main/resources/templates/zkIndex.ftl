@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="/static/css/toastr.css">
     <link rel="stylesheet" type="text/css" href="/static/css/highlight-8.6.default.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/fileinput.css">
     <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="/static/js/zkIndex.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.js"></script>
@@ -16,6 +17,7 @@
     <script type="text/javascript" src="/static/js/toastr.js"></script>
     <script type="text/javascript" src="/static/js/BootstrapMenu.min.js"></script>
     <script type="text/javascript" src="/static/js/highlight-8.6.default.min.js"></script>
+    <script type="text/javascript" src="/static/js/upload/fileinput.js"></script>
     <script>
         hljs.initHighlightingOnLoad();
     </script>
@@ -25,37 +27,30 @@
 
 <h2>Farmer - ZooKeeper Visual Interface</h2>
 
-<#--
-    bootstrap 图标样式
-    https://www.w3schools.com/icons/bootstrap_icons_glyphicons.asp
-
-    sweetalert
-    http://mishengqiang.com/sweetalert/
--->
-
 <#--顶部按钮-->
 <div class="nav">
     <#include "button.ftl" >
 </div>
 
 <#--连接服务器的弹窗-->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none">
     <#include "connZKServerPopUps.ftl" >
 </div>
 
 <#--右击-添加子节点弹窗-->
-<div class="modal fade" id="addChildNodeParent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="addChildNodeParent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none">
     <#include "addChildNode.ftl" >
 </div>
 
 <#-- 创建节点-弹窗-->
-<div class="modal fade" id="addAllNodePath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="addAllNodePath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none">
     <#include "createCompleteNodePath.ftl">
 </div>
 
-<#--<div class="nodeModal nodeFade" id="addAllNodePath" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <#include "createCompleteNodePath.ftl">
-</div>-->
+<#--文件上传弹窗-->
+<div class="modal fade" id="upLoadFilePopUps" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none">
+    <#include "upLoadFilePopUps.ftl">
+</div>
 
 <#--节点列表-->
 <div class="content">

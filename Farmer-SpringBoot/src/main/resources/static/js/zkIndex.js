@@ -219,8 +219,6 @@ var zkIndex = {
                         zkIndex.renderingNodeDataInfo();
                         //展示文本框上方显示节点名称
                         $("#node_data_name").show();
-                        // $("#node_data_name").html(name);
-                        // var resultNodePath = nodePath.replace(/_/g, "/").replace(/-/, ".");
                         $("#node_data_name").html(nodePath);
                         //塞入节点数据内容
                         $("#node-info-display-input").val(nodeData);
@@ -266,10 +264,8 @@ var zkIndex = {
 
         $("#nodeData_SubmitButton").click(function (e) {
             var nodePath = clickNodePath;
-
             //获取文本编辑框中的数据
             var data = $("#node-info-display-input").val();
-
             var inputData = {"nodePath": nodePath, "nodeData": data};
 
             $.ajax({
@@ -297,13 +293,8 @@ var zkIndex = {
 
         //被点击的节点
         var parentNode = $("#addNodeChildPath").attr("nodePath");
-
         //填写的需要创建的节点名称
         var childNodeName = $("#addNodeChildPath").val();
-        // if (childNodeName.indexOf(".") != -1) {
-        //     childNodeName = childNodeName.replace(".", "-");
-        // }
-
         var nodeData = $("#addNodeChildData").val();
 
         $.ajax({
@@ -340,14 +331,8 @@ var zkIndex = {
 
         //被点击的节点
         var nodePath = e[0].id;
-        // var formatNodePath = zkIndex.escapeJquery(nodePath);
-
         //将被点击的节点，存储到编辑区节点的属性中
         $("#addNodeChildPath").attr("nodePath", nodePath);
-
-        // var formatNodePath = nodePath.replace(/_/g, "/").replace(/-/g, ".");
-        // var formatNodePath = nodePath;
-
         $("#addChildNodelLabel").text("添加" + nodePath + "的子节点");
 
         // 弹出弹框
@@ -441,7 +426,6 @@ var zkIndex = {
                     success: function (data) {
 
                         var result = data.resultData;
-
                         if ("Y" == result.isSuccess) {
                             var displayCopy = result.displayCopy + " " + result.nodePath;
                             sweetAlert("删除成功,请手动刷新页面", displayCopy, "success")
@@ -548,11 +532,65 @@ var zkIndex = {
         //还原css样式
         $("#addAllNodePath").css("opacity", "0");
         $("#addAllNodePath").css("top", "-25%");
+
+        //清空数据
+        $("#createCompleteNodePath").val("");
+        $("#createCompleteNodeData").val("");
     },
 
     //新建节点-创建完整节点路径
     createCompleteNodePath: function () {
 
+        //完整节点路径
+        var createCompleteNodePath = $("#createCompleteNodePath").val();
+        //完整节点路径的数据
+        var createCompleteNodeData = $("#createCompleteNodeData").val();
+
+        if (undefined != createCompleteNodePath && "" != createCompleteNodePath && createCompleteNodePath.length > 0) {
+
+            var root = createCompleteNodePath[0];
+
+            if ("/" != root) {
+                sweetAlert("ERROR:请输入完整节点路径", "请从根节点开始(例如：/home/test)", "error");
+                $("#createCompleteNodePath").val("");
+                $("#createCompleteNodeData").val("");
+                return;
+            }
+
+            $.ajax({
+                type: "post",
+                dataType: "json",
+                async: false,
+                url: "/zk/creatCompleteNodes.do",
+                data: {"nodePath": createCompleteNodePath, "nodeData": createCompleteNodeData},
+                success: function (data) {
+
+                    console.log(data);
+
+                    var resultData = data.resultData;
+                    if ("Y" == resultData.isSuccess) {
+
+                        sweetAlert("创建成功", "创建节点 " + resultData.nodePath + " 成功，请手动刷新页面", "success")
+
+                        //清空数据
+                        $("#createCompleteNodePath").val("");
+                        $("#createCompleteNodeData").val("");
+
+                    } else {
+                        var errorMessage = resultData.errorInfo.errorMessage;
+                        sweetAlert("异常信息", errorMessage, "error");
+
+                        //清空数据
+                        $("#createCompleteNodePath").val("");
+                        $("#createCompleteNodeData").val("");
+                    }
+                }
+            });
+        } else {
+            sweetAlert("异常信息", "请输入正确的节点路径", "error");
+            $("#createCompleteNodePath").val("");
+            $("#createCompleteNodeData").val("");
+        }
     },
 
     //渲染节点数据展示区域
@@ -565,15 +603,15 @@ var zkIndex = {
         });
     },
 
-    // 添加子节点弹窗-数据文本框展示区域
-    addNodeChildDataRenderingNodeDataInfo: function () {
-        $("#addNodeChildData").setTextareaCount({
-            width: "30px",
-            bgColor: "#000",
-            color: "#FFF",
-            display: "inline-block"
-        });
-    },
+    /**
+     * 特殊字符转义
+     *
+     * zookeeper节点中包含'/'(斜杠)，为了方便使用jQuery定位，在id中直接拼接完整的节点路径
+     *
+     * 但在jquery、js中，'/'(斜杠)是特殊字符，使用选择器无法定位；
+     * 同时，为了防止用户定义节点名称时使用其他特殊字符，所以对节点路径、名称进行转义
+     *
+     * */
     escapeJquery: function (srcString) {
 
         // 转义之后的结果
@@ -602,44 +640,3 @@ var zkIndex = {
 $(function () {
     zkIndex.init();
 });
-
-
-/**
- * 特殊字符转义
- *
- * zookeeper节点中包含'/'(斜杠)，为了方便使用jQuery定位，在id中直接拼接完整的节点路径
- *
- * 但在jquery中，'/'(斜杠)是特殊字符，使用选择器无法定位；
- * 同时，为了防止用户定义节点名称时使用特殊字符，所以对节点路径、名称进行转义
- *
- * */
-// function escapeJquery(srcString) {
-//
-//     // 转义之后的结果
-//     var escapseResult = srcString;
-//
-//     // javascript正则表达式中的特殊字符
-//     var jsSpecialChars = ["\\", "^", "$", "*", "?", ".", "+", "(", ")", "[",
-//         "]", "|", "{", "}"];
-//
-//     // jquery中的特殊字符,不是正则表达式中的特殊字符
-//     var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
-//         ":", ";", "<", ">", ",", "/"];
-//
-//     for (var i = 0; i < jsSpecialChars.length; i++) {
-//         escapseResult = escapseResult.replace(new RegExp("\\" + jsSpecialChars[i], "g"), "\\" + jsSpecialChars[i]);
-//     }
-//
-//     for (var i = 0; i < jquerySpecialChars.length; i++) {
-//         escapseResult = escapseResult.replace(new RegExp(jquerySpecialChars[i], "g"), "\\" + jquerySpecialChars[i]);
-//     }
-//
-//     return escapseResult;
-// };
-//
-//     var id="add/gift/card/btn.txt"
-//
-//     var result = escapeJquery(id);
-//     console.log(result);
-//     console.log("#"+result)
-//     $("#"+result)

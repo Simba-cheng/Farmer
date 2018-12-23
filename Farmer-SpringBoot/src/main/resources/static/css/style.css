@@ -171,6 +171,19 @@ h2 {
     resize: none;
 }
 
+#createCompleteNodePath{
+    width: 100%;
+    height: 100%;
+    resize: none;
+}
+
+#createCompleteNodeData{
+    width: 100%;
+    /*height: 100%;*/
+    height: 200px;
+    resize: none;
+}
+
 body {
     font-family: Verdana;
 }

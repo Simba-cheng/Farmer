@@ -198,7 +198,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
                 //递归循环节点，一层层判断、校验
                 boolean handleNodeResult = handleNode(nodePath, handleNode, data, acl, createMode);
 
-                if (!handleNodeResult) {
+                if (handleNodeResult) {
                     //成功
                     resCreateAllNodeVO = new ResCreateAllNodeVO(CommConstant.STRING_Y, null, "节点创建成功", nodePath);
                 } else {

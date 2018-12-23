@@ -370,6 +370,7 @@ public class ZooKeeperController {
      * @param request
      * @param response
      */
+    @PostMapping(value = "/creatCompleteNodes.do")
     public void createCompleteNodePath(String nodePath, String nodeData, HttpServletRequest request, HttpServletResponse response) {
 
         LOGGER.info("===== 删除节点以及所有子节点 =====");
@@ -381,7 +382,7 @@ public class ZooKeeperController {
         //process
         ResCreateAllNodeVO resCreateAllNodeVO = zkClientService.createNodes(nodePath, nodeData, ZooDefs.Ids.OPEN_ACL_UNSAFE, PERSISTENT);
 
-        resultVO.setResultData(null);
+        resultVO.setResultData(resCreateAllNodeVO);
 
         String resultJson = gson.toJson(resultVO);
         LOGGER.info("result info : {}", new Object[]{resultJson});

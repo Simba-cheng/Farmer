@@ -338,9 +338,9 @@
         '    <div class="{dropClass}">\n' +
         '    <div class="file-preview-thumbnails">\n' +
         '    </div>\n' +
-        '    <div class="clearfix"></div>' +
-        '    <div class="file-preview-status text-center text-success"></div>\n' +
-        '    <div class="kv-fileinput-error"></div>\n' +
+        // '    <div class="clearfix"></div>' +
+        // '    <div class="file-preview-status text-center text-success"></div>\n' +
+        // '    <div class="kv-fileinput-error"></div>\n' +
         '    </div>\n' +
         '</div>';
     tClose = '<div class="close fileinput-remove">&times;</div>\n';
@@ -424,8 +424,8 @@
         fileIcon: tFileIcon,
         caption: tCaption,
         modalMain: tModalMain,
-        modal: tModal,
-        progress: tProgress,
+        // modal: tModal,
+        // progress: tProgress,
         size: tSize,
         footer: tFooter,
         actions: tActions,
@@ -3252,7 +3252,8 @@
         msgErrorClass: 'file-error-message',
         progressThumbClass: "progress-bar progress-bar-success progress-bar-striped active",
         progressClass: "progress-bar progress-bar-success progress-bar-striped active",
-        progressCompleteClass: "progress-bar progress-bar-success",
+        // progressCompleteClass: "progress-bar progress-bar-success",
+        progressCompleteClass:"",
         progressErrorClass: "progress-bar progress-bar-danger",
         progressUploadThreshold: 99,
         previewFileType: 'image',

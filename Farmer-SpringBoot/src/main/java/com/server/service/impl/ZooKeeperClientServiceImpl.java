@@ -174,7 +174,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         ResErrorInfo errorInfo;
 
         //check
-        if (StringUtils.isEmpty(nodePath) || StringUtils.isEmpty(data)) {
+        if (StringUtils.isEmpty(nodePath)) {
             resCreateAllNodeVO.setIsSuccess(CommConstant.STRING_N);
             errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage());
             resCreateAllNodeVO.setErrorInfo(errorInfo);

@@ -69,14 +69,6 @@ public interface ZooKeeperClientService {
     ResZKClientResultVO createFileToNode(String fileName, String nodePath, String data, List<ACL> acl, CreateMode createMode);
 
     /**
-     * 判断节点路径是否存在
-     *
-     * @param nodePath 节点路径
-     * @return
-     */
-    ResExitNodePathVO exitNodePath(String nodePath);
-
-    /**
      * 删除节点路径
      *
      * @param nodePath 节点路径

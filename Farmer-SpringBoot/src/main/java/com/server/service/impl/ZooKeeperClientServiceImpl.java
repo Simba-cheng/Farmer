@@ -316,32 +316,6 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         return handleNodeResult;
     }
 
-
-    @Override
-    public ResExitNodePathVO exitNodePath(String nodePath) {
-
-        ResExitNodePathVO exitNodePathVO = new ResExitNodePathVO();
-        String message;
-        String isExist;
-        try {
-            Stat stat = zooKeeperClient.exitNodePath(nodePath);
-
-            if (null == stat) {
-                message = "节点不存在";
-                isExist = NumberEnum.ZERO_STR.getNumberStr();
-            } else {
-                message = "节点已存在";
-                isExist = NumberEnum.ONE_STR.getNumberStr();
-            }
-            //exitNodePathVO = new ResExitNodePathVO(CommConstant.STRING_Y, StringUtils.EMPTY, StringUtils.EMPTY, message, nodePath, isExist);
-        } catch (Exception e) {
-            LOGGER.error("nodePath : {} , error message : {}", new Object[]{nodePath, e.getMessage()}, e);
-            //exitNodePathVO = new ResExitNodePathVO(CommConstant.STRING_N, "ZK_Client_ERROR_06", "判断节点是否存在操作异常", StringUtils.EMPTY, nodePath, isExist);
-        }
-
-        return exitNodePathVO;
-    }
-
     @Override
     public ResDeleteNodeVO deleteNode(String nodePath, int version) {
 

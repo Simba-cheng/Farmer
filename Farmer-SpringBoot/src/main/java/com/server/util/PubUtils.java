@@ -2,6 +2,9 @@ package com.server.util;
 
 import com.server.constant.CommConstant;
 import freemarker.template.Template;
+import org.apache.commons.lang.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
@@ -20,6 +23,8 @@ import java.util.Map;
  */
 @Service
 public class PubUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PubUtils.class);
 
     @Autowired
     private FreeMarkerConfig freeMarkerConfig;
@@ -54,8 +59,8 @@ public class PubUtils {
             Template template = freeMarkerConfig.getConfiguration().getTemplate(templatePath);
             template.process(module, stringWriter);
         } catch (Exception e) {
-            e.printStackTrace();
-            return "";
+            LOGGER.error(e.getMessage(), e);
+            return StringUtils.EMPTY;
         }
         return stringWriter.toString();
     }
@@ -80,7 +85,7 @@ public class PubUtils {
             writer.flush();
             writer.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

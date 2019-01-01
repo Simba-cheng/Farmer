@@ -610,7 +610,7 @@ var zkIndex = {
         if ("0" == opacityValue) {
             $("#upLoadFilePopUps").css("opacity", "1");
         }
-        $("#upLoadFilePopUps").css("top", "50%");
+        $("#upLoadFilePopUps").css("top", "46%");
     },
 
     //文件上传关闭弹窗

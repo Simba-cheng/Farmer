@@ -16,10 +16,10 @@
             </div>
         </div>
 
-        <div class="container kv-main">
+        <div class="container my-4" id="fileUpLoadContainer">
             <form enctype="multipart/form-data">
-                <div class="form-group">
-                    <input id="file-4" type="file" class="file" data-upload-url="#">
+                <div class="file-loading">
+                    <input id="file-0a" class="file" type="file" multiple data-min-file-count="1" data-theme="fas">
                 </div>
             </form>
         </div>

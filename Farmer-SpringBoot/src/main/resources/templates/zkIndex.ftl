@@ -8,7 +8,6 @@
     <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="/static/css/toastr.css">
     <link rel="stylesheet" type="text/css" href="/static/css/highlight-8.6.default.min.css">
-    <link rel="stylesheet" type="text/css" href="/static/css/fileinput.css">
     <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
     <script type="text/javascript" src="/static/js/zkIndex.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.js"></script>
@@ -17,7 +16,21 @@
     <script type="text/javascript" src="/static/js/toastr.js"></script>
     <script type="text/javascript" src="/static/js/BootstrapMenu.min.js"></script>
     <script type="text/javascript" src="/static/js/highlight-8.6.default.min.js"></script>
-    <script type="text/javascript" src="/static/js/upload/fileinput.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="/static/upload/css/fileinput.css" media="all"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/upload/themes/theme.css" media="all"/>
+
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+
+    <script src="/static/upload/js/sortable.js" type="text/javascript"></script>
+    <script src="/static/upload/js/fileinput.js" type="text/javascript"></script>
+    <script src="/static/upload/js/fr.js" type="text/javascript"></script>
+    <script src="/static/upload/js/es.js" type="text/javascript"></script>
+    <script src="/static/upload/js/zh.js" type="text/javascript"></script>
+    <script src="/static/upload/js/theme.js" type="text/javascript"></script>
+    <script src="/static/upload/js/explorer-fas/theme.js" type="text/javascript"></script>
+
     <script>
         hljs.initHighlightingOnLoad();
     </script>

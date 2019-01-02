@@ -279,3 +279,8 @@ pre {
 .upload-file {
     overflow-y: visible;
 }
+
+.modal-content {
+    height: 600px;
+}
+

@@ -16,13 +16,18 @@
             </div>
         </div>
 
-        <div class="container my-4" id="fileUpLoadContainer">
-            <form enctype="multipart/form-data">
-                <div class="file-loading">
-                    <input id="file-0a" class="file" type="file" multiple data-min-file-count="1" data-theme="fas">
-                </div>
-            </form>
+
+        <div class="modal-body upload-file" class="mt10">
+            <input id="f_upload" type="file" class="file"/>
         </div>
+        <#--<div class="container my-4" id="fileUpLoadContainer">-->
+            <#--<form enctype="multipart/form-data">-->
+                <#--<div class="file-loading">-->
+                    <#--<input id="file-0a" class="file" type="file" multiple data-min-file-count="1" data-theme="fas">-->
+                <#--</div>-->
+            <#--</form>-->
+        <#--</div>-->
+
 
     </div>
 </div>

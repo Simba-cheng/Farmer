@@ -275,3 +275,7 @@ pre {
 #fileUpLoadContainer{
     width: 640px;
 }
+
+.upload-file {
+    overflow-y: visible;
+}

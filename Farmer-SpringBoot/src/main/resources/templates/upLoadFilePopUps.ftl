@@ -17,7 +17,7 @@
         </div>
 
 
-        <div class="modal-body upload-file" class="mt10">
+        <div class="modal-body upload-file">
             <input id="f_upload" type="file" class="file"/>
         </div>
         <#--<div class="container my-4" id="fileUpLoadContainer">-->

@@ -25,8 +25,8 @@
 
     <script src="/static/upload/js/sortable.js" type="text/javascript"></script>
     <script src="/static/upload/js/fileinput.js" type="text/javascript"></script>
-    <script src="/static/upload/js/fr.js" type="text/javascript"></script>
-    <script src="/static/upload/js/es.js" type="text/javascript"></script>
+    <#--<script src="/static/upload/js/fr.js" type="text/javascript"></script>
+    <script src="/static/upload/js/es.js" type="text/javascript"></script>-->
     <script src="/static/upload/js/zh.js" type="text/javascript"></script>
     <script src="/static/upload/js/theme.js" type="text/javascript"></script>
     <script src="/static/upload/js/explorer-fas/theme.js" type="text/javascript"></script>

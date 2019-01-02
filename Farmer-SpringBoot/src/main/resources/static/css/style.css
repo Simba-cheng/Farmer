@@ -280,7 +280,7 @@ pre {
     overflow-y: visible;
 }
 
-.modal-content {
+#fileUpLoadModalContent {
     height: 600px;
 }
 

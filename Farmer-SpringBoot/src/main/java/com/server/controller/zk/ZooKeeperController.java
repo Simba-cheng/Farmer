@@ -390,4 +390,46 @@ public class ZooKeeperController {
         pubUtils.flushResultToPage(response, resultJson);
     }
 
+        /**
+     * 文件上传
+     *
+     * @param request
+     * @param response
+     */
+    @PostMapping(value = "/fileUpLoad.do")
+    public void fileUpLoad(HttpServletRequest request, HttpServletResponse response) {
+
+        ResultVO resultVO = new ResultVO();
+        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
+
+        try {
+
+            request.setCharacterEncoding("UTF-8");
+            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+
+            /** 页面控件的文件流* */
+            MultipartFile multipartFile = null;
+            Map map = multipartRequest.getFileMap();
+            for (Iterator i = map.keySet().iterator(); i.hasNext(); ) {
+                Object obj = i.next();
+                multipartFile = (MultipartFile) map.get(obj);
+
+            }
+            /** 获取文件的后缀* */
+            String filename = multipartFile.getOriginalFilename();
+            InputStream inputStream = multipartFile.getInputStream();
+
+            String result = IOUtils.toString(inputStream, "UTF-8");
+            System.out.println("file name : " + filename);
+            System.out.println("file info : " + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        resultVO.setResultData("copy that");
+        String resultJson = gson.toJson(resultVO);
+        pubUtils.flushResultToPage(response, resultJson);
+    }
+
+    
 }

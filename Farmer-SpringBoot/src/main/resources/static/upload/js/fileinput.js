@@ -699,8 +699,9 @@
             tBtnLink = '<a href="{href}" tabindex="500" title="{title}" class="{css}" {status}>{icon} {label}</a>';
             //noinspection HtmlUnknownAttribute
             tBtnBrowse = '<div tabindex="500" class="{css}" {status}>{icon} {label}</div>';
-            tModalMain = '<div id="' + $h.MODAL_ID + '" class="file-zoom-dialog modal fade" ' +
-                'tabindex="-1" aria-labelledby="' + $h.MODAL_ID + 'Label"></div>';
+            // tModalMain = '<div id="' + $h.MODAL_ID + '" class="file-zoom-dialog modal fade" ' +
+            //     'tabindex="-1" aria-labelledby="' + $h.MODAL_ID + 'Label"></div>';
+            tModalMain = '';
             tModal = '<div class="modal-dialog modal-lg{rtl}" role="document">\n' +
                 '  <div class="modal-content">\n' +
                 '    <div class="modal-header">\n' +
@@ -1265,16 +1266,21 @@
             self._raise('filefoldererror', [folders, msg]);
         },
         _showUploadError: function (msg, params, event) {
-            var self = this, $error = self.$errorContainer, ev = event || 'fileuploaderror', e = params && params.id ?
-                '<li data-file-id="' + params.id + '">' + msg + '</li>' : '<li>' + msg + '</li>';
-            if ($error.find('ul').length === 0) {
-                self._addError('<ul>' + e + '</ul>');
-            } else {
-                $error.find('ul').append(e);
-            }
-            $error.fadeIn(800);
-            self._raise(ev, [params, msg]);
-            self._setValidationError('file-input-new');
+            //TODO 错误信息展示
+
+            msg = delHtmlTag(msg);
+            sweetAlert("异常信息", msg, "error");
+
+            // var self = this, $error = self.$errorContainer, ev = event || 'fileuploaderror', e = params && params.id ?
+            //     '<li data-file-id="' + params.id + '">' + msg + '</li>' : '<li>' + msg + '</li>';
+            // if ($error.find('ul').length === 0) {
+            //     self._addError('<ul>' + e + '</ul>');
+            // } else {
+            //     $error.find('ul').append(e);
+            // }
+            // $error.fadeIn(800);
+            // self._raise(ev, [params, msg]);
+            // self._setValidationError('file-input-new');
             return true;
         },
         _showError: function (msg, params, event) {
@@ -1579,6 +1585,7 @@
             }
         },
         _uploadClick: function (e) {
+            // TODO 001-文件上传
             var self = this, $btn = self.$container.find('.fileinput-upload'), $form,
                 isEnabled = !$btn.hasClass('disabled') && $h.isEmpty($btn.attr('disabled'));
             if (e && e.isDefaultPrevented()) {
@@ -1597,6 +1604,7 @@
             }
             e.preventDefault();
             if (isEnabled) {
+                // TODO 002
                 self.upload();
             }
         },
@@ -2182,6 +2190,7 @@
             }
         },
         _ajaxSubmit: function (fnBefore, fnSuccess, fnComplete, fnError, previewId, index) {
+            //TODO 007
             var self = this, settings, vUrl;
             if (!self._raise('filepreajax', [previewId, index])) {
                 return;
@@ -2206,6 +2215,7 @@
                 processData: false,
                 contentType: false
             }, self._ajaxSettings);
+            //TODO 008 实际上传
             self.ajaxRequests.push($.ajax(settings));
         },
         _mergeArray: function (prop, content) {
@@ -2213,6 +2223,9 @@
             self[prop] = arr1.concat(arr2);
         },
         _initUploadSuccess: function (out, $thumb, allFiles) {
+            //TODO 8 处理结果
+
+
             var self = this, append, data, index, $div, $newCache, content, config, tags, i;
             if (!self.showPreview || typeof out !== 'object' || $.isEmptyObject(out)) {
                 return;
@@ -2311,6 +2324,7 @@
             });
         },
         _uploadSingle: function (i, isBatch) {
+            //TODO 005
             var self = this, total = self.getFileStack().length, formdata = new FormData(), outData,
                 previewId = self.previewInitId + "-" + i, $thumb, chkComplete, $btnUpload, $btnDelete,
                 hasPostData = self.filestack.length > 0 || !$.isEmptyObject(self.uploadExtraData), uploadFailed,
@@ -2391,6 +2405,7 @@
                 }, 100);
             };
             fnBefore = function (jqXHR) {
+                // TODO 文件实际上传前还要走这个
                 outData = self._getOutData(jqXHR);
                 self.fileBatchCompleted = false;
                 if (!isBatch) {
@@ -2422,6 +2437,7 @@
                 }
             };
             fnSuccess = function (data, textStatus, jqXHR) {
+                //TODO 上传成功
                 var pid = self.showPreview && $thumb.attr('id') ? $thumb.attr('id') : previewId;
                 outData = self._getOutData(jqXHR, data);
                 $.extend(true, params, outData);
@@ -2490,6 +2506,7 @@
             };
             formdata.append(self.uploadFileAttr, self.filestack[i], self.filenames[i]);
             formdata.append('file_id', i);
+            //TODO 006
             self._ajaxSubmit(fnBefore, fnSuccess, fnComplete, fnError, previewId, i);
         },
         _uploadBatch: function () {
@@ -2639,10 +2656,12 @@
                 }
             };
             fnSuccess = function (data, textStatus, jqXHR) {
+                //TODO 6 处理返回数据
                 var outData = self._getOutData(jqXHR, data);
                 if ($h.isEmpty(data) || $h.isEmpty(data.error)) {
                     self._raise('filebatchuploadsuccess', [outData]);
                     self._clearFileInput();
+                    //TODO 7
                     self._initUploadSuccess(data);
                     self._setProgress(101);
                 } else {
@@ -2878,6 +2897,7 @@
             return self.mimeTypeAliases[ftype] || ftype;
         },
         _generatePreviewTemplate: function (cat, data, fname, ftype, previewId, isError, size, frameClass, foot, ind, templ) {
+            //TODO 生成预览模板
             var self = this, caption = self.slug(fname), prevContent, zoomContent = '', styleAttribs = '',
                 screenW = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth,
                 config = screenW < 400 ? (self.previewSettingsSmall[cat] || self.defaults.previewSettingsSmall[cat]) :
@@ -3052,6 +3072,7 @@
             self._setProgress(101, self.$progress, self.msgCancelled);
         },
         _setProgress: function (p, $el, error) {
+            //TODO 9 具体错误信息展示 div
             var self = this, pct = Math.min(p, 100), out, pctLimit = self.progressUploadThreshold,
                 t = p <= 100 ? self.progressTemplate : self.progressCompleteTemplate,
                 template = pct < 100 ? self.progressTemplate : (error ? self.progressErrorTemplate : t);
@@ -3504,6 +3525,7 @@
             return '';
         },
         _renderFileFooter: function (caption, size, width, isError) {
+            //TODO 加载文件、校验
             var self = this, config = self.fileActionSettings, rem = config.showRemove, drg = config.showDrag,
                 upl = config.showUpload, zoom = config.showZoom, out,
                 template = self._getLayoutTemplate('footer'), tInd = self._getLayoutTemplate('indicator'),
@@ -3616,6 +3638,7 @@
             fileIds.push(fileId);
         },
         _change: function (e) {
+            //TODO 01
             var self = this;
             if (self.changeTriggered) {
                 return;
@@ -3685,7 +3708,9 @@
                     }
                 }
             }
+            //是否预览
             if (self.isPreviewable) {
+                //TODO 02
                 self.readFiles(tfiles);
             } else {
                 self._updateFileDetails(1);
@@ -3777,36 +3802,55 @@
         },
         readFiles: function (files) {
             this.reader = new FileReader();
-            var self = this, $el = self.$element, $preview = self.$preview, reader = self.reader,
-                $container = self.$previewContainer, $status = self.$previewStatus, msgLoading = self.msgLoading,
-                msgProgress = self.msgProgress, previewInitId = self.previewInitId, numFiles = files.length,
-                settings = self.fileTypeSettings, ctr = self.filestack.length, readFile,
-                fileTypes = self.allowedFileTypes, typLen = fileTypes ? fileTypes.length : 0,
-                fileExt = self.allowedFileExtensions, strExt = $h.isEmpty(fileExt) ? '' : fileExt.join(', '),
-                maxPreviewSize = self.maxFilePreviewSize && parseFloat(self.maxFilePreviewSize),
-                canPreview = $preview.length && (!maxPreviewSize || isNaN(maxPreviewSize)),
-                //TODO 错误展示优化
-                throwError = function (msg, file, previewId, index) {
-                    var p1 = $.extend(true, {}, self._getOutData({}, {}, files), {id: previewId, index: index}),
-                        p2 = {id: previewId, index: index, file: file, files: files}, $thumb;
-                    self._previewDefault(file, previewId, true);
-                    if (self.isAjaxUpload) {
-                        self.addToStack(undefined);
-                        setTimeout(function () {
-                            readFile(index + 1);
-                        }, 100);
-                    } else {
-                        numFiles = 0;
-                    }
-                    self._initFileActions();
-                    $thumb = $('#' + previewId);
-                    $thumb.find('.kv-file-upload').hide();
-                    if (self.removeFromPreviewOnError) {
-                        $thumb.remove();
-                    }
-                    self.isError = self.isAjaxUpload ? self._showUploadError(msg, p1) : self._showError(msg, p2);
-                    self._updateFileDetails(numFiles);
-                };
+            var self = this;
+            var $el = self.$element;
+            var $preview = self.$preview;
+            var reader = self.reader;
+            var $container = self.$previewContainer;
+            var $status = self.$previewStatus;
+            var msgLoading = self.msgLoading;
+            var msgProgress = self.msgProgress;
+            var previewInitId = self.previewInitId;
+            var numFiles = files.length;
+            var settings = self.fileTypeSettings;
+            var ctr = self.filestack.length;
+            var readFile;
+            var fileTypes = self.allowedFileTypes;
+            var typLen = fileTypes ? fileTypes.length : 0;
+            var fileExt = self.allowedFileExtensions;
+            var strExt = $h.isEmpty(fileExt) ? '' : fileExt.join(', ');
+            var maxPreviewSize = self.maxFilePreviewSize && parseFloat(self.maxFilePreviewSize);
+            var canPreview = $preview.length && (!maxPreviewSize || isNaN(maxPreviewSize));
+
+            //TODO 错误展示优化
+            var throwError = function (msg, file, previewId, index) {
+
+                msg = delHtmlTag(msg);
+                sweetAlert("异常信息", msg, "error");
+
+                //TODO 展示模板
+                self._previewDefault(file, previewId, true);
+
+                //移除产生错误的文件
+                self.clear();
+
+                // if (self.isAjaxUpload) {
+                //     self.addToStack(undefined);
+                //     setTimeout(function () {
+                //         readFile(index + 1);
+                //     }, 100);
+                // } else {
+                //     numFiles = 0;
+                // }
+                // self._initFileActions();
+                // $thumb = $('#' + previewId);
+                // $thumb.find('.kv-file-upload').hide();
+                // if (self.removeFromPreviewOnError) {
+                //     $thumb.remove();
+                // }
+                // self.isError = self.isAjaxUpload ? self._showUploadError(msg, p1) : self._showError(msg, p2);
+                // self._updateFileDetails(numFiles);
+            };
 
             self.loadedImages = [];
             self.totalImagesCount = 0;
@@ -4162,8 +4206,10 @@
             return self.$element;
         },
         upload: function () {
+            //TODO 003
             var self = this, totLen = self.getFileStack().length, i, outData, len,
                 hasExtraData = !$.isEmptyObject(self._getExtraData());
+
             if (!self.isAjaxUpload || self.isDisabled || !self._isFileSelectionValid(totLen)) {
                 return;
             }
@@ -4201,6 +4247,7 @@
 
                 for (i = 0; i < len; i++) {
                     if (self.filestack[i]) {
+                        //TODO 004
                         self._uploadSingle(i, true);
                     }
                 }
@@ -4437,94 +4484,11 @@
         reversePreviewOrder: false
     };
 
-    //异步上传返回结果处理
-    $("#f_upload").on("fileuploaded", function (event, data, previewId, index) {
-        console.log("收到消息");
-    });
-
-    // noinspection HtmlUnknownAttribute
-    // $.fn.fileinputLocales.en = {
-    //     fileSingle: 'file',
-    //     filePlural: 'files',
-    //     browseLabel: 'Browse &hellip;',
-    //     removeLabel: 'Remove',
-    //     removeTitle: 'Clear selected files',
-    //     cancelLabel: 'Cancel',
-    //     cancelTitle: 'Abort ongoing upload',
-    //     uploadLabel: 'Upload',
-    //     uploadTitle: 'Upload selected files',
-    //     msgNo: 'No',
-    //     msgNoFilesSelected: 'No files selected',
-    //     msgCancelled: 'Cancelled',
-    //     msgPlaceholder: 'Select {files}...',
-    //     msgZoomModalHeading: 'Detailed Preview',
-    //     msgFileRequired: 'You must select a file to upload.',
-    //     msgSizeTooSmall: 'File "{name}" (<b>{size} KB</b>) is too small and must be larger than <b>{minSize} KB</b>.',
-    //     msgSizeTooLarge: 'File "{name}" (<b>{size} KB</b>) exceeds maximum allowed upload size of <b>{maxSize} KB</b>.',
-    //     msgFilesTooLess: 'You must select at least <b>{n}</b> {files} to upload.',
-    //     msgFilesTooMany: 'Number of files selected for upload <b>({n})</b> exceeds maximum allowed limit of <b>{m}</b>.',
-    //     msgFileNotFound: 'File "{name}" not found!',
-    //     msgFileSecured: 'Security restrictions prevent reading the file "{name}".',
-    //     msgFileNotReadable: 'File "{name}" is not readable.',
-    //     msgFilePreviewAborted: 'File preview aborted for "{name}".',
-    //     msgFilePreviewError: 'An error occurred while reading the file "{name}".',
-    //     msgInvalidFileName: 'Invalid or unsupported characters in file name "{name}".',
-    //     msgInvalidFileType: 'Invalid type for file "{name}". Only "{types}" files are supported.',
-    //     msgInvalidFileExtension: 'Invalid extension for file "{name}". Only "{extensions}" files are supported.',
-    //     msgFileTypes: {
-    //         'image': 'image',
-    //         'html': 'HTML',
-    //         'text': 'text',
-    //         'video': 'video',
-    //         'audio': 'audio',
-    //         'flash': 'flash',
-    //         'pdf': 'PDF',
-    //         'object': 'object'
-    //     },
-    //     msgUploadAborted: 'The file upload was aborted',
-    //     msgUploadThreshold: 'Processing...',
-    //     msgUploadBegin: 'Initializing...',
-    //     msgUploadEnd: 'Done',
-    //     msgUploadEmpty: 'No valid data available for upload.',
-    //     msgUploadError: 'Error',
-    //     msgValidationError: 'Validation Error',
-    //     msgLoading: 'Loading file {index} of {files} &hellip;',
-    //     msgProgress: 'Loading file {index} of {files} - {name} - {percent}% completed.',
-    //     msgSelected: '{n} {files} selected',
-    //     msgFoldersNotAllowed: 'Drag & drop files only! {n} folder(s) dropped were skipped.',
-    //     msgImageWidthSmall: 'Width of image file "{name}" must be at least {size} px.',
-    //     msgImageHeightSmall: 'Height of image file "{name}" must be at least {size} px.',
-    //     msgImageWidthLarge: 'Width of image file "{name}" cannot exceed {size} px.',
-    //     msgImageHeightLarge: 'Height of image file "{name}" cannot exceed {size} px.',
-    //     msgImageResizeError: 'Could not get the image dimensions to resize.',
-    //     msgImageResizeException: 'Error while resizing the image.<pre>{errors}</pre>',
-    //     msgAjaxError: 'Something went wrong with the {operation} operation. Please try again later!',
-    //     msgAjaxProgressError: '{operation} failed',
-    //     ajaxOperations: {
-    //         deleteThumb: 'file delete',
-    //         uploadThumb: 'file upload',
-    //         uploadBatch: 'batch file upload',
-    //         uploadExtra: 'form data upload'
-    //     },
-    //     dropZoneTitle: 'Drag & drop files here &hellip;',
-    //     dropZoneClickTitle: '<br>(or click to select {files})',
-    //     previewZoomButtonTitles: {
-    //         prev: 'View previous file',
-    //         next: 'View next file',
-    //         toggleheader: 'Toggle header',
-    //         fullscreen: 'Toggle full screen',
-    //         borderless: 'Toggle borderless mode',
-    //         close: 'Close detailed preview'
-    //     },
-    //     usePdfRenderer: function () {
-    //         var isIE11 = !!window.MSInputMethodContext && !!document.documentMode;
-    //         return !!navigator.userAgent.match(/(iPod|iPhone|iPad|Android)/i) || isIE11;
-    //     },
-    //     pdfRendererUrl: '',
-    //     pdfRendererTemplate: '<iframe class="kv-preview-data file-preview-pdf" src="{renderer}?file={data}" {style}></iframe>'
-    // };
-
     $.fn.fileinput.Constructor = FileInput;
+
+    function delHtmlTag(str) {
+        return str.replace(/<[^>]+>/g, "");
+    };
 
     /**
      * Convert automatically file inputs with class 'file' into a bootstrap fileinput control.

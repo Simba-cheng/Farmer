@@ -617,6 +617,9 @@ var zkIndex = {
     closeFileUpLoadPopUps: function () {
 
         $("#upLoadFilePopUps").modal('hide');
+        //还原css样式
+        $("#upLoadFilePopUps").css("opacity", "0");
+        $("#upLoadFilePopUps").css("top", "-50%");
 
     },
 

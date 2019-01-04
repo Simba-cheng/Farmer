@@ -3,7 +3,7 @@
     <div class="modal-content" id="fileUpLoadModalContent">
 
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="zkIndex.closeFileUpLoadPopUps()">
                 <span aria-hidden="true">&times;</span>
             </button>
             <h4 class="modal-title" id="createCompleteNodelLabel">上传文件</h4>

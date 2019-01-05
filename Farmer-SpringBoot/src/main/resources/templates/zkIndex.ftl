@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/static/css/toastr.css">
     <link rel="stylesheet" type="text/css" href="/static/css/highlight-8.6.default.min.css">
     <script type="text/javascript" src="/static/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="/static/js/jquery.cookie.js"></script>
     <script type="text/javascript" src="/static/js/zkIndex.js"></script>
     <script type="text/javascript" src="/static/js/bootstrap.js"></script>
     <script type="text/javascript" src="/static/js/sweetalert.min.js"></script>

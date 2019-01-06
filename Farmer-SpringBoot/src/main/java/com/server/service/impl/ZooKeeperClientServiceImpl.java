@@ -425,16 +425,6 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
     }
 
     @Override
-    public ResZKClientResultVO getDataForNodePathWithFile(String fileName, String nodePath, Watcher watcher, Stat stat) {
-        return null;
-    }
-
-    @Override
-    public ResZKClientResultVO createFileToNode(String fileName, String nodePath, String data, List<ACL> acl, CreateMode createMode) {
-        return null;
-    }
-
-    @Override
     public ResGetChildNodeVO getChildNode(String inputData, Watcher watcher) {
 
         ResGetChildNodeVO getChildNodeVO = new ResGetChildNodeVO();
@@ -710,4 +700,47 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         return allChildNodePaths;
     }
 
+    @Override
+    public ResUploadFileVO uploadFileWithCreateNode(String uploadPath, String fileName, String fileInfo) {
+
+        ResUploadFileVO resUploadFileVO = new ResUploadFileVO();
+        ResErrorInfo errorInfo;
+
+        //check
+        if (StringUtils.isEmpty(uploadPath)) {
+            errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_18.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_18.getErrorMessage());
+            resUploadFileVO.setErrorInfo(errorInfo);
+            resUploadFileVO.setIsSuccess(CommConstant.STRING_N);
+            return resUploadFileVO;
+        }
+        if (StringUtils.isEmpty(fileName) || StringUtils.isEmpty(fileInfo)) {
+            errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_19.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_19.getErrorMessage());
+            resUploadFileVO.setErrorInfo(errorInfo);
+            resUploadFileVO.setIsSuccess(CommConstant.STRING_N);
+            return resUploadFileVO;
+        }
+
+        String nodePath;
+
+        if (uploadPath.length() + 1 != uploadPath.lastIndexOf(CommConstant.SLASH)) {
+            //末尾不包含'/'
+            nodePath = uploadPath + CommConstant.SLASH + fileName;
+        } else {
+            nodePath = uploadPath + fileName;
+        }
+
+        //复用-多层节点创建service
+        ResCreateAllNodeVO createAllNodeVO = createNodes(nodePath, fileInfo, null, null);
+
+        if (CommConstant.STRING_Y.equals(createAllNodeVO.getIsSuccess())) {
+            resUploadFileVO.setIsSuccess(CommConstant.STRING_Y);
+            resUploadFileVO.setDisplayCopy("文件上传成功");
+        } else {
+            errorInfo = createAllNodeVO.getErrorInfo();
+            resUploadFileVO.setErrorInfo(errorInfo);
+            resUploadFileVO.setIsSuccess(CommConstant.STRING_N);
+        }
+
+        return resUploadFileVO;
+    }
 }

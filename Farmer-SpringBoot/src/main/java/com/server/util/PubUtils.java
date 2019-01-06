@@ -2,17 +2,23 @@ package com.server.util;
 
 import com.server.constant.CommConstant;
 import freemarker.template.Template;
+import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -87,6 +93,57 @@ public class PubUtils {
         } catch (IOException e) {
             LOGGER.error(e.getMessage(), e);
         }
+    }
+
+    /**
+     * 获取页面文件流
+     *
+     * @param request
+     * @return
+     */
+    public static MultipartFile getMultipartFile(HttpServletRequest request) throws Exception {
+
+        //页面控件的文件流
+        MultipartFile multipartFile = null;
+
+        request.setCharacterEncoding("UTF-8");
+
+        MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+
+        Map map = multipartRequest.getFileMap();
+
+        for (Iterator i = map.keySet().iterator(); i.hasNext(); ) {
+            Object obj = i.next();
+            multipartFile = (MultipartFile) map.get(obj);
+        }
+
+        return multipartFile;
+    }
+
+    /**
+     * 从cookie中获取参数
+     *
+     * @param key
+     * @return
+     * @throws Exception
+     */
+    public static String getCookieStr(HttpServletRequest request, String key) throws Exception {
+
+        String resultValue = StringUtils.EMPTY;
+
+        Cookie[] cookies = request.getCookies();
+
+        if (ArrayUtils.isNotEmpty(cookies)) {
+
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals(key)) {
+                    resultValue = cookie.getValue();
+                }
+            }
+
+        }
+
+        return resultValue;
     }
 
 }

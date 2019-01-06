@@ -47,4 +47,9 @@ public class CommConstant {
      * 英文-点
      */
     public static final String POINT = ".";
+
+    /**
+     * cookie-key 文件上传的节点路径key
+     */
+    public static final String UPLOADFILEPATH_KEY = "uploadFilePath";
 }

@@ -2,18 +2,11 @@ package com.server.controller.zk;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.server.constant.CommConstant;
 import com.server.constant.NumberEnum;
 import com.server.service.ZooKeeperClientService;
 import com.server.util.PubUtils;
-import com.server.vo.response.ResCloseZKClientConnVO;
-import com.server.vo.response.ResCreateAllNodeVO;
-import com.server.vo.response.ResCreateOneNodeVO;
-import com.server.vo.response.ResDeleteNodeVO;
-import com.server.vo.response.ResGetChildNodeVO;
-import com.server.vo.response.ResGetDataForNodeVO;
-import com.server.vo.response.ResSetDataForNodeVO;
-import com.server.vo.response.ResZKClientConectVO;
-import com.server.vo.response.ResultVO;
+import com.server.vo.response.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.zookeeper.ZooDefs;
 import org.slf4j.Logger;
@@ -24,14 +17,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import static org.apache.zookeeper.CreateMode.PERSISTENT;
@@ -395,7 +385,7 @@ public class ZooKeeperController {
         pubUtils.flushResultToPage(response, resultJson);
     }
 
-        /**
+    /**
      * 文件上传
      *
      * @param request
@@ -404,37 +394,35 @@ public class ZooKeeperController {
     @PostMapping(value = "/fileUpLoad.do")
     public void fileUpLoad(HttpServletRequest request, HttpServletResponse response) {
 
+        LOGGER.info("===== 文件上传 =====");
+
         ResultVO resultVO = new ResultVO();
         resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
 
+        ResUploadFileVO resUploadFileVO = null;
         try {
 
-            request.setCharacterEncoding("UTF-8");
-            MultipartHttpServletRequest multipartRequest = (MultipartHttpServletRequest) request;
+            //从cookie中获取 父节点路径
+            String uploadFilePath = PubUtils.getCookieStr(request, CommConstant.UPLOADFILEPATH_KEY);
 
-            /** 页面控件的文件流* */
-            MultipartFile multipartFile = null;
-            Map map = multipartRequest.getFileMap();
-            for (Iterator i = map.keySet().iterator(); i.hasNext(); ) {
-                Object obj = i.next();
-                multipartFile = (MultipartFile) map.get(obj);
+            //文件名、文件内容
+            MultipartFile multipartFile = PubUtils.getMultipartFile(request);
+            String fileName = multipartFile.getOriginalFilename();
+            String fileInfo = IOUtils.toString(multipartFile.getInputStream(), CommConstant.CODING_UTF8);
 
-            }
-            /** 获取文件的后缀* */
-            String filename = multipartFile.getOriginalFilename();
-            InputStream inputStream = multipartFile.getInputStream();
+            LOGGER.info("uploadFilePath : {} , fileName ：{} , fileInfo : {}", new Object[]{uploadFilePath, fileName, fileInfo});
 
-            String result = IOUtils.toString(inputStream, "UTF-8");
-            System.out.println("file name : " + filename);
-            System.out.println("file info : " + result);
+            //process
+            resUploadFileVO = zkClientService.uploadFileWithCreateNode(uploadFilePath, fileName, fileInfo);
+
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error(e.getMessage(), e);
         }
 
-        resultVO.setResultData("copy that");
+        resultVO.setResultData(resUploadFileVO);
         String resultJson = gson.toJson(resultVO);
         pubUtils.flushResultToPage(response, resultJson);
     }
 
-    
+
 }

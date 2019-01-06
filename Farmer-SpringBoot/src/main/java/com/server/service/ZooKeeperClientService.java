@@ -57,18 +57,6 @@ public interface ZooKeeperClientService {
     ResCreateAllNodeVO createNodes(String nodePath, String data, List<ACL> acl, CreateMode createMode);
 
     /**
-     * 以文件的形式创建节点并写入数据
-     *
-     * @param fileName
-     * @param nodePath
-     * @param data
-     * @param acl
-     * @param createMode
-     * @return
-     */
-    ResZKClientResultVO createFileToNode(String fileName, String nodePath, String data, List<ACL> acl, CreateMode createMode);
-
-    /**
      * 删除节点路径
      *
      * @param nodePath 节点路径
@@ -106,17 +94,6 @@ public interface ZooKeeperClientService {
     ResGetDataForNodeVO getDataForNodePath(String inputData, Watcher watcher, Stat stat);
 
     /**
-     * 从指定节点下的文件类型节点中获取数据
-     *
-     * @param fileName 文件名
-     * @param nodePath 节点名称
-     * @param watcher  回调类
-     * @param stat     节点统计信息
-     * @return
-     */
-    ResZKClientResultVO getDataForNodePathWithFile(String fileName, String nodePath, Watcher watcher, Stat stat);
-
-    /**
      * 获取指定节点下所有子节点
      *
      * @param inputData 接口入参
@@ -139,4 +116,14 @@ public interface ZooKeeperClientService {
      * @return true-已连接，false-未连接
      */
     ResErrorInfo whetherToConnect();
+
+    /**
+     * 上传文件并创建节点
+     *
+     * @param uploadPath 上传文件的路径(父路径)
+     * @param fileName   文件名(节点名称)
+     * @param fileInfo   文件内容
+     * @return
+     */
+    ResUploadFileVO uploadFileWithCreateNode(String uploadPath, String fileName, String fileInfo);
 }

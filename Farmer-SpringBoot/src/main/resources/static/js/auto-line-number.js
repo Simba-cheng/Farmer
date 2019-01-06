@@ -12,9 +12,10 @@
         this.$ol.css({
             "color": "#999",
             "width": config.width,
-            "height": "96%",
-            "font-size": "16px",
-            "line-height": this.$element.css("line-height"),
+            "height": "97%",
+            "font-size": "19px",
+            // "line-height": this.$element.css("line-height"),
+            "line-height": "18.7px",
             "position": "absolute",
             "overflow": "hidden",
             "margin": 0,
@@ -29,7 +30,7 @@
             "position": "absolute",
             "width": config.width,
 //	    	"height" : this.$element.height() + 'px'
-            "height": "52%"
+            "height": "59.5%"
         });
         this.$element.css({
             "white-space": "none",

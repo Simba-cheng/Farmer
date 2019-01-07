@@ -1587,11 +1587,6 @@
         },
         _uploadClick: function (e) {
 
-            // 文件上传的节点路径，写入cookie
-            $.cookie.raw = true;
-            var uploadFilePath = $("#upLoadFileNodePath").val();
-            $.cookie("uploadFilePath", uploadFilePath);
-
             // 001-文件上传
             var self = this, $btn = self.$container.find('.fileinput-upload'), $form,
                 isEnabled = !$btn.hasClass('disabled') && $h.isEmpty($btn.attr('disabled'));
@@ -1614,6 +1609,10 @@
                 // 002
                 self.upload();
             }
+            $('#f_upload').fileinput("enable").fileinput('clear').fileinput('refresh');
+            $("#upLoadFileNodePath").val("");
+
+
         },
         _submitForm: function () {
             var self = this;
@@ -2234,17 +2233,11 @@
             var resultData = out.resultData;
 
             if ("Y" == resultData.isSuccess) {
-                // sweetAlert("成功", resultData.displayCopy, "success")
-
-                // $('#f_upload').fileinput('clear');
-                // $('#f_upload').fileinput('reset');
-                // $('#f_upload').fileinput('cancel');
-                // $('#f_upload').fileinput('refresh');
+                sweetAlert("成功", resultData.displayCopy, "success")
             } else {
-                // sweetAlert("异常", resultData.errorInfo.errorMessage, "error")
-                // self._initPreviewActions();
+                sweetAlert("异常", resultData.errorInfo.errorMessage, "error")
+                self._initPreviewActions();
             }
-
 
             var self = this, append, data, index, $div, $newCache, content, config, tags, i;
             if (!self.showPreview || typeof out !== 'object' || $.isEmptyObject(out)) {
@@ -3852,6 +3845,7 @@
 
                 //移除产生错误的文件
                 self.clear();
+                $('#f_upload').fileinput("enable").fileinput('clear').fileinput('refresh');
 
                 // if (self.isAjaxUpload) {
                 //     self.addToStack(undefined);
@@ -4225,6 +4219,18 @@
             return self.$element;
         },
         upload: function () {
+
+            var uploadFilePath = $("#upLoadFileNodePath").val();
+
+            if (uploadFilePath == "" || uploadFilePath.length <= 0) {
+                sweetAlert("异常", "请填写父节点路径", "error");
+                return;
+            }
+
+            // 文件上传的节点路径，写入cookie
+            $.cookie.raw = true;
+            $.cookie("uploadFilePath", uploadFilePath);
+
             //003
             var self = this, totLen = self.getFileStack().length, i, outData, len,
                 hasExtraData = !$.isEmptyObject(self._getExtraData());
@@ -4270,7 +4276,6 @@
                         self._uploadSingle(i, true);
                     }
                 }
-                $('#f_upload').fileinput('clear');
                 return;
             }
             // self._uploadBatch();
@@ -4503,6 +4508,7 @@
         retryErrorUploads: true,
         reversePreviewOrder: false
     };
+
 
     $.fn.fileinput.Constructor = FileInput;
 

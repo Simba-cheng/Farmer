@@ -16,7 +16,7 @@ public class CommConstant {
     /**
      * 命令行-key-zookeeper服务端ip端口
      */
-    public static final String CLI_KEY_ZK = "zkClientHost";
+    public static final String CLI_KEY_ZK = "zkHost";
 
     /**
      * 字符常量-Y

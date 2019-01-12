@@ -99,22 +99,22 @@ public class ZooKeeperController {
      * @param request
      * @param response
      */
-    @GetMapping(value = "/close.do")
-    public void zkClientClose(HttpServletRequest request, HttpServletResponse response) {
-
-        LOGGER.info("===== 关闭ZooKeeper服务端的连接 =====");
-
-        ResultVO resultVO = new ResultVO();
-        resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
-
-        ResCloseZKClientConnVO resCloseZKClientConnVO = zkClientService.closeZKClientConn();
-        resultVO.setResultData(resCloseZKClientConnVO);
-
-        String resultJson = gson.toJson(resultVO);
-        LOGGER.info("result info : {}", new Object[]{resultJson});
-
-        pubUtils.flushResultToPage(response, resultJson);
-    }
+    //@GetMapping(value = "/close.do")
+    //public void zkClientClose(HttpServletRequest request, HttpServletResponse response) {
+    //
+    //    LOGGER.info("===== 关闭ZooKeeper服务端的连接 =====");
+    //
+    //    ResultVO resultVO = new ResultVO();
+    //    resultVO.setIsSuccess(NumberEnum.ONE_STR.getNumberStr());
+    //
+    //    ResCloseZKClientConnVO resCloseZKClientConnVO = zkClientService.closeZKClientConn();
+    //    resultVO.setResultData(resCloseZKClientConnVO);
+    //
+    //    String resultJson = gson.toJson(resultVO);
+    //    LOGGER.info("result info : {}", new Object[]{resultJson});
+    //
+    //    pubUtils.flushResultToPage(response, resultJson);
+    //}
 
     /**
      * index页面初始化时，查询根节点下第一层节点

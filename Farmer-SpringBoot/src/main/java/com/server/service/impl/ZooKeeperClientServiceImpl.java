@@ -80,7 +80,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
             if (checkFlag) {
 
                 //存储zkHost变量
-                ZooKeeperController.ZK_HOST = host;
+                ZooKeeperController.ZK_HOST = host.trim();
 
                 /*
                     上面判断'zookeeper服务端是否已经连接',这边又'断开之前的连接'，这边是这样考虑的：
@@ -95,7 +95,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
                 zooKeeperClient.closeClientConn();
                 LOGGER.info("===== 连接前，断开之前的连接 ======");
 
-                zooKeeperClient.connect(host);
+                zooKeeperClient.connect(ZooKeeperController.ZK_HOST);
 
                 zkClientConectVO.setIsSuccess(CommConstant.STRING_Y);
                 zkClientConectVO.setDisplayCopy("zookeeper连接成功");
@@ -134,6 +134,14 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
     public ResCreateOneNodeVO createOneNode(String parentNode, String childNode, String nodeData, List<ACL> acl, CreateMode createMode) {
 
         ResCreateOneNodeVO createOneNodeVO = new ResCreateOneNodeVO();
+
+        //判断连接是否异常
+        ResErrorInfo errorInfo = whetherToConnect();
+        if (null != errorInfo) {
+            createOneNodeVO.setIsSuccess(CommConstant.STRING_N);
+            createOneNodeVO.setErrorInfo(errorInfo);
+            return createOneNodeVO;
+        }
 
         //check
         if (StringUtils.isEmpty(parentNode) || StringUtils.isEmpty(childNode)) {
@@ -184,6 +192,14 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         boolean checkFlag = true;
 
         //check
+        //判断连接是否异常
+        ResErrorInfo errorInfo = whetherToConnect();
+        if (null != errorInfo) {
+            resCreateAllNodeVO.setIsSuccess(CommConstant.STRING_N);
+            resCreateAllNodeVO.setErrorInfo(errorInfo);
+            checkFlag = false;
+        }
+
         if (StringUtils.isEmpty(nodePath)) {
             resCreateAllNodeVO.setIsSuccess(CommConstant.STRING_N);
             resCreateAllNodeVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage()));
@@ -323,6 +339,14 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         String resultNodePath = StringUtils.EMPTY;
 
         //check
+        //判断连接是否异常
+        ResErrorInfo errorInfo = whetherToConnect();
+        if (null != errorInfo) {
+            deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
+            deleteNodeVO.setErrorInfo(errorInfo);
+            return deleteNodeVO;
+        }
+
         if (StringUtils.isEmpty(nodePath)) {
             deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
             deleteNodeVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage()));
@@ -574,12 +598,18 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
     public ResDeleteNodeVO deleteAllNodes(String nodePath, int version) {
 
         ResDeleteNodeVO deleteNodeVO = new ResDeleteNodeVO();
-        ResErrorInfo errorInfo;
         String deleteNode = "";
 
-        if (StringUtils.isEmpty(nodePath)) {
-            errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage());
+        //判断连接是否异常
+        ResErrorInfo errorInfo = whetherToConnect();
+        if (null != errorInfo) {
             deleteNodeVO.setErrorInfo(errorInfo);
+            deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
+            return deleteNodeVO;
+        }
+
+        if (StringUtils.isEmpty(nodePath)) {
+            deleteNodeVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage()));
             deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
             return deleteNodeVO;
         }
@@ -609,9 +639,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
         } catch (Exception e) {
             LOGGER.error("nodePath : {} , error message : {}", new Object[]{nodePath, e.getMessage()}, e);
-
-            errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_17.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_17.getErrorMessage());
-            deleteNodeVO.setErrorInfo(errorInfo);
+            deleteNodeVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_17.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_17.getErrorMessage()));
             deleteNodeVO.setIsSuccess(CommConstant.STRING_N);
             deleteNodeVO.setNodePath(deleteNode);
         }
@@ -704,18 +732,22 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
     public ResUploadFileVO uploadFileWithCreateNode(String uploadPath, String fileName, String fileInfo) {
 
         ResUploadFileVO resUploadFileVO = new ResUploadFileVO();
-        ResErrorInfo errorInfo;
 
         //check
-        if (StringUtils.isEmpty(uploadPath)) {
-            errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_18.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_18.getErrorMessage());
+        //判断连接是否异常
+        ResErrorInfo errorInfo = whetherToConnect();
+        if (null != errorInfo) {
             resUploadFileVO.setErrorInfo(errorInfo);
             resUploadFileVO.setIsSuccess(CommConstant.STRING_N);
             return resUploadFileVO;
         }
+        if (StringUtils.isEmpty(uploadPath)) {
+            resUploadFileVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_18.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_18.getErrorMessage()));
+            resUploadFileVO.setIsSuccess(CommConstant.STRING_N);
+            return resUploadFileVO;
+        }
         if (StringUtils.isEmpty(fileName) || StringUtils.isEmpty(fileInfo)) {
-            errorInfo = new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_19.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_19.getErrorMessage());
-            resUploadFileVO.setErrorInfo(errorInfo);
+            resUploadFileVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_19.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_19.getErrorMessage()));
             resUploadFileVO.setIsSuccess(CommConstant.STRING_N);
             return resUploadFileVO;
         }
@@ -736,8 +768,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
             resUploadFileVO.setIsSuccess(CommConstant.STRING_Y);
             resUploadFileVO.setDisplayCopy("文件上传成功");
         } else {
-            errorInfo = createAllNodeVO.getErrorInfo();
-            resUploadFileVO.setErrorInfo(errorInfo);
+            resUploadFileVO.setErrorInfo(createAllNodeVO.getErrorInfo());
             resUploadFileVO.setIsSuccess(CommConstant.STRING_N);
         }
 

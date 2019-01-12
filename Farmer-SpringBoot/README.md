@@ -1,9 +1,7 @@
 # Farmer - ZooKeeper UI
 Farmer是一个ZooKeeper的可视化工具，开箱即用。
 
-如果使用中发现了bug，希望你能告诉我。
-
-## 项目、工具概览
+## 概览
 
 页面URL : http://localhost:9527/zk/index.do
 
@@ -43,61 +41,6 @@ jar包的版本号，对应"版本计划"中的功能，高版本涵盖低版本
 
 ## 使用方法
 
-### **1.IDEA 编译器启动**
-首先将项目导入IDEA中。
-
-然后根据下图配置ZooKeeper服务器IP，多个地址用逗号(',')分隔。
-
-![IDEA编译器参数启动配置](image/IDEA编译器参数启动配置.png)
-
-然后启动主类：com.server.FarmerApplication即可
-
-然后访问：http://localhost:9527/zk/index.do
-
-**上图不配置参数，程序也可以启动，点击页面的"连接ZooKeeper服务器"按钮，输入host信息，即可连接。**
-<!--![ZooKeeper-UI展示图](image/index页面连接zookeeper服务器.png)-->
-
-
-### **2.命令行启动**
-
-#### **2.1 Windows系统启动**
-
-从[installPackage目录](https://github.com/Simba-cheng/Farmer/tree/master/Farmer-SpringBoot/installPackage)中下载对应版本的jar包。
-
-farmer-0.0.1.jar，可以将其放在Windows桌面上
-
-然后进入cmd命令行，到jar所在的目录中
-
-执行命令：(ZooKeeper服务器host信息根据实际情况修改)
-
-**java -jar farmer-0.0.1.jar zkClientHost=192.168.137.150:2181**
-
-![](image/命令行带参数启动.png)<br>
-
-页面URL : http://localhost:9527/zk/index.do
-
-**上图不配置参数，程序也可以启动，点击页面的"连接ZooKeeper服务器"按钮，输入host信息，即可连接。**
-
-<br>
-<br>
-
-#### **2.2 Linux系统启动**
-
-从[installPackage目录](https://github.com/Simba-cheng/Farmer/tree/master/Farmer-SpringBoot/installPackage)中下载对应版本的jar包。
-
-farmer-springboot-0.0.2.jar，将其上传到linux服务器某个目录上。
-
-![jar上传Linux服务器](image/jar上传linux服务器.png)
-
-执行命令：(ZooKeeper服务器host信息根据实际情况修改)
-
-**java -jar farmer-springboot-0.0.2.jar**
-
-然后程序即可启动
-
-![jar-linux启动](image/jarlinux启动.png)
-
-页面URL : http://localhost:9527/zk/index.do
 
 
 ## 版本计划

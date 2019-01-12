@@ -1,9 +1,14 @@
 # Farmer - ZooKeeper UI
 Farmer是一个ZooKeeper的可视化工具，开箱即用。
 
-## 概览
+## 页面概览
 
-页面URL : http://localhost:9527/zk/index.do
+
+## Farmer如何使用？
+[Farmer ZooKeeper UI 如何使用？](https://github.com/Simba-cheng/Farmer/blob/master/Farmer-SpringBoot/FAQ.md)
+
+
+## 概览
 
 ### **首页展示图**
 ![ZooKeeper-UI展示图](image/ZooKeeper-UI展示图.png)
@@ -24,23 +29,6 @@ Farmer是一个ZooKeeper的可视化工具，开箱即用。
 
 ### **删除节点**
 ![](image/删除节点.png)
-
-
-## 项目简述
-**项目定位** : 日常工具、开箱即用。
-
-**用户体验** : 希望最好可以无脑使用
-
-**项目技术** : JDK1.8、Java、SpringBoot 2.X、FreeMarker、JavaScript、jQuery
-
-
-## 使用说明
-从[installPackage目录](https://github.com/Simba-cheng/Farmer/tree/master/Farmer-SpringBoot/installPackage)中下载对应版本的jar包。
-jar包的版本号，对应"版本计划"中的功能，高版本涵盖低版本的功能。
-
-
-## 使用方法
-
 
 
 ## 版本计划
@@ -86,7 +74,7 @@ jar包的版本号，对应"版本计划"中的功能，高版本涵盖低版本
 
 ## 注意事项：
  
-**1.直接download下来的代码可能无法直接打包运行**
+**1.直接download下来的代码可能会报错**
 
     原因：闲暇时间开发，可能会将尚未完成的功能的代码先提交。
     建议：直接使用installPackage目录中的安装包，详情见"使用说明"

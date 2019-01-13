@@ -1,35 +1,8 @@
 # Farmer - ZooKeeper UI
 Farmer是一个ZooKeeper的可视化工具，开箱即用。
 
-## 页面概览
-
-
 ## Farmer如何使用？
 [Farmer ZooKeeper UI 如何使用？](https://github.com/Simba-cheng/Farmer/blob/master/Farmer-SpringBoot/FAQ.md)
-
-
-## 概览
-
-### **首页展示图**
-![ZooKeeper-UI展示图](image/ZooKeeper-UI展示图.png)
-
-### **节点、节点数据展示图**
-![index页面节点-数据](image/index页面节点数据.png)
-
-### **页面按钮-连接ZooKeeper服务器**
-![](image/页面连接zk服务器.png)
-
-![](image/页面连接zk服务器成功.png)
-
-### **节点右击事件**
-![](image/节点-右击事件.png)
-
-### **添加子节点**
-![](image/添加节点.png)
-
-### **删除节点**
-![](image/删除节点.png)
-
 
 ## 版本计划
 

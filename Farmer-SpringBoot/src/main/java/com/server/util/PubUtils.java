@@ -53,6 +53,26 @@ public class PubUtils {
     }
 
     /**
+     * 检查变量是否为空，只要其中一个变量为空则返回true
+     *
+     * @param params 参数列表
+     * @return
+     */
+    public static boolean checkParamsIsEmpty(String... params) {
+
+        boolean result = false;
+
+        for (String param : params) {
+
+            if (StringUtils.isEmpty(param)) {
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    /**
      * 根据模板和参数输出HTML字符串
      *
      * @param module       参数map
@@ -127,22 +147,19 @@ public class PubUtils {
      * @return
      * @throws Exception
      */
-    public static String getCookieStr(HttpServletRequest request, String key) throws Exception {
+    public static String getCookieStr(HttpServletRequest request, String key) {
 
         String resultValue = StringUtils.EMPTY;
 
         Cookie[] cookies = request.getCookies();
 
         if (ArrayUtils.isNotEmpty(cookies)) {
-
             for (Cookie cookie : cookies) {
                 if (cookie.getName().equals(key)) {
                     resultValue = cookie.getValue();
                 }
             }
-
         }
-
         return resultValue;
     }
 

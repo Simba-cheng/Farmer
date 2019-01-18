@@ -8,6 +8,7 @@ import com.server.controller.zk.ZooKeeperController;
 import com.server.dto.NodeInfoDTO;
 import com.server.service.ZooKeeperClientService;
 import com.server.util.JsonUtils;
+import com.server.util.PubUtils;
 import com.server.vo.request.ReqNodeInfo;
 import com.server.vo.response.*;
 import org.apache.commons.collections.CollectionUtils;
@@ -144,7 +145,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         }
 
         //check
-        if (StringUtils.isEmpty(parentNode) || StringUtils.isEmpty(childNode)) {
+        if (PubUtils.checkParamsIsEmpty(parentNode, childNode)) {
             createOneNodeVO.setIsSuccess(CommConstant.STRING_N);
             createOneNodeVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_04.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_04.getErrorMessage()));
             return createOneNodeVO;
@@ -714,7 +715,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
      * @param childNode 子节点集合
      * @return
      */
-    private List<String> assembleNodePath(String rootNode, List<String> childNode) throws Exception {
+    private List<String> assembleNodePath(String rootNode, List<String> childNode) {
 
         List<String> allChildNodePaths = new ArrayList<String>();
 
@@ -746,7 +747,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
             resUploadFileVO.setIsSuccess(CommConstant.STRING_N);
             return resUploadFileVO;
         }
-        if (StringUtils.isEmpty(fileName) || StringUtils.isEmpty(fileInfo)) {
+        if (PubUtils.checkParamsIsEmpty(fileName, fileInfo)) {
             resUploadFileVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_19.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_19.getErrorMessage()));
             resUploadFileVO.setIsSuccess(CommConstant.STRING_N);
             return resUploadFileVO;

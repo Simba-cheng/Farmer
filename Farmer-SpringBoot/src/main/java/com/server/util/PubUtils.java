@@ -15,11 +15,18 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerConfig;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 公共方法
@@ -31,6 +38,9 @@ import java.util.Map;
 public class PubUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PubUtils.class);
+
+    //Java Bean 约束校验
+    private static ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
 
     @Autowired
     private FreeMarkerConfig freeMarkerConfig;
@@ -161,6 +171,25 @@ public class PubUtils {
             }
         }
         return resultValue;
+    }
+
+    /**
+     * 校验Java bean对象中的字段
+     *
+     * @param t
+     * @return
+     */
+    public static <T> List<String> validateObjectField(T t) {
+
+        Validator validator = validatorFactory.getValidator();
+        Set<ConstraintViolation<T>> constraintViolations = validator.validate(t);
+
+        List<String> messageList = new ArrayList<>();
+        for (ConstraintViolation<T> constraintViolation : constraintViolations) {
+            messageList.add(constraintViolation.getMessage());
+        }
+
+        return messageList;
     }
 
 }

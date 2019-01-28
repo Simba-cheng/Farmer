@@ -50,7 +50,7 @@ Farmer是一个ZooKeeper的可视化工具，开箱即用。
 **1.直接download下来的代码可能会报错**
 
     原因：闲暇时间开发，可能会将尚未完成的功能的代码先提交。
-    建议：直接使用installPackage目录中的安装包，详情见 [Farmer如何使用？？](https://github.com/Simba-cheng/Farmer/blob/master/Farmer-SpringBoot/FAQ.md)
+    建议：直接使用installPackage目录中的安装包，详情见"Farmer如何使用？"
 
 **2.用户鉴权**
 

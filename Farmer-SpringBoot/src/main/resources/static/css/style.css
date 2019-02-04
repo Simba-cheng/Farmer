@@ -131,7 +131,7 @@ h2 {
 }
 
 #node_data_name {
-    width: 96%;
+    width: 98%;
 }
 
 .node_button {
@@ -144,7 +144,8 @@ h2 {
 }
 
 #node-info-display-input {
-    width: 95% !important;
+    /*width: 95% !important;*/
+    width: 100%;
     height: 85.85%;
     resize: none;
     margin-top: -1px;

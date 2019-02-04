@@ -1,5 +1,7 @@
 var clickNodePath = "";
 
+var codeEditor = "";
+
 var zkIndex = {
 
     //初始化
@@ -10,6 +12,9 @@ var zkIndex = {
         this.connZkServerButton();
         this.refreshPage();
         this.submitNodeData();
+
+        //页面编辑器
+        require.config({paths: {'vs': '/static/monaco-editor/min/vs'}});
     },
 
     //初始化查询-默认展示第一层节点
@@ -217,12 +222,30 @@ var zkIndex = {
                         //展示文本框
                         $("#node-info-display").show();
                         //展示文本框行号渲染
-                        zkIndex.renderingNodeDataInfo();
+                        // zkIndex.renderingNodeDataInfo();
                         //展示文本框上方显示节点名称
                         $("#node_data_name").show();
                         $("#node_data_name").html(nodePath);
                         //塞入节点数据内容
-                        $("#node-info-display-input").val(nodeData);
+                        // $("#node-info-display-input").val(nodeData);
+
+                        //删除前一个展示框，防止叠加
+                        $(".monaco-editor").remove();
+
+                        require(['vs/editor/editor.main'], function () {
+                            codeEditor = monaco.editor.create(document.getElementById('node-info-display-input'), {
+                                //语言
+                                language: 'ini',
+                                //背景样式'vs'、'vs-dark'、'hc-black'
+                                theme: 'hc-black',
+                                //编辑器中文字的大小
+                                fontSize: '16',
+                                //编辑器随浏览器窗口自动调整大小
+                                automaticLayout: true
+                            });
+                            codeEditor.setValue(nodeData);
+                        });
+
                     }
                 } else if ("N" == resultData.isSuccess) {
                     var errorMessage = resultData.errorInfo.errorMessage;
@@ -266,7 +289,8 @@ var zkIndex = {
         $("#nodeData_SubmitButton").click(function (e) {
             var nodePath = clickNodePath;
             //获取文本编辑框中的数据
-            var data = $("#node-info-display-input").val();
+            // var data = $("#node-info-display-input").val();
+            var data = codeEditor.getValue();
             var inputData = {"nodePath": nodePath, "nodeData": data};
 
             $.ajax({

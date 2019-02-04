@@ -221,13 +221,9 @@ var zkIndex = {
                     if (undefined != nodeData) {
                         //展示文本框
                         $("#node-info-display").show();
-                        //展示文本框行号渲染
-                        // zkIndex.renderingNodeDataInfo();
                         //展示文本框上方显示节点名称
                         $("#node_data_name").show();
                         $("#node_data_name").html(nodePath);
-                        //塞入节点数据内容
-                        // $("#node-info-display-input").val(nodeData);
 
                         //删除前一个展示框，防止叠加
                         $(".monaco-editor").remove();
@@ -289,7 +285,6 @@ var zkIndex = {
         $("#nodeData_SubmitButton").click(function (e) {
             var nodePath = clickNodePath;
             //获取文本编辑框中的数据
-            // var data = $("#node-info-display-input").val();
             var data = codeEditor.getValue();
             var inputData = {"nodePath": nodePath, "nodeData": data};
 

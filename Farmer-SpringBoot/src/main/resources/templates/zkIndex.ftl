@@ -35,7 +35,7 @@
 
 <body>
 
-<h2>Farmer - ZooKeeper Visual Interface</h2>
+<#--<h2>Farmer - ZooKeeper Visual Interface</h2>-->
 
 <#--顶部按钮-->
 <div class="nav">

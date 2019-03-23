@@ -1,20 +1,59 @@
 var clickNodePath = "";
-
 var codeEditor = "";
 
 var zkIndex = {
-
     //初始化
     init: function () {
+        this.initMonaceEditor();
         this.indexQuery();
         this.connZkServer();
         this.closeZkServerClick();
         this.connZkServerButton();
         this.refreshPage();
         this.submitNodeData();
+    },
 
-        //页面编辑器
-        require.config({paths: {'vs': '/static/monaco-editor/min/vs'}});
+    //初始化页面编辑器
+    initMonaceEditor: function () {
+        $(document).ready(function () {
+
+            require.config({paths: {'vs': '/static/monaco-editor/min/vs'}});
+            require(['vs/editor/editor.main'], function () {
+                zkIndex.codeEditor = monaco.editor.create(document.getElementById('nodeInfoDisplayInput'), {
+                    //语言
+                    language: 'ini',
+                    //背景样式'vs'、'vs-dark'、'hc-black'
+                    theme: 'vs',
+                    //编辑器中文字的大小
+                    fontSize: '16',
+                    //编辑器随浏览器窗口自动调整大小
+                    automaticLayout: true
+                });
+
+                //编辑器背景样式修改
+                $(".selectpicker-modifyEditorBackGround").change(function (e) {
+                    zkIndex.changeTheme(this.selectedIndex);
+                });
+
+                //修改语言
+                try {
+                    $(".selectpicker-languageContent").change(function (e) {
+                        var name = e.target.value;
+
+                        var data = zkIndex.codeEditor.getValue();
+                        var newModel = monaco.editor.createModel(data, name);
+                        zkIndex.codeEditor.setModel(newModel);
+                    });
+                } catch (e) {
+                }
+            });
+        });
+    },
+
+    //切换编辑器背景
+    changeTheme: function (theme) {
+        var newTheme = (theme === 1 ? 'vs-dark' : (theme === 0 ? 'vs' : 'hc-black'));
+        monaco.editor.setTheme(newTheme);
     },
 
     //初始化查询-默认展示第一层节点
@@ -99,8 +138,10 @@ var zkIndex = {
     refreshPage: function () {
         $("#button_refresh_page").click(function () {
             zkIndex.indexQuery();
-            //隐藏数据展示区域
-            $("#node-info-display").hide();
+            //清空编辑器中的数据
+            zkIndex.codeEditor.setValue("");
+            //清空编辑器上方，zk路径名称
+            $("#node_data_name").html("/");
         });
     },
 
@@ -196,8 +237,8 @@ var zkIndex = {
             thisNode.attr("title", "Expand this branch");
             //文件夹形式的节点隐藏数据展示区域，文件形式的节点不隐藏
             if ("0" == nodeisfilevalue) {
-                //隐藏节点数据展示区域
-                $("#node-info-display").hide();
+                //将编辑器中的数据清空
+                zkIndex.codeEditor.setValue("");
             }
         } else {
             //查询节点数据
@@ -219,29 +260,10 @@ var zkIndex = {
                 if ("Y" == resultData.isSuccess) {
                     var nodeData = resultData.data;
                     if (undefined != nodeData) {
-                        //展示文本框
-                        $("#node-info-display").show();
                         //展示文本框上方显示节点名称
                         $("#node_data_name").show();
                         $("#node_data_name").html(nodePath);
-
-                        //删除前一个展示框，防止叠加
-                        $(".monaco-editor").remove();
-
-                        require(['vs/editor/editor.main'], function () {
-                            codeEditor = monaco.editor.create(document.getElementById('node-info-display-input'), {
-                                //语言
-                                language: 'ini',
-                                //背景样式'vs'、'vs-dark'、'hc-black'
-                                theme: 'hc-black',
-                                //编辑器中文字的大小
-                                fontSize: '16',
-                                //编辑器随浏览器窗口自动调整大小
-                                automaticLayout: true
-                            });
-                            codeEditor.setValue(nodeData);
-                        });
-
+                        zkIndex.codeEditor.setValue(nodeData);
                     }
                 } else if ("N" == resultData.isSuccess) {
                     var errorMessage = resultData.errorInfo.errorMessage;
@@ -281,13 +303,11 @@ var zkIndex = {
 
     //数据展示区域-确定修改按钮
     submitNodeData: function () {
-
         $("#nodeData_SubmitButton").click(function (e) {
             var nodePath = clickNodePath;
             //获取文本编辑框中的数据
-            var data = codeEditor.getValue();
+            var data = zkIndex.codeEditor.getValue();
             var inputData = {"nodePath": nodePath, "nodeData": data};
-
             $.ajax({
                 type: "post",
                 dataType: "json",
@@ -328,12 +348,10 @@ var zkIndex = {
                 if ("Y" == result.isSuccess) {
                     var info = result.displayCopy + " " + result.nodePath;
                     sweetAlert("创建成功", info, "success")
-
                     //当前节点的li设置class属性
                     var nodeID = parentNode;
                     nodeID = zkIndex.escapeJquery(nodeID);
                     $("#" + nodeID).parent().attr("class", "parent_li");
-
                     //刷新节点
                     zkIndex.createNodeRefreshNode(parentNode);
                 } else {
@@ -349,13 +367,11 @@ var zkIndex = {
 
     //右击-打开添加子节点弹窗
     addChildNodePopup: function (e) {
-
         //被点击的节点
         var nodePath = e[0].id;
         //将被点击的节点，存储到编辑区节点的属性中
         $("#addNodeChildPath").attr("nodePath", nodePath);
         $("#addChildNodelLabel").text("添加" + nodePath + "的子节点");
-
         // 弹出弹框
         $("#addChildNodeParent").modal();
         //修改CSS属性
@@ -368,13 +384,10 @@ var zkIndex = {
 
     //关闭-添加子节点弹窗展示
     closeAddChildNodePopup: function () {
-
         $("#addChildNodeParent").modal('hide');
-
         //还原css样式
         $("#addChildNodeParent").css("opacity", "0");
         $("#addChildNodeParent").css("top", "-25%");
-
         //编辑区内容清空
         $("#addNodeChildPath").val("");
         $("#addNodeChildData").val("");
@@ -409,11 +422,14 @@ var zkIndex = {
                         var result = data.resultData;
                         if ("Y" == result.isSuccess) {
                             var displayCopy = result.displayCopy + " " + result.nodePath;
-                            sweetAlert("删除成功", displayCopy, "success")
+                            sweetAlert("删除成功", displayCopy, "success");
                             //删除页面中的节点
-                            $("#" + formatNodePath).parent().remove();
-                            // 隐藏数据展示区域
-                            $("#node-info-display").hide();
+                            // $("#" + formatNodePath).parent().remove();
+                            e[0].parentElement.remove();
+                            //将编辑器中的数据，删除
+                            zkIndex.codeEditor.setValue("");
+                            //删除编辑器上方的节点路径
+                            $("#node_data_name").html("/");
                         } else if ("N" == result.isSuccess) {
                             var error = result.errorInfo;
                             sweetAlert("异常信息", error.errorMessage, "error");
@@ -425,10 +441,8 @@ var zkIndex = {
 
     //删除选中节点(包括选中节点下的所有子节点)
     deleteAllChildNode: function (e) {
-
         var nodePath = e[0].id;
         var formatNodePath = zkIndex.escapeJquery(nodePath);
-
         //弹窗提醒
         swal({
                 title: "确定全部删除吗？",
@@ -453,11 +467,13 @@ var zkIndex = {
                         if ("Y" == result.isSuccess) {
                             var displayCopy = result.displayCopy + " " + result.nodePath;
                             sweetAlert("删除成功,请手动刷新页面", displayCopy, "success")
-
                             // span 当前节点 父节点 li 删除
-                            $("#" + formatNodePath).parent().remove();
-                            // 隐藏数据展示区域
-                            $("#node-info-display").hide();
+                            // $("#" + formatNodePath).parent().remove();
+                            e[0].parentElement.remove();
+                            // 将编辑器中的数据清空
+                            zkIndex.codeEditor.setValue("");
+                            //删除编辑器上方的节点路径
+                            $("#node_data_name").html("/");
                         } else if ("N" == result.isSuccess) {
                             var error = result.errorInfo;
                             sweetAlert("异常信息", error.errorMessage, "error");
@@ -534,7 +550,6 @@ var zkIndex = {
         }
 
         var htmlNodeData = resultHTMLData + htmlData + "</ul>";
-
         return htmlNodeData;
     },
 
@@ -552,13 +567,10 @@ var zkIndex = {
 
     //新建节点-关闭弹窗
     closePopUpsCreateCompleteNodePath: function () {
-
         $("#addAllNodePath").modal('hide');
-
         //还原css样式
         $("#addAllNodePath").css("opacity", "0");
         $("#addAllNodePath").css("top", "-50%");
-
         //清空数据
         $("#createCompleteNodePath").val("");
         $("#createCompleteNodeData").val("");
@@ -566,16 +578,12 @@ var zkIndex = {
 
     //新建节点-创建完整节点路径
     createCompleteNodePath: function () {
-
         //完整节点路径
         var createCompleteNodePath = $("#createCompleteNodePath").val();
         //完整节点路径的数据
         var createCompleteNodeData = $("#createCompleteNodeData").val();
-
         if (undefined != createCompleteNodePath && "" != createCompleteNodePath && createCompleteNodePath.length > 0) {
-
             var root = createCompleteNodePath[0];
-
             if ("/" != root) {
                 sweetAlert("ERROR:请输入完整节点路径", "请从根节点开始(例如：/home/test)", "error");
                 $("#createCompleteNodePath").val("");
@@ -590,22 +598,15 @@ var zkIndex = {
                 url: "/zk/creatCompleteNodes.do",
                 data: {"nodePath": createCompleteNodePath, "nodeData": createCompleteNodeData},
                 success: function (data) {
-
-                    console.log(data);
-
                     var resultData = data.resultData;
                     if ("Y" == resultData.isSuccess) {
-
                         sweetAlert("创建成功", "创建节点 " + resultData.nodePath + " 成功，请手动刷新页面", "success")
-
                         //清空数据
                         $("#createCompleteNodePath").val("");
                         $("#createCompleteNodeData").val("");
-
                     } else {
                         var errorMessage = resultData.errorInfo.errorMessage;
                         sweetAlert("异常信息", errorMessage, "error");
-
                         //清空数据
                         $("#createCompleteNodePath").val("");
                         $("#createCompleteNodeData").val("");
@@ -621,9 +622,7 @@ var zkIndex = {
 
     //文件上传弹窗展示
     fileUpLoadPopUps: function () {
-
         $("#upLoadFilePopUps").modal();
-
         //修改CSS属性
         var opacityValue = $("#upLoadFilePopUps").css("opacity");
         if ("0" == opacityValue) {
@@ -634,22 +633,11 @@ var zkIndex = {
 
     //文件上传关闭弹窗
     closeFileUpLoadPopUps: function () {
-
         $("#upLoadFilePopUps").modal('hide');
         //还原css样式
         $("#upLoadFilePopUps").css("opacity", "0");
         $("#upLoadFilePopUps").css("top", "-50%");
 
-    },
-
-    //渲染节点数据展示区域
-    renderingNodeDataInfo: function () {
-        $("#node-info-display-input").setTextareaCount({
-            width: "30px",
-            bgColor: "#000",
-            color: "#FFF",
-            display: "inline-block"
-        });
     },
 
     /**
@@ -667,8 +655,9 @@ var zkIndex = {
         var escapseResult = srcString;
 
         // jquery中的特殊字符,不是正则表达式中的特殊字符
-        var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
-            ":", ";", "<", ">", ",", "/"];
+        // var jquerySpecialChars = ["~", "`", "@", "#", "%", "&", "=", "'", "\"",
+        //     ":", ";", "<", ">", ",", "/"];
+        var jquerySpecialChars = ["/"];
 
         for (var i = 0; i < jquerySpecialChars.length; i++) {
             escapseResult = escapseResult.replace(new RegExp(jquerySpecialChars[i], "g"), "\\" + jquerySpecialChars[i]);

@@ -42,6 +42,11 @@
     <#include "button.ftl" >
 </div>
 
+<#--节点列表-->
+<div class="content">
+    <#include "nodeList.ftl">
+</div>
+
 <#--连接服务器的弹窗-->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="display: none">
     <#include "connZKServerPopUps.ftl" >
@@ -62,10 +67,6 @@
     <#include "upLoadFilePopUps.ftl">
 </div>
 
-<#--节点列表-->
-<div class="content">
-    <#include "nodeList.ftl">
-</div>
 
 <#--页脚footer-->
 <div class="footer">

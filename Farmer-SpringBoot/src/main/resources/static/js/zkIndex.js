@@ -11,6 +11,10 @@ var zkIndex = {
         this.connZkServerButton();
         this.refreshPage();
         this.submitNodeData();
+
+        //按钮默认不支持使用，点击节点后再放开使用
+        $("#nodeData_SubmitButton").prop('disabled', true);
+        $("#amplificationEditorButton").prop('disabled', true);
     },
 
     //初始化页面编辑器
@@ -69,6 +73,10 @@ var zkIndex = {
                 if ("Y" == data.code) {
                     var htmlData = data.html;
                     $('#node_start').html(htmlData);
+
+                    //按钮默认不支持使用，点击节点后再放开使用
+                    $("#nodeData_SubmitButton").prop('disabled', true);
+                    $("#amplificationEditorButton").prop('disabled', true);
                 } else if ("N" == data.code) {
                     var errorMessage = data.errorMessage;
                     sweetAlert("异常信息", errorMessage, "error");
@@ -205,6 +213,10 @@ var zkIndex = {
         var titleValue = $("#" + forMatNodePath).attr("title");
         var nodeisfilevalue = $("#" + forMatNodePath).attr("nodeisfilevalue");
 
+        //按钮放开支持点击
+        $("#nodeData_SubmitButton").removeAttr("disabled");
+        $("#amplificationEditorButton").removeAttr("disabled");
+
         //每次点击时，将id存储到 变量'clickNodePath'中，如果修改数据,则使用这个变量
         clickNodePath = nodePath;
 
@@ -235,6 +247,9 @@ var zkIndex = {
 
             //收起操作完成后，将title改为'Expand this branch'
             thisNode.attr("title", "Expand this branch");
+            //更新编辑器上方的节点路径
+            $("#node_data_name").html(nodePath);
+
             //文件夹形式的节点隐藏数据展示区域，文件形式的节点不隐藏
             if ("0" == nodeisfilevalue) {
                 //将编辑器中的数据清空

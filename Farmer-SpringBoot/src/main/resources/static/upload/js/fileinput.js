@@ -2234,9 +2234,10 @@
 
             if ("Y" == resultData.isSuccess) {
                 sweetAlert("成功", resultData.displayCopy, "success")
+                //关闭弹窗
+                zkIndex.closeFileUpLoadPopUps();
             } else {
                 sweetAlert("异常", resultData.errorInfo.errorMessage, "error")
-                self._initPreviewActions();
             }
 
             var self = this, append, data, index, $div, $newCache, content, config, tags, i;

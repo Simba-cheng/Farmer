@@ -189,7 +189,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
         ResCreateAllNodeVO resCreateAllNodeVO = new ResCreateAllNodeVO();
 
-        //校验成功/失败标示
+        //基础校验 成功/失败标示
         boolean checkFlag = true;
 
         //check
@@ -207,18 +207,20 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
             checkFlag = false;
         }
 
-        if (checkFlag) {
+        //process
+        try {
 
-            if (CollectionUtils.isEmpty(acl)) {
-                acl = ZooDefs.Ids.OPEN_ACL_UNSAFE;
+            //判断完整节点路径是否存在
+            if (whetherCompleteNodeExists(nodePath)) {
+                resCreateAllNodeVO.setIsSuccess(CommConstant.STRING_N);
+                resCreateAllNodeVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_20.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_20.getErrorMessage()));
+                checkFlag = false;
             }
 
-            if (null == createMode) {
-                createMode = CreateMode.PERSISTENT;
-            }
+            if (checkFlag) {
 
-            //process
-            try {
+                acl = CollectionUtils.isEmpty(acl) ? ZooDefs.Ids.OPEN_ACL_UNSAFE : acl;
+                createMode = null == createMode ? CreateMode.PERSISTENT : createMode;
 
                 StringBuilder handleNode = new StringBuilder();
 
@@ -235,12 +237,12 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
                     resCreateAllNodeVO.setIsSuccess(CommConstant.STRING_N);
                     resCreateAllNodeVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_08.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_08.getErrorMessage()));
                 }
-
-            } catch (Exception e) {
-                LOGGER.error("创建完整路径节点 : {} 失败", new Object[]{nodePath}, e);
-                resCreateAllNodeVO.setIsSuccess(CommConstant.STRING_N);
-                resCreateAllNodeVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_08.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_08.getErrorMessage()));
             }
+        } catch (Exception e) {
+            LOGGER.error("创建完整路径节点 : {} 失败", new Object[]{nodePath}, e);
+            resCreateAllNodeVO.setIsSuccess(CommConstant.STRING_N);
+            resCreateAllNodeVO.setErrorInfo(new ResErrorInfo(ErrorMessageEnum.ZK_Client_ERROR_08.getErrorCode(), ErrorMessageEnum.ZK_Client_ERROR_08.getErrorMessage()));
+
         }
 
         return resCreateAllNodeVO;
@@ -767,7 +769,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
         if (CommConstant.STRING_Y.equals(createAllNodeVO.getIsSuccess())) {
             resUploadFileVO.setIsSuccess(CommConstant.STRING_Y);
-            resUploadFileVO.setDisplayCopy("文件上传成功");
+            resUploadFileVO.setDisplayCopy("文件上传成功, 请刷新节点");
         } else {
             resUploadFileVO.setErrorInfo(createAllNodeVO.getErrorInfo());
             resUploadFileVO.setIsSuccess(CommConstant.STRING_N);
@@ -775,4 +777,25 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
         return resUploadFileVO;
     }
+
+    /**
+     * 判断完整节点路径是否存在
+     *
+     * @param handleNode 完整节点路径
+     * @return 存在-true 不存在-false
+     */
+    private boolean whetherCompleteNodeExists(String handleNode) throws Exception {
+
+        boolean result = true;
+
+        //判断节点是否存在
+        Stat stat = zooKeeperClient.exitNodePath(handleNode.toString());
+
+        if (null == stat) {
+            result = false;
+        }
+
+        return result;
+    }
+
 }

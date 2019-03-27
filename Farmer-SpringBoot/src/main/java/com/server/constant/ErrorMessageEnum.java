@@ -27,7 +27,8 @@ public enum ErrorMessageEnum {
     ZK_Client_ERROR_16("ZK_Client_ERROR_16", "服务端连接超时,请重新连接"),
     ZK_Client_ERROR_17("ZK_Client_ERROR_17", "删除全部节点-异常-中断删除"),
     ZK_Client_ERROR_18("ZK_Client_ERROR_18", "文件上传-节点路径为空，请填写节点路径"),
-    ZK_Client_ERROR_19("ZK_Client_ERROR_19", "文件上传-文件名或文件内容为空，请检查文件是否正确");
+    ZK_Client_ERROR_19("ZK_Client_ERROR_19", "文件上传-文件名或文件内容为空，请检查文件是否正确"),
+    ZK_Client_ERROR_20("ZK_Client_ERROR_20", "节点已存在");
 
     private String errorCode;
 

@@ -7,6 +7,7 @@ import com.server.constant.NumberEnum;
 import com.server.controller.zk.ZooKeeperController;
 import com.server.dto.NodeInfoDTO;
 import com.server.service.ZooKeeperClientService;
+import com.server.util.CollectionUtil;
 import com.server.util.JsonUtils;
 import com.server.util.PubUtils;
 import com.server.vo.request.ReqNodeInfo;
@@ -24,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -47,12 +47,12 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
     /**
      * 删除所有子节点-临时存储节点路径
      */
-    private List<String> temp_deleteAllChildNodes = new ArrayList<String>();
+    private List<String> temp_deleteAllChildNodes = CollectionUtil.newArrayListInstance();
 
     /**
      * 删除所有子节点-最终所有需要删除的节点路径
      */
-    private LinkedList<String> result_deleteAllChildNodes = new LinkedList<String>();
+    private LinkedList<String> result_deleteAllChildNodes = CollectionUtil.newLinkedList();
 
     @Override
     public ResZKClientConectVO zkClientConect(String host) {
@@ -456,7 +456,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
         ResGetChildNodeVO getChildNodeVO = new ResGetChildNodeVO();
         NodeInfoDTO nodeInfoDTO = new NodeInfoDTO();
-        List<ResNodeInfoVO> resNodeInfoVOS = new ArrayList<ResNodeInfoVO>();
+        List<ResNodeInfoVO> resNodeInfoVOS = CollectionUtil.newArrayListInstance();
         List<String> childNodes;
         ResErrorInfo errorInfo;
         String nodePath = null;
@@ -674,7 +674,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
         if (CollectionUtils.isNotEmpty(temp_deleteAllChildNodes)) {
 
-            List<String> tempNode = new ArrayList<String>();
+            List<String> tempNode = CollectionUtil.newArrayListInstance();
 
             Iterator<String> nodeIterator = temp_deleteAllChildNodes.iterator();
 
@@ -719,7 +719,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
      */
     private List<String> assembleNodePath(String rootNode, List<String> childNode) {
 
-        List<String> allChildNodePaths = new ArrayList<String>();
+        List<String> allChildNodePaths = CollectionUtil.newArrayListInstance();
 
         for (String childNodePath : childNode) {
 
@@ -789,7 +789,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
         boolean result = true;
 
         //判断节点是否存在
-        Stat stat = zooKeeperClient.exitNodePath(handleNode.toString());
+        Stat stat = zooKeeperClient.exitNodePath(handleNode);
 
         if (null == stat) {
             result = false;

@@ -29,7 +29,7 @@
 
 执行命令：(ZooKeeper服务器host信息根据实际情况修改)
 
-**java -jar farmer-0.0.3.jar zkHost=192.168.137.150:2181**
+**java -jar farmer-0.0.3.jar zkHost=127.0.0.1:2181**
 
 ![](image/6-cmd命令行启动.png)<br>
 
@@ -50,7 +50,7 @@ farmer-springboot-0.0.3.jar，将其上传到linux服务器某个目录上。
 
 执行命令：(ZooKeeper服务器host信息根据实际情况修改)
 
-**java -jar farmer-0.0.3-SNAPSHOT.jar zkHost=192.168.137.150:2181**
+**java -jar farmer-0.0.3-SNAPSHOT.jar zkHost=127.0.0.1:2181**
 
 然后程序即可启动
 
@@ -60,4 +60,4 @@ farmer-springboot-0.0.3.jar，将其上传到linux服务器某个目录上。
 
 **注意：上图不配置参数，直接输入"java -jar farmer-0.0.3.jar"，程序也可以启动，点击页面的"连接ZooKeeper服务器"按钮，输入host信息，即可连接ZooKeeper服务器。**
 
-**注意:linux环境下，使用上面这种启动方式，如果xshell tab窗口被关闭，那程序也会终止，如果想在后台运行，则使用这个命令："nohup java -jar farmer-0.0.3-SNAPSHOT.jar zkHost=192.168.137.150:2181 &"。**
+**注意:linux环境下，使用上面这种启动方式，如果xshell tab窗口被关闭，那程序也会终止，如果想在后台运行，则使用这个命令："nohup java -jar farmer-0.0.3-SNAPSHOT.jar zkHost=127.0.0.1:2181 &"。**

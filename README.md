@@ -19,14 +19,14 @@ Farmer 是一个ZooKeeper的可视化工具、Zookeeper配置中心的可视化�
 
 左侧是层级节点展示区域；右侧是节点信息展示区域
 
-![ZooKeeper-UI展示图](Farmer-SpringBoot/image/1-总览.png)<br>
-![ZooKeeper-UI展示图](Farmer-SpringBoot/image/2-总览.png)
+![ZooKeeper-UI展示图](./Farmer-SpringBoot/image/1-总览.png)<br>
+![ZooKeeper-UI展示图](./Farmer-SpringBoot/image/2-总览.png)
 
 ### **页面按钮-连接ZooKeeper服务器**
-![](Farmer-SpringBoot/image/3-页面连接.png)
+![连接zk服务器](./Farmer-SpringBoot/image/3-页面连接.png)
 
 ### **节点右击事件**
-![](Farmer-SpringBoot/image/4-节点右键事件.png)
+![节点右击](./Farmer-SpringBoot/image/4-节点右键事件.png)
 
 
 ## 版本

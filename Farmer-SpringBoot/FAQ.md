@@ -9,7 +9,7 @@
 
 然后根据下图配置ZooKeeper服务器IP，多个IP地址用逗号(',')分隔。
 
-![IDEA编译器参数启动配置](image/5-IDEA启动参数配置.png)
+![IDEA编译器参数启动配置](./image/5-IDEA启动参数配置.png)
 
 然后启动主类：com.server.FarmerApplication即可
 
@@ -46,7 +46,7 @@
 
 farmer-springboot-0.0.3.jar，将其上传到linux服务器某个目录上。
 
-![jar上传Linux服务器](image/7-linux服务器目录.png)
+![jar上传Linux服务器](./image/7-linux服务器目录.png)
 
 执行命令：(ZooKeeper服务器host信息根据实际情况修改)
 
@@ -54,7 +54,7 @@ farmer-springboot-0.0.3.jar，将其上传到linux服务器某个目录上。
 
 然后程序即可启动
 
-![jar-linux启动](image/8-linux启动.png)
+![jar-linux启动](./image/8-linux启动.png)
 
 页面URL : http://localhost:9527/zk/index.do
 

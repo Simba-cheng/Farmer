@@ -1,3 +1,9 @@
+**注意：**
+
+不知道为何图片显示不出来，经过测试，打开"V'P'N" 就可以出图片来。
+
+<br>
+
 # Farmer - ZooKeeper UI
 
 Farmer 是一个ZooKeeper的可视化工具、Zookeeper配置中心的可视化界面。

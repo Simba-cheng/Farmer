@@ -1,6 +1,5 @@
 package com.server.vo.response;
 
-import lombok.Data;
 
 /**
  * 节点信息
@@ -8,7 +7,7 @@ import lombok.Data;
  * @author CYX
  * @create 2018-11-17-15:09
  */
-@Data
+
 public class ResNodeInfoVO {
 
     /**
@@ -34,6 +33,38 @@ public class ResNodeInfoVO {
      */
     private String nodeIsFile;
 
+    public String getNodePath() {
+        return nodePath;
+    }
+
+    public void setNodePath(String nodePath) {
+        this.nodePath = nodePath;
+    }
+
+    public String getCompleteNode() {
+        return completeNode;
+    }
+
+    public void setCompleteNode(String completeNode) {
+        this.completeNode = completeNode;
+    }
+
+    public String getIsExistenceChild() {
+        return isExistenceChild;
+    }
+
+    public void setIsExistenceChild(String isExistenceChild) {
+        this.isExistenceChild = isExistenceChild;
+    }
+
+    public String getNodeIsFile() {
+        return nodeIsFile;
+    }
+
+    public void setNodeIsFile(String nodeIsFile) {
+        this.nodeIsFile = nodeIsFile;
+    }
+
     public ResNodeInfoVO() {
     }
 
@@ -42,5 +73,16 @@ public class ResNodeInfoVO {
         this.completeNode = completeNode;
         this.isExistenceChild = isExistenceChild;
         this.nodeIsFile = nodeIsFile;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ResNodeInfoVO{");
+        sb.append("nodePath='").append(nodePath).append('\'');
+        sb.append(", completeNode='").append(completeNode).append('\'');
+        sb.append(", isExistenceChild='").append(isExistenceChild).append('\'');
+        sb.append(", nodeIsFile='").append(nodeIsFile).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

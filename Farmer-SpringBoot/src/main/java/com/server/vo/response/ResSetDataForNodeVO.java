@@ -1,12 +1,11 @@
 package com.server.vo.response;
 
-import lombok.Data;
 
 /**
  * @author CYX
  * @Date: 2018/11/15 14:56
  */
-@Data
+
 public class ResSetDataForNodeVO {
 
     /**
@@ -37,6 +36,46 @@ public class ResSetDataForNodeVO {
      */
     private String data;
 
+    public String getIsSuccess() {
+        return isSuccess;
+    }
+
+    public void setIsSuccess(String isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
+    public ResErrorInfo getErrorInfo() {
+        return errorInfo;
+    }
+
+    public void setErrorInfo(ResErrorInfo errorInfo) {
+        this.errorInfo = errorInfo;
+    }
+
+    public String getDisplayCopy() {
+        return displayCopy;
+    }
+
+    public void setDisplayCopy(String displayCopy) {
+        this.displayCopy = displayCopy;
+    }
+
+    public String getNodePath() {
+        return nodePath;
+    }
+
+    public void setNodePath(String nodePath) {
+        this.nodePath = nodePath;
+    }
+
+    public String getData() {
+        return data;
+    }
+
+    public void setData(String data) {
+        this.data = data;
+    }
+
     public ResSetDataForNodeVO() {
     }
 
@@ -46,5 +85,17 @@ public class ResSetDataForNodeVO {
         this.displayCopy = displayCopy;
         this.nodePath = nodePath;
         this.data = data;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ResSetDataForNodeVO{");
+        sb.append("isSuccess='").append(isSuccess).append('\'');
+        sb.append(", errorInfo=").append(errorInfo);
+        sb.append(", displayCopy='").append(displayCopy).append('\'');
+        sb.append(", nodePath='").append(nodePath).append('\'');
+        sb.append(", data='").append(data).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

@@ -1,12 +1,10 @@
 package com.server.vo.response;
 
-import lombok.Data;
-
 /**
  * @author CYX
  * @create 2018-11-14-11:54
  */
-@Data
+
 public class ResultVO {
 
     /**
@@ -22,6 +20,22 @@ public class ResultVO {
      */
     private Object resultData;
 
+    public String getIsSuccess() {
+        return isSuccess;
+    }
+
+    public void setIsSuccess(String isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
+    public Object getResultData() {
+        return resultData;
+    }
+
+    public void setResultData(Object resultData) {
+        this.resultData = resultData;
+    }
+
     public ResultVO(String isSuccess, Object resultData) {
         this.isSuccess = isSuccess;
         this.resultData = resultData;
@@ -32,9 +46,10 @@ public class ResultVO {
 
     @Override
     public String toString() {
-        return "ResultVO{" +
-                "isSuccess='" + isSuccess + '\'' +
-                ", resultData=" + resultData +
-                '}';
+        final StringBuilder sb = new StringBuilder("ResultVO{");
+        sb.append("isSuccess='").append(isSuccess).append('\'');
+        sb.append(", resultData=").append(resultData);
+        sb.append('}');
+        return sb.toString();
     }
 }

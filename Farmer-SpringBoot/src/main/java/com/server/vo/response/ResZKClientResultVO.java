@@ -1,6 +1,5 @@
 package com.server.vo.response;
 
-import lombok.Data;
 
 import java.util.List;
 
@@ -8,7 +7,7 @@ import java.util.List;
  * @author CYX
  * @create 2018-11-14-11:52
  */
-@Data
+
 public class ResZKClientResultVO {
 
     /**
@@ -39,6 +38,46 @@ public class ResZKClientResultVO {
      */
     private List<String> childNodePath;
 
+    public String getIsSuccess() {
+        return isSuccess;
+    }
+
+    public void setIsSuccess(String isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
+    public ResErrorInfo getErrorInfo() {
+        return errorInfo;
+    }
+
+    public void setErrorInfo(ResErrorInfo errorInfo) {
+        this.errorInfo = errorInfo;
+    }
+
+    public String getDisplayCopy() {
+        return displayCopy;
+    }
+
+    public void setDisplayCopy(String displayCopy) {
+        this.displayCopy = displayCopy;
+    }
+
+    public String getNodePath() {
+        return nodePath;
+    }
+
+    public void setNodePath(String nodePath) {
+        this.nodePath = nodePath;
+    }
+
+    public List<String> getChildNodePath() {
+        return childNodePath;
+    }
+
+    public void setChildNodePath(List<String> childNodePath) {
+        this.childNodePath = childNodePath;
+    }
+
     public ResZKClientResultVO() {
     }
 
@@ -48,5 +87,17 @@ public class ResZKClientResultVO {
         this.displayCopy = displayCopy;
         this.nodePath = nodePath;
         this.childNodePath = childNodePath;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ResZKClientResultVO{");
+        sb.append("isSuccess='").append(isSuccess).append('\'');
+        sb.append(", errorInfo=").append(errorInfo);
+        sb.append(", displayCopy='").append(displayCopy).append('\'');
+        sb.append(", nodePath='").append(nodePath).append('\'');
+        sb.append(", childNodePath=").append(childNodePath);
+        sb.append('}');
+        return sb.toString();
     }
 }

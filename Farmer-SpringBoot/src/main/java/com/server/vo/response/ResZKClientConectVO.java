@@ -1,6 +1,6 @@
 package com.server.vo.response;
 
-import lombok.Data;
+
 
 /**
  * zookeeper 链接VO
@@ -8,7 +8,7 @@ import lombok.Data;
  * @author CYX
  * @Date: 2018/11/15 11:16
  */
-@Data
+
 public class ResZKClientConectVO {
 
     /**
@@ -29,6 +29,30 @@ public class ResZKClientConectVO {
      */
     private String displayCopy;
 
+    public String getIsSuccess() {
+        return isSuccess;
+    }
+
+    public void setIsSuccess(String isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
+    public ResErrorInfo getErrorInfo() {
+        return errorInfo;
+    }
+
+    public void setErrorInfo(ResErrorInfo errorInfo) {
+        this.errorInfo = errorInfo;
+    }
+
+    public String getDisplayCopy() {
+        return displayCopy;
+    }
+
+    public void setDisplayCopy(String displayCopy) {
+        this.displayCopy = displayCopy;
+    }
+
     public ResZKClientConectVO() {
     }
 
@@ -36,5 +60,15 @@ public class ResZKClientConectVO {
         this.isSuccess = isSuccess;
         this.errorInfo = errorInfo;
         this.displayCopy = displayCopy;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ResZKClientConectVO{");
+        sb.append("isSuccess='").append(isSuccess).append('\'');
+        sb.append(", errorInfo=").append(errorInfo);
+        sb.append(", displayCopy='").append(displayCopy).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

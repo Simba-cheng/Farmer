@@ -113,12 +113,6 @@
             <version>1.4</version>
         </dependency>
 
-        <!--Lombok插件-->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
-
         <!--Mockito 单元测试-->
         <dependency>
             <groupId>org.mockito</groupId>

@@ -1,6 +1,5 @@
 package com.server.vo.response;
 
-import lombok.Data;
 
 import java.util.List;
 
@@ -8,7 +7,7 @@ import java.util.List;
  * @author CYX
  * @Date: 2018/11/16 17:47
  */
-@Data
+
 public class ResGetChildNodeVO {
 
     /**
@@ -39,6 +38,46 @@ public class ResGetChildNodeVO {
      */
     private List<ResNodeInfoVO> childNodeInfoList;
 
+    public String getIsSuccess() {
+        return isSuccess;
+    }
+
+    public void setIsSuccess(String isSuccess) {
+        this.isSuccess = isSuccess;
+    }
+
+    public ResErrorInfo getErrorInfo() {
+        return errorInfo;
+    }
+
+    public void setErrorInfo(ResErrorInfo errorInfo) {
+        this.errorInfo = errorInfo;
+    }
+
+    public String getDisplayCopy() {
+        return displayCopy;
+    }
+
+    public void setDisplayCopy(String displayCopy) {
+        this.displayCopy = displayCopy;
+    }
+
+    public String getNodePath() {
+        return nodePath;
+    }
+
+    public void setNodePath(String nodePath) {
+        this.nodePath = nodePath;
+    }
+
+    public List<ResNodeInfoVO> getChildNodeInfoList() {
+        return childNodeInfoList;
+    }
+
+    public void setChildNodeInfoList(List<ResNodeInfoVO> childNodeInfoList) {
+        this.childNodeInfoList = childNodeInfoList;
+    }
+
     public ResGetChildNodeVO() {
     }
 
@@ -48,5 +87,17 @@ public class ResGetChildNodeVO {
         this.displayCopy = displayCopy;
         this.nodePath = nodePath;
         this.childNodeInfoList = childNodeInfoList;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ResGetChildNodeVO{");
+        sb.append("isSuccess='").append(isSuccess).append('\'');
+        sb.append(", errorInfo=").append(errorInfo);
+        sb.append(", displayCopy='").append(displayCopy).append('\'');
+        sb.append(", nodePath='").append(nodePath).append('\'');
+        sb.append(", childNodeInfoList=").append(childNodeInfoList);
+        sb.append('}');
+        return sb.toString();
     }
 }

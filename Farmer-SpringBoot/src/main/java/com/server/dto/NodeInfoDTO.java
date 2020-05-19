@@ -1,12 +1,11 @@
 package com.server.dto;
 
-import lombok.Data;
 
 /**
  * @author CYX
  * @Date: 2018/11/20 10:59
  */
-@Data
+
 public class NodeInfoDTO {
 
     /**
@@ -24,6 +23,30 @@ public class NodeInfoDTO {
      */
     private String nodeData;
 
+    public String getZkConnHost() {
+        return zkConnHost;
+    }
+
+    public void setZkConnHost(String zkConnHost) {
+        this.zkConnHost = zkConnHost;
+    }
+
+    public String getNodePath() {
+        return nodePath;
+    }
+
+    public void setNodePath(String nodePath) {
+        this.nodePath = nodePath;
+    }
+
+    public String getNodeData() {
+        return nodeData;
+    }
+
+    public void setNodeData(String nodeData) {
+        this.nodeData = nodeData;
+    }
+
     public NodeInfoDTO() {
     }
 
@@ -31,5 +54,15 @@ public class NodeInfoDTO {
         this.zkConnHost = zkConnHost;
         this.nodePath = nodePath;
         this.nodeData = nodeData;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("NodeInfoDTO{");
+        sb.append("zkConnHost='").append(zkConnHost).append('\'');
+        sb.append(", nodePath='").append(nodePath).append('\'');
+        sb.append(", nodeData='").append(nodeData).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

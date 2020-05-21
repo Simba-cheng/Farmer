@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.server.constant.CommConstant;
 import com.server.constant.NumberEnum;
+import com.server.controller.AbstractControllerComm;
 import com.server.service.ZooKeeperClientService;
 import com.server.util.PubUtils;
 import com.server.vo.response.*;
@@ -11,7 +12,6 @@ import org.apache.commons.io.IOUtils;
 import org.apache.zookeeper.ZooDefs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -32,15 +33,12 @@ import static org.apache.zookeeper.CreateMode.PERSISTENT;
  */
 @Controller
 @RequestMapping(value = "/zk")
-public class ZooKeeperController {
+public class ZooKeeperController extends AbstractControllerComm {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ZooKeeperController.class);
 
-    @Autowired
+    @Resource
     private ZooKeeperClientService zkClientService;
-
-    @Autowired
-    private PubUtils pubUtils;
 
     /**
      * 用来存储ZooKeeper服务端host配置
@@ -90,7 +88,7 @@ public class ZooKeeperController {
 
         LOGGER.info("result info : {}", new Object[]{resultJson});
 
-        pubUtils.flushResultToPage(response, resultJson);
+        flushResultToPage(response, resultJson);
     }
 
     /**
@@ -113,7 +111,7 @@ public class ZooKeeperController {
     //    String resultJson = gson.toJson(resultVO);
     //    LOGGER.info("result info : {}", new Object[]{resultJson});
     //
-    //    pubUtils.flushResultToPage(response, resultJson);
+    //    flushResultToPage(response, resultJson);
     //}
 
     /**
@@ -147,7 +145,7 @@ public class ZooKeeperController {
             Map<String, Object> map = new HashMap<String, Object>();
             map.put("resultVO", resultVO);
 
-            String htmlData = pubUtils.getOutputHtmlStr(map, "nodeInfo.ftl");
+            String htmlData = getOutputHtmlStr(map, "nodeInfo.ftl");
             jsonMap.put("html", htmlData);
             jsonMap.put("code", "Y");
         } else {
@@ -161,7 +159,7 @@ public class ZooKeeperController {
         String resultJSON = gson.toJson(jsonMap);
         LOGGER.info("result info : {}", new Object[]{resultJSON});
 
-        pubUtils.flushResultToPage(response, resultJSON);
+        flushResultToPage(response, resultJSON);
 
     }
 
@@ -187,7 +185,7 @@ public class ZooKeeperController {
         String resultJson = gson.toJson(resultVO);
         LOGGER.info("result info : {}", new Object[]{resultJson});
 
-        pubUtils.flushResultToPage(response, resultJson);
+        flushResultToPage(response, resultJson);
     }
 
     /**
@@ -212,7 +210,7 @@ public class ZooKeeperController {
         String resultJson = gson.toJson(resultVO);
         LOGGER.info("result info : {}", new Object[]{resultJson});
 
-        pubUtils.flushResultToPage(response, resultJson);
+        flushResultToPage(response, resultJson);
 
     }
 
@@ -236,7 +234,7 @@ public class ZooKeeperController {
         String resultJson = gson.toJson(resultVO);
         LOGGER.info("result info : {}", new Object[]{resultJson});
 
-        pubUtils.flushResultToPage(response, resultJson);
+        flushResultToPage(response, resultJson);
     }
 
     /**
@@ -262,7 +260,7 @@ public class ZooKeeperController {
         String resultJson = gson.toJson(resultVO);
         LOGGER.info("result info : {}", new Object[]{resultJson});
 
-        pubUtils.flushResultToPage(response, resultJson);
+        flushResultToPage(response, resultJson);
 
     }
 
@@ -294,7 +292,7 @@ public class ZooKeeperController {
         String resultJson = gson.toJson(resultVO);
         LOGGER.info("result info : {}", new Object[]{resultJson});
 
-        pubUtils.flushResultToPage(response, resultJson);
+        flushResultToPage(response, resultJson);
     }
 
     /**
@@ -321,7 +319,7 @@ public class ZooKeeperController {
         String resultJson = gson.toJson(resultVO);
         LOGGER.info("result info : {}", new Object[]{resultJson});
 
-        pubUtils.flushResultToPage(response, resultJson);
+        flushResultToPage(response, resultJson);
     }
 
     /**
@@ -348,7 +346,7 @@ public class ZooKeeperController {
         String resultJson = gson.toJson(resultVO);
         LOGGER.info("result info : {}", new Object[]{resultJson});
 
-        pubUtils.flushResultToPage(response, resultJson);
+        flushResultToPage(response, resultJson);
     }
 
     /**
@@ -382,7 +380,7 @@ public class ZooKeeperController {
         String resultJson = gson.toJson(resultVO);
         LOGGER.info("result info : {}", new Object[]{resultJson});
 
-        pubUtils.flushResultToPage(response, resultJson);
+        flushResultToPage(response, resultJson);
     }
 
     /**
@@ -421,7 +419,7 @@ public class ZooKeeperController {
 
         resultVO.setResultData(resUploadFileVO);
         String resultJson = gson.toJson(resultVO);
-        pubUtils.flushResultToPage(response, resultJson);
+        flushResultToPage(response, resultJson);
     }
 
 

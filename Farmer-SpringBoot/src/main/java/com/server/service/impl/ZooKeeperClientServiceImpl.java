@@ -22,9 +22,9 @@ import org.apache.zookeeper.data.ACL;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -33,7 +33,7 @@ import java.util.List;
  * @author CYX
  * @date 2018/11/11 11:35
  */
-@Service
+@Service("zkClientService")
 public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ZooKeeperClientServiceImpl.class);
@@ -41,7 +41,7 @@ public class ZooKeeperClientServiceImpl implements ZooKeeperClientService {
     /**
      * ZK节点CRUD 底层客户端
      */
-    @Autowired
+    @Resource
     private ZooKeeperClient zooKeeperClient;
 
     /**
